@@ -77,6 +77,7 @@ class _ClinicDetailsState extends State<ClinicDetails> {
                       color: white, fontSize: 18, fontWeight: FontWeight.w300),
                 ),
                 color: orangep,
+                onPressed: (){},
                 //onPressed: () =>changeScreen(context, AddClinic())
               ),
             ),
@@ -87,13 +88,14 @@ class _ClinicDetailsState extends State<ClinicDetails> {
               height: 40,
               width: MediaQuery.of(context).size.width,
               child: FlatButton(
+                onPressed: (){},
                 child: Text(
                   'ADD AS OWNED CLINIC',
                   style: TextStyle(
                       color: white, fontSize: 18, fontWeight: FontWeight.w300),
                 ),
                 color: orangep,
-                //onPressed: () =>changeScreen(context,CreateClinic()),
+                // onPressed: () =>changeScreen(context,CreateClinic()),
               ),
             ),
           )

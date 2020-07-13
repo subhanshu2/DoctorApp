@@ -25,18 +25,18 @@ class Data {
   String email;
   String mobileNo;
   String password;
-  Null alternateNo;
+  dynamic alternateNo;
   String gender;
-  Null university;
-  Null experience;
-  Null qualification;
-  Null imageUrl;
-  Null address;
-  Null information;
-  Null speciality;
+  dynamic university;
+  dynamic experience;
+  dynamic qualification;
+  dynamic imageUrl;
+  dynamic address;
+  dynamic information;
+  dynamic speciality;
   bool isVerified;
   String getCureCode;
-  Null identityVerificationUrl;
+  dynamic identityVerificationUrl;
   String createdAt;
   String updatedAt;
 

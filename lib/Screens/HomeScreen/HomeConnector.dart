@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/single_child_widget.dart';
-
 import '../../Helpers/colors.dart';
 
 String temp;
@@ -304,10 +302,10 @@ class _HomeConnectorState extends State<HomeConnector>
 }
 
 class CustomBoxes extends StatefulWidget {
-  String label;
-  String unit;
-  String value;
-  Icon icon;
+  final String label;
+  final String unit;
+  final String value;
+  final Icon icon;
   CustomBoxes({this.label, this.value, this.unit, this.icon});
 
   @override
