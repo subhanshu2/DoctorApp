@@ -1,12 +1,25 @@
-// import 'dart:convert';
-// import 'package:get_cure/Database/TokensDb.dart';
-// import 'package:intl/intl.dart';
-// import 'package:get_cure/Helpers/Apis.dart';
-// import 'package:get_cure/Models/DoctorModel.dart';
-// import 'package:get_cure/Models/tokenModel.dart';
-// import 'package:get_cure/Models/FrontDeskUser.dart';
-// import 'package:http/http.dart' as http;
-// import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+import 'package:getcure_doctor/Models/DoctorLogin.dart';
+import 'package:intl/intl.dart';
+
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'Apis.dart';
+
+Future<String> loginDoctor(mobNo, pass) async {
+  var response = await http
+      .post(LOGINDOCTOR, body: {"emailOrPhone": mobNo, "password": pass});
+  print(response.statusCode);
+  if (response.statusCode == 200) {
+    DoctorLogin doctor = DoctorLogin.fromJson(json.decode(response.body));
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    print(doctor.token.toString());
+    pref.setString('docToken', doctor.token);
+    pref.setString('dresponse', json.encode(doctor));
+  }
+  return response.body;
+}
 
 // Future<String> generateOtp(mobno) async {
 //   var response = await http.post(OTP, body: {"mobile_no": mobno});
