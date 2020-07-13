@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:getcure_doctor/Helpers/colors.dart';
+import '../Helpers/Navigation.dart';
+import 'login.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -8,7 +10,7 @@ class SignUpPage extends StatefulWidget {
 }
 
 class SignUpPageState extends State<SignUpPage> {
-  bool buttonLoad=false;
+  bool buttonLoad = false;
   bool _autoValidate = false;
   String mobno = '';
   String password = '';
@@ -40,24 +42,23 @@ class SignUpPageState extends State<SignUpPage> {
   Future<void> _validateInputs() async {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-  //     String otpgenerated = await generateOtp(mobno);
-  //     if (otpgenerated == null) {
-  //      // errorController.add(ErrorAnimationType.shake);
-  //       setState(() { 
-      
-      
-  //         hasError = true;
-  //       });
-  //     } else {
-  //       // changeScreenRepacement(context,
-  //       //     Otp(mobno: mobno, password: password, generated: otpgenerated));
-  //     }
-  //   } else {
-  //     setState(() {
-  //       _autoValidate = true;
-  //     });
-  //   }
-  // }
+      //     String otpgenerated = await generateOtp(mobno);
+      //     if (otpgenerated == null) {
+      //      // errorController.add(ErrorAnimationType.shake);
+      //       setState(() {
+
+      //         hasError = true;
+      //       });
+      //     } else {
+      //       // changeScreenRepacement(context,
+      //       //     Otp(mobno: mobno, password: password, generated: otpgenerated));
+      //     }
+      //   } else {
+      //     setState(() {
+      //       _autoValidate = true;
+      //     });
+      //   }
+      // }
     }
   }
 
@@ -271,8 +272,8 @@ class SignUpPageState extends State<SignUpPage> {
                                 ],
                               ),
                               FlatButton(
-                                // onPressed: () =>
-                                //     changeScreen(context, LoginPage()),
+                                onPressed: () =>
+                                    changeScreen(context, LoginPage()),
                                 child: Text('Already have an Account? Login'),
                               ),
                               MaterialButton(
@@ -280,14 +281,16 @@ class SignUpPageState extends State<SignUpPage> {
                                 minWidth: 100.0,
                                 color: pcolor,
                                 textColor: Colors.white,
-                                child:buttonLoad?CircularProgressIndicator(): new Icon(
-                                  Icons.exit_to_app,
-                                  size: 30.0,
-                                ),
+                                child: buttonLoad
+                                    ? CircularProgressIndicator()
+                                    : new Icon(
+                                        Icons.exit_to_app,
+                                        size: 30.0,
+                                      ),
                                 shape: CircleBorder(side: BorderSide.none),
                                 onPressed: () {
                                   setState(() {
-                                    buttonLoad=true;
+                                    buttonLoad = true;
                                   });
                                   _validateInputs();
                                 },

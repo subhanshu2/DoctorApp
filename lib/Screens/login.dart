@@ -2,9 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:getcure_doctor/Helpers/colors.dart';
+import 'package:getcure_doctor/Screens/Signup.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
+
+import '../Helpers/Navigation.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -19,14 +22,14 @@ class LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   bool isObsolete = false;
   String dropdownValue = 'Doctor';
- // StreamController<ErrorAnimationType> errorController;
+  // StreamController<ErrorAnimationType> errorController;
   bool hasError = false;
   String errorText = "Something wrong happend";
   final RoundedLoadingButtonController _btnController =
       new RoundedLoadingButtonController();
   @override
   void initState() {
-   // errorController = StreamController<ErrorAnimationType>();
+    // errorController = StreamController<ErrorAnimationType>();
     super.initState();
   }
 
@@ -91,7 +94,7 @@ class LoginPageState extends State<LoginPage> {
   //         } else {
   //           _btnController.success();
   //           Timer(Duration(seconds: 1),
-  //               () => changeScreenRepacement(context, 
+  //               () => changeScreenRepacement(context,
   //               ChangeNotifierProvider(
   //                 create: (context)=>DoctorProvider(),
   //                 child: PatientInfo(),
@@ -282,12 +285,9 @@ class LoginPageState extends State<LoginPage> {
                                 style: TextStyle(color: Colors.black),
                               ),
                               FlatButton(
-                                child: Text('New to app? Signup'),
-                                onPressed: () =>
-                                {
-
-                                }
-                              ),
+                                  child: Text('New to app? Signup'),
+                                  onPressed: () =>
+                                      changeScreen(context, SignUpPage())),
                               RoundedLoadingButton(
                                 controller: _btnController,
                                 child: Text(
@@ -295,9 +295,7 @@ class LoginPageState extends State<LoginPage> {
                                   style: TextStyle(color: white),
                                 ),
                                 color: orangef,
-                                onPressed: () {
-                                
-                                },
+                                onPressed: () {},
                               ),
                               // MaterialButton(
                               //   height: 55.0,
