@@ -2,12 +2,15 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:getcure_doctor/Helpers/colors.dart';
+import 'package:getcure_doctor/Models/DoctorLogin.dart';
+import 'package:getcure_doctor/Screens/HomeScreen/HomeConnector.dart';
 import 'package:getcure_doctor/Screens/Signup.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:provider/provider.dart';
 
 import '../Helpers/Navigation.dart';
+import '../Helpers/Requesthttp.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -22,14 +25,14 @@ class LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   bool isObsolete = false;
   String dropdownValue = 'Doctor';
-  // StreamController<ErrorAnimationType> errorController;
+  StreamController<ErrorAnimationType> errorController;
   bool hasError = false;
   String errorText = "Something wrong happend";
   final RoundedLoadingButtonController _btnController =
       new RoundedLoadingButtonController();
   @override
   void initState() {
-    // errorController = StreamController<ErrorAnimationType>();
+    errorController = StreamController<ErrorAnimationType>();
     super.initState();
   }
 
@@ -66,46 +69,33 @@ class LoginPageState extends State<LoginPage> {
       return null;
   }
 
-  // void _validateInputs() async {
-  //   if (_formKey.currentState.validate()) {
-  //     print(pass);
-  //     _formKey.currentState.save();
-  //     String loginContents = await loginError(urls, emailOrMob, pass);
-  //     if (loginContents == null) {
-  //       errorController.add(ErrorAnimationType.shake);
-  //       setState(() {
-  //         hasError = true;
-  //         _btnController.reset();
-  //       });
-  //     } else {
-  //       if (urls == LOGINFRONTDESK) {
-  //         _btnController.success();
-  //         Timer(Duration(seconds: 1),
-  //             () => changeScreenRepacement(context, Appointments()));
-  //       } else {
-  //         SharedPreferences pref = await SharedPreferences.getInstance();
-  //         String doctors = pref.getString('dresponse');
-  //         FrontDeskUser frontDeskUser =
-  //             FrontDeskUser.fromJson(json.decode(doctors));
-  //         if (frontDeskUser.data.isVerified) {
-  //           _btnController.success();
-  //           Timer(Duration(seconds: 1),
-  //               () => changeScreenRepacement(context, ProfilePage()));
-  //         } else {
-  //           _btnController.success();
-  //           Timer(Duration(seconds: 1),
-  //               () => changeScreenRepacement(context,
-  //               ChangeNotifierProvider(
-  //                 create: (context)=>DoctorProvider(),
-  //                 child: PatientInfo(),
-  //               )));
-  //         }
-  //       }
-  //     }
-  //   } else {
-  //     _btnController.reset();
-  //   }
-  // }
+  void _validateInputs() async {
+    if (_formKey.currentState.validate()) {
+      print(pass);
+      _formKey.currentState.save();
+      String loginContents = await loginDoctor(emailOrMob, pass);
+      if (loginContents == null) {
+        errorController.add(ErrorAnimationType.shake);
+        setState(() {
+          hasError = true;
+          _btnController.reset();
+        });
+      } else {
+        SharedPreferences pref = await SharedPreferences.getInstance();
+        String doctors = pref.getString('dresponse');
+        DoctorLogin docUser = DoctorLogin.fromJson(json.decode(doctors));
+        if (!docUser.data.isVerified) {
+          _btnController.success();
+          Timer(Duration(seconds: 1),
+              () => changeScreenRepacement(context, HomeConnector()));
+        } else {
+          _btnController.reset();
+        }
+      }
+    } else {
+      _btnController.reset();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -286,8 +276,8 @@ class LoginPageState extends State<LoginPage> {
                               ),
                               FlatButton(
                                   child: Text('New to app? Signup'),
-                                  onPressed: () =>
-                                      changeScreen(context, SignUpPage())),
+                                  onPressed: () => changeScreenRepacement(
+                                      context, SignUpPage())),
                               RoundedLoadingButton(
                                 controller: _btnController,
                                 child: Text(
@@ -295,27 +285,10 @@ class LoginPageState extends State<LoginPage> {
                                   style: TextStyle(color: white),
                                 ),
                                 color: orangef,
-                                onPressed: () {},
+                                onPressed: () {
+                                  _validateInputs();
+                                },
                               ),
-                              // MaterialButton(
-                              //   height: 55.0,
-                              //   color: pcolor,
-                              //   textColor: Colors.white,
-                              //   child: buttonLd?CircularProgressIndicator(): new Icon(
-                              //     Icons.exit_to_app,
-                              //     size: 30.0,
-                              //   ),
-                              //   shape: CircleBorder(side: BorderSide.none),
-                              //   onPressed: () {
-                              //     setState(() {
-                              //       if(emailOrMob.isEmpty){
-                              //         buttonLd=true;
-                              //       }
-                              //     });
-                              //     _validateInputs();
-                              //   },
-                              //   splashColor: Colors.redAccent,
-                              // ),
                             ],
                           ),
                         ))
