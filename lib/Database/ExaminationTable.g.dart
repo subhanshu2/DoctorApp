@@ -12,7 +12,7 @@ class Examination extends DataClass implements Insertable<Examination> {
   final int clinicDoctorId;
   final int doctorId;
   final String title;
-  final String parameters;
+  final Parameters parameters;
   final int price;
   final bool isOnline;
   Examination(
@@ -20,7 +20,7 @@ class Examination extends DataClass implements Insertable<Examination> {
       @required this.clinicDoctorId,
       @required this.doctorId,
       @required this.title,
-      @required this.parameters,
+      this.parameters,
       @required this.price,
       @required this.isOnline});
   factory Examination.fromData(Map<String, dynamic> data, GeneratedDatabase db,
@@ -37,8 +37,8 @@ class Examination extends DataClass implements Insertable<Examination> {
           intType.mapFromDatabaseResponse(data['${effectivePrefix}doctor_id']),
       title:
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}title']),
-      parameters: stringType
-          .mapFromDatabaseResponse(data['${effectivePrefix}parameters']),
+      parameters: $ExaminationsTable.$converter0.mapToDart(stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}parameters'])),
       price: intType.mapFromDatabaseResponse(data['${effectivePrefix}price']),
       isOnline:
           boolType.mapFromDatabaseResponse(data['${effectivePrefix}is_online']),
@@ -60,7 +60,8 @@ class Examination extends DataClass implements Insertable<Examination> {
       map['title'] = Variable<String>(title);
     }
     if (!nullToAbsent || parameters != null) {
-      map['parameters'] = Variable<String>(parameters);
+      final converter = $ExaminationsTable.$converter0;
+      map['parameters'] = Variable<String>(converter.mapToSql(parameters));
     }
     if (!nullToAbsent || price != null) {
       map['price'] = Variable<int>(price);
@@ -101,7 +102,7 @@ class Examination extends DataClass implements Insertable<Examination> {
       clinicDoctorId: serializer.fromJson<int>(json['clinicDoctorId']),
       doctorId: serializer.fromJson<int>(json['doctorId']),
       title: serializer.fromJson<String>(json['title']),
-      parameters: serializer.fromJson<String>(json['parameters']),
+      parameters: serializer.fromJson<Parameters>(json['parameters']),
       price: serializer.fromJson<int>(json['price']),
       isOnline: serializer.fromJson<bool>(json['isOnline']),
     );
@@ -114,7 +115,7 @@ class Examination extends DataClass implements Insertable<Examination> {
       'clinicDoctorId': serializer.toJson<int>(clinicDoctorId),
       'doctorId': serializer.toJson<int>(doctorId),
       'title': serializer.toJson<String>(title),
-      'parameters': serializer.toJson<String>(parameters),
+      'parameters': serializer.toJson<Parameters>(parameters),
       'price': serializer.toJson<int>(price),
       'isOnline': serializer.toJson<bool>(isOnline),
     };
@@ -125,7 +126,7 @@ class Examination extends DataClass implements Insertable<Examination> {
           int clinicDoctorId,
           int doctorId,
           String title,
-          String parameters,
+          Parameters parameters,
           int price,
           bool isOnline}) =>
       Examination(
@@ -180,7 +181,7 @@ class ExaminationsCompanion extends UpdateCompanion<Examination> {
   final Value<int> clinicDoctorId;
   final Value<int> doctorId;
   final Value<String> title;
-  final Value<String> parameters;
+  final Value<Parameters> parameters;
   final Value<int> price;
   final Value<bool> isOnline;
   const ExaminationsCompanion({
@@ -197,13 +198,12 @@ class ExaminationsCompanion extends UpdateCompanion<Examination> {
     @required int clinicDoctorId,
     @required int doctorId,
     @required String title,
-    @required String parameters,
+    this.parameters = const Value.absent(),
     @required int price,
     this.isOnline = const Value.absent(),
   })  : clinicDoctorId = Value(clinicDoctorId),
         doctorId = Value(doctorId),
         title = Value(title),
-        parameters = Value(parameters),
         price = Value(price);
   static Insertable<Examination> custom({
     Expression<int> id,
@@ -230,7 +230,7 @@ class ExaminationsCompanion extends UpdateCompanion<Examination> {
       Value<int> clinicDoctorId,
       Value<int> doctorId,
       Value<String> title,
-      Value<String> parameters,
+      Value<Parameters> parameters,
       Value<int> price,
       Value<bool> isOnline}) {
     return ExaminationsCompanion(
@@ -260,7 +260,9 @@ class ExaminationsCompanion extends UpdateCompanion<Examination> {
       map['title'] = Variable<String>(title.value);
     }
     if (parameters.present) {
-      map['parameters'] = Variable<String>(parameters.value);
+      final converter = $ExaminationsTable.$converter0;
+      map['parameters'] =
+          Variable<String>(converter.mapToSql(parameters.value));
     }
     if (price.present) {
       map['price'] = Variable<int>(price.value);
@@ -346,7 +348,7 @@ class $ExaminationsTable extends Examinations
     return GeneratedTextColumn(
       'parameters',
       $tableName,
-      false,
+      true,
     );
   }
 
@@ -408,14 +410,7 @@ class $ExaminationsTable extends Examinations
     } else if (isInserting) {
       context.missing(_titleMeta);
     }
-    if (data.containsKey('parameters')) {
-      context.handle(
-          _parametersMeta,
-          parameters.isAcceptableOrUnknown(
-              data['parameters'], _parametersMeta));
-    } else if (isInserting) {
-      context.missing(_parametersMeta);
-    }
+    context.handle(_parametersMeta, const VerificationResult.success());
     if (data.containsKey('price')) {
       context.handle(
           _priceMeta, price.isAcceptableOrUnknown(data['price'], _priceMeta));
@@ -441,6 +436,9 @@ class $ExaminationsTable extends Examinations
   $ExaminationsTable createAlias(String alias) {
     return $ExaminationsTable(_db, alias);
   }
+
+  static TypeConverter<Parameters, String> $converter0 =
+      const ParametersConverter();
 }
 
 abstract class _$ExaminationsDB extends GeneratedDatabase {
