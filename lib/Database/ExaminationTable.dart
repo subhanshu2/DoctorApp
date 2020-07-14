@@ -1,17 +1,87 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:moor/moor.dart';
 import 'package:moor_ffi/moor_ffi.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
-
 part 'ExaminationTable.g.dart';
+
+class Parameters {
+  List<ParameterData> data;
+  Parameters({this.data});
+  Parameters.fromJson(Map<String, dynamic> json) {
+    if (json['data'] != null) {
+      data = new List<ParameterData>();
+      json['data'].forEach((v) {
+        data.add(new ParameterData.fromJson(v));
+      });
+    }
+  }
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.data != null) {
+      data['data'] = this.data.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class ParameterData {
+  String title;
+  String type;
+  List<int> references;
+  String unit;
+  List<String> bioReference;
+
+  ParameterData(
+      {this.title, this.type, this.references, this.unit, this.bioReference});
+
+  ParameterData.fromJson(Map<String, dynamic> json) {
+    title = json['title'];
+    type = json['type'];
+    references = json['references'].cast<int>();
+    unit = json['unit'];
+    bioReference = json['bio_reference'].cast<String>();
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['title'] = this.title;
+    data['type'] = this.type;
+    data['references'] = this.references;
+    data['unit'] = this.unit;
+    data['bio_reference'] = this.bioReference;
+    return data;
+  }
+}
+
+class ParametersConverter extends TypeConverter<Parameters, String> {
+  const ParametersConverter();
+  @override
+  Parameters mapToDart(String fromDb) {
+    if (fromDb == null) {
+      return null;
+    }
+    return Parameters.fromJson(json.decode(fromDb) as Map<String, dynamic>);
+  }
+
+  @override
+  String mapToSql(Parameters value) {
+    if (value == null) {
+      return null;
+    }
+
+    return json.encode(value.toJson());
+  }
+}
 
 class Examinations extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get clinicDoctorId => integer()();
   IntColumn get doctorId => integer()();
   TextColumn get title => text()();
-  TextColumn get parameters => text()();
+  TextColumn get parameters =>
+      text().map(const ParametersConverter()).nullable()();
   IntColumn get price => integer()();
   BoolColumn get isOnline => boolean().withDefault(Constant(false))();
 }
@@ -19,7 +89,7 @@ class Examinations extends Table {
 LazyDatabase _openConnection() {
   return LazyDatabase(() async {
     final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbFolder.path, 'examinationsDBtable.sqlite'));
+    final file = File(p.join(dbFolder.path, 'getcure.sqlite'));
     return VmDatabase(file, logStatements: true);
   });
 }
