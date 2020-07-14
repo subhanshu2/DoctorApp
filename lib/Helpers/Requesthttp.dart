@@ -1,10 +1,7 @@
 import 'dart:convert';
 import 'package:getcure_doctor/Models/DoctorLogin.dart';
-import 'package:intl/intl.dart';
-
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'Apis.dart';
 
 Future<String> loginDoctor(mobNo, pass) async {

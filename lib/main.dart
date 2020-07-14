@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:getcure_doctor/Helpers/Config.dart';
 import 'package:getcure_doctor/Screens/login.dart';
 
 void main() {
