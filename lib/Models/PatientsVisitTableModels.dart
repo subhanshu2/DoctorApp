@@ -167,3 +167,245 @@ class MedicationConverter extends TypeConverter<Medicationgenerated, String> {
     return json.encode(value.toJson());
   }
 }
+
+//examination
+
+class Examinationgenerated {
+  List<ExaminationData> data;
+
+  Examinationgenerated({this.data});
+
+  Examinationgenerated.fromJson(Map<String, dynamic> json) {
+    if (json['data'] != null) {
+      data = new List<ExaminationData>();
+      json['data'].forEach((v) {
+        data.add(new ExaminationData.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.data != null) {
+      data['data'] = this.data.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class ExaminationData {
+  int examinationId;
+  String title;
+  List<Parameters> parameters;
+  String status;
+
+  ExaminationData({this.examinationId, this.title, this.parameters, this.status});
+
+  ExaminationData.fromJson(Map<String, dynamic> json) {
+    examinationId = json['examination_id'];
+    title = json['title'];
+    if (json['parameters'] != null) {
+      parameters = new List<Parameters>();
+      json['parameters'].forEach((v) {
+        parameters.add(new Parameters.fromJson(v));
+      });
+    }
+    status = json['status'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['examination_id'] = this.examinationId;
+    data['title'] = this.title;
+    if (this.parameters != null) {
+      data['parameters'] = this.parameters.map((v) => v.toJson()).toList();
+    }
+    data['status'] = this.status;
+    return data;
+  }
+}
+
+class Parameters {
+  String title;
+  String type;
+  List<String> references;
+  String unit;
+  List<String> bioReference;
+  List<String> result;
+
+  Parameters(
+      {this.title,
+      this.type,
+      this.references,
+      this.unit,
+      this.bioReference,
+      this.result});
+
+  Parameters.fromJson(Map<String, dynamic> json) {
+    title = json['title'];
+    type = json['type'];
+    references = json['references'].cast<String>();
+    unit = json['unit'];
+    bioReference = json['bio_reference'].cast<String>();
+    result = json['result'].cast<String>();
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['title'] = this.title;
+    data['type'] = this.type;
+    data['references'] = this.references;
+    data['unit'] = this.unit;
+    data['bio_reference'] = this.bioReference;
+    data['result'] = this.result;
+    return data;
+  }
+}
+class ExaminationConverter extends TypeConverter<Examinationgenerated, String> {
+  const ExaminationConverter();
+  @override
+  Examinationgenerated mapToDart(String fromDb) {
+    if (fromDb == null) {
+      return null;
+    }
+    return Examinationgenerated.fromJson(json.decode(fromDb) as Map<String, dynamic>);
+  }
+
+  @override
+  String mapToSql(Examinationgenerated value) {
+    if (value == null) {
+      return null;
+    }
+    return json.encode(value.toJson());
+  }
+}
+
+//Visit Reason
+class VisitReasongenerated {
+  List<VisitReasonData> data;
+
+  VisitReasongenerated({this.data});
+
+  VisitReasongenerated.fromJson(Map<String, dynamic> json) {
+    if (json['data'] != null) {
+      data = new List<VisitReasonData>();
+      json['data'].forEach((v) {
+        data.add(new VisitReasonData.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.data != null) {
+      data['data'] = this.data.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class VisitReasonData {
+  String title;
+  String date;
+  String visibleTill;
+
+  VisitReasonData({this.title, this.date, this.visibleTill});
+
+  VisitReasonData.fromJson(Map<String, dynamic> json) {
+    title = json['title'];
+    date = json['date'];
+    visibleTill = json['visible_till'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['title'] = this.title;
+    data['date'] = this.date;
+    data['visible_till'] = this.visibleTill;
+    return data;
+  }
+}
+class VisitReasonConverter extends TypeConverter<VisitReasongenerated, String> {
+  const VisitReasonConverter();
+  @override
+  VisitReasongenerated mapToDart(String fromDb) {
+    if (fromDb == null) {
+      return null;
+    }
+    return VisitReasongenerated.fromJson(json.decode(fromDb) as Map<String, dynamic>);
+  }
+
+  @override
+  String mapToSql(VisitReasongenerated value) {
+    if (value == null) {
+      return null;
+    }
+
+    return json.encode(value.toJson());
+  }
+}
+
+//Dignosis
+class Dignosisgenerated {
+  List<DignosisData> data;
+
+  Dignosisgenerated({this.data});
+
+  Dignosisgenerated.fromJson(Map<String, dynamic> json) {
+    if (json['data'] != null) {
+      data = new List<DignosisData>();
+      json['data'].forEach((v) {
+        data.add(new DignosisData.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.data != null) {
+      data['data'] = this.data.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class DignosisData {
+  String title;
+  String date;
+  String visibleTill;
+
+  DignosisData({this.title, this.date, this.visibleTill});
+
+  DignosisData.fromJson(Map<String, dynamic> json) {
+    title = json['title'];
+    date = json['date'];
+    visibleTill = json['visible_till'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['title'] = this.title;
+    data['date'] = this.date;
+    data['visible_till'] = this.visibleTill;
+    return data;
+  }
+}
+class DignosisConverter extends TypeConverter<Dignosisgenerated, String> {
+  const DignosisConverter();
+  @override
+  Dignosisgenerated mapToDart(String fromDb) {
+    if (fromDb == null) {
+      return null;
+    }
+    return Dignosisgenerated.fromJson(json.decode(fromDb) as Map<String, dynamic>);
+  }
+
+  @override
+  String mapToSql(Dignosisgenerated value) {
+    if (value == null) {
+      return null;
+    }
+
+    return json.encode(value.toJson());
+  }
+}
