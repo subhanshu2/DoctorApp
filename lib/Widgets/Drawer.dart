@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:getcure_doctor/Database/TokenTable.dart';
 import 'package:getcure_doctor/Helpers/Navigation.dart';
+import 'package:getcure_doctor/Screens/Appointments/ListDocPatients.dart';
 import 'package:getcure_doctor/Screens/login.dart';
+import 'package:getcure_doctor/provider/UserProvider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -57,12 +59,12 @@ class DrawerWidget extends StatelessWidget {
             title: Text('Doctor Section'),
             onTap: () {
               Navigator.of(context).pop();
-              // changeScreen(
-              //     context,
-              //     ChangeNotifierProvider(
-              //       create: (context) => DoctorProvider(),
-              //       child: ListDocPatients(),
-              //     ));
+              changeScreen(
+                  context,
+                  ChangeNotifierProvider(
+                    create: (context) => DoctorProvider(),
+                    child: ListDocPatients(),
+                  ));
             },
           ),
           ListTile(

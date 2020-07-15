@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:getcure_doctor/Database/TokenTable.dart';
 import '../../Helpers/AppConfig/colors.dart';
 
 String temp;
@@ -7,6 +8,9 @@ String pulse;
 String weight;
 
 class HomeConnector extends StatefulWidget {
+  final Token token;
+
+  const HomeConnector({Key key, this.token}) : super(key: key);
   @override
   _HomeConnectorState createState() => _HomeConnectorState();
 }
@@ -192,42 +196,42 @@ class _HomeConnectorState extends State<HomeConnector>
     getDesigns();
     return Scaffold(
         // drawer: DoctorDrawer(),
-        appBar: AppBar(
-          iconTheme: IconThemeData(
-            color: orange,
-          ),
-          backgroundColor: white,
-          actions: <Widget>[
-            Row(
-              children: <Widget>[
-                InkWell(
-                    onTap: () {},
-                    child: Container(
-                      height: 34,
-                      width: 34,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: orange,
-                      ),
-                    )),
-                SizedBox(
-                  width: 10,
-                ),
-                InkWell(
-                    onTap: () {},
-                    child: Container(
-                      height: 34,
-                      width: 34,
-                      decoration:
-                          BoxDecoration(shape: BoxShape.circle, color: green),
-                    )),
-                SizedBox(
-                  width: 10,
-                ),
-              ],
-            )
-          ],
-        ),
+        // appBar: AppBar(
+        //   iconTheme: IconThemeData(
+        //     color: orange,
+        //   ),
+        //   backgroundColor: white,
+        //   actions: <Widget>[
+        //     Row(
+        //       children: <Widget>[
+        //         InkWell(
+        //             onTap: () {},
+        //             child: Container(
+        //               height: 34,
+        //               width: 34,
+        //               decoration: BoxDecoration(
+        //                 shape: BoxShape.circle,
+        //                 color: orange,
+        //               ),
+        //             )),
+        //         SizedBox(
+        //           width: 10,
+        //         ),
+        //         InkWell(
+        //             onTap: () {},
+        //             child: Container(
+        //               height: 34,
+        //               width: 34,
+        //               decoration:
+        //                   BoxDecoration(shape: BoxShape.circle, color: green),
+        //             )),
+        //         SizedBox(
+        //           width: 10,
+        //         ),
+        //       ],
+        //     )
+        //   ],
+        // ),
         body: PageView(
           controller: controller,
           scrollDirection: scrollDirection,
@@ -249,11 +253,11 @@ class _HomeConnectorState extends State<HomeConnector>
                               SizedBox(
                                 width: 5,
                               ),
-                              Text('Ajay Kumar'),
+                              Text(widget.token.name),
                             ],
                           ),
-                          Text('25 Years'),
-                          Text('Male')
+                          Text(widget.token.age.toString()+" yr"),
+                          Text(widget.token.gender.toUpperCase())
                         ],
                       ),
                     ),

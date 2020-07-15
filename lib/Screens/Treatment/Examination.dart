@@ -4,7 +4,6 @@ import 'package:flutter_tagging/flutter_tagging.dart';
 
 import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
 import 'package:getcure_doctor/Models/addItemmodel.dart';
-import 'package:provider/provider.dart';
 
 
 class Examination extends StatefulWidget {
