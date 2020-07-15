@@ -1,8 +1,10 @@
+import 'package:getcure_doctor/Database/TokenTable.dart';
 import 'package:getcure_doctor/Helpers/AppConfig/GetBigggerData.dart';
 import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
 import 'package:getcure_doctor/Widgets/updatebooking.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class TokenTable extends StatefulWidget {
   final Function count;
@@ -20,23 +22,23 @@ class _TokenTableState extends State<TokenTable> {
     sort = false;
   }
 
-  List/*<Token>*/ li = [];
+  List<Token> li = [];
   @override
   Widget build(BuildContext context) {
-//    final database = Provider.of<TokenDB>(context);
+   final database = Provider.of<TokenDB>(context);
     return StreamBuilder(
-        //    stream: database.watchAllTasks(widget.query),
-        builder: (context, AsyncSnapshot<List/*<Token>*/ > list) {
+           stream: database.watchAllTasks(widget.query),
+        builder: (context, AsyncSnapshot<List<Token>> list) {
       li = list.data;
-      // onSort(int columnIndex, bool ascending, List<Token> token) {
-      //   if (columnIndex == 1) {
-      //     if (ascending) {
-      //       li.sort((a, b) => a.name.compareTo(b.name));
-      //     } else {
-      //       li.sort((a, b) => b.name.compareTo(a.name));
-      //     }
-      //   }
-      // }
+      onSort(int columnIndex, bool ascending, List<Token> token) {
+        if (columnIndex == 1) {
+          if (ascending) {
+            li.sort((a, b) => a.name.compareTo(b.name));
+          } else {
+            li.sort((a, b) => b.name.compareTo(a.name));
+          }
+        }
+      }
 
       if (list.data != null) {
         return Container(
@@ -56,7 +58,7 @@ class _TokenTableState extends State<TokenTable> {
                       setState(() {
                         sort = !sort;
                       });
-                      // onSort(columnIndex, ascending, li);
+                      onSort(columnIndex, ascending, li);
                     },
                     label: Text('Patients Name'),
                   ),

@@ -7,7 +7,6 @@ import 'package:getcure_doctor/Helpers/Network/Requesthttp.dart';
 import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
 import 'package:getcure_doctor/Logic/GenerateTokens.dart';
 import 'package:getcure_doctor/Models/ClinicDoctorModel.dart' as cdm;
-import 'package:getcure_doctor/Models/DoctorLogin.dart';
 import 'package:getcure_doctor/Widgets/Drawer.dart';
 import 'package:getcure_doctor/Widgets/dataTable.dart';
 import 'package:getcure_doctor/Widgets/slots.dart';
@@ -95,8 +94,8 @@ class _AppointmentsState extends State<Appointments> {
   void initState() {
     clinicDoctors();
     getdoctors();
-    const oneSec = const Duration(seconds: 5);
-    new Timer.periodic(oneSec, (Timer t) => tokenfetch());
+    // const oneSec = const Duration(seconds: 5);
+    // new Timer.periodic(oneSec, (Timer t) => tokenfetch());
     // counting(widget.database);
     super.initState();
   }
@@ -416,7 +415,7 @@ class _AppointmentsState extends State<Appointments> {
               scrollDirection: Axis.horizontal,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: TokenTable(/*count: counting, query: query*/),
+                child: TokenTable(count: counting, query: query),
               ),
             )
           ],
@@ -437,7 +436,7 @@ StreamBuilder<List<Token>> _buildTaskList(
         scrollDirection: Axis.horizontal,
         itemCount: tasks.length,
         itemBuilder: (_, index) {
-          // final itemTask = tasks[index];
+          final itemTask = tasks[index];
           return Slots(
             itemTask: itemTask,
             database: database,

@@ -11,7 +11,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../Helpers/Navigation.dart';
 import '../Helpers/Network/Requesthttp.dart';
 import 'Appointments/Appointment.dart';
-import 'Treatment/HomeConnector.dart';
 
 class LoginPage extends StatefulWidget {
   @override
