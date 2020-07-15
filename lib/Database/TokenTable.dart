@@ -45,7 +45,7 @@ class TokenDB extends _$TokenDB {
   Future<List<Token>> getAllTasks(DateTime time) {
     final query = select(tokens)
       ..where((t) => t.tokentime.day.equals(time.day))
-      ..where((t) => t.booked.equals(false));
+      ..where((t) => t._booked.equals(false));
     return query.get();
   }
 

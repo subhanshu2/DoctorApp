@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/material.dart';
+import 'package:getcure_doctor/Database/TokenTable.dart';
+import 'package:getcure_doctor/Helpers/Requesthttp.dart';
 import 'package:intl/intl.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import '../Helpers/colors.dart';
@@ -8,17 +10,19 @@ import '../Helpers/colors.dart';
 class SlotBooking extends StatefulWidget {
   final int tokenno;
   final DateTime time;
- // final Token token;
+  final Token token;
   final Function count;
   final Function changeColorAppointment;
+  final TokenDB database;
 
   const SlotBooking(
       {Key key,
       this.tokenno,
       this.time,
-   //   this.token,
+      this.token,
       this.count,
-      this.changeColorAppointment});
+      this.changeColorAppointment,
+      this.database});
   @override
   _SlotBookingState createState() => _SlotBookingState();
 }
@@ -433,37 +437,37 @@ class _SlotBookingState extends State<SlotBooking> {
                               _formKey.currentState.save();
 
                               if (result == true) {
-                                // response = await bookToken(
-                                //   _name,
-                                //   _age,
-                                //   _mobileno,
-                                //   _address,
-                                //   _radioValue2,
-                                //   _radioValue,
-                                //   widget.tokenno,
-                                //   widget.time,
-                                //   widget.token.tokentime,
-                                //   _radioValue3,
-                                //   widget.token.doctorid,
-                                //   _radiovalue4,
-                                // );
+                                response = await bookToken(
+                                  _name,
+                                  _age,
+                                  _mobileno,
+                                  _address,
+                                  _radioValue2,
+                                  _radioValue,
+                                  widget.tokenno,
+                                  widget.time,
+                                  widget.token.tokentime,
+                                  _radioValue3,
+                                  widget.token.doctorid,
+                                  _radiovalue4,
+                                );
                               }
                               print("GUID" + response);
-                              // database.updateData(
-                              //     widget.token.copyWith(
-                              //         name: _name,
-                              //         mobileno: int.parse(_mobileno),
-                              //         address: _address,
-                              //         age: int.parse(_age),
-                              //         appointmenttype: _radioValue,
-                              //         visittype: _radioValue2,
-                              //         bookedtype: _radioValue3,
-                              //         booked: true,
-                              //         gender: _radiovalue4,
-                              //         guid: response),
-                              //     response.toString());
+                              widget.database.updateData(
+                                  widget.token.copyWith(
+                                      name: _name,
+                                      mobileno: int.parse(_mobileno),
+                                      address: _address,
+                                      age: int.parse(_age),
+                                      appointmenttype: _radioValue,
+                                      visittype: _radioValue2,
+                                      bookedtype: _radioValue3,
+                                      booked: true,
+                                      gender: _radiovalue4,
+                                      guid: response),
+                                  response.toString());
                               setState(() {
-                             //   widget.count(database);
+                                // widget.count(widget.database);
                               });
                               _btnController.success();
                               Timer(Duration(seconds: 1),
@@ -485,39 +489,39 @@ class _SlotBookingState extends State<SlotBooking> {
                           onPressed: () async {
                             if (_formKey.currentState.validate()) {
                               _formKey.currentState.save();
-                              if (result == true) {
-                                // response = await bookToken(
-                                //   _name,
-                                //   _age,
-                                //   _mobileno,
-                                //   _address,
-                                //   _radioValue2,
-                                //   _radioValue,
-                                //   widget.tokenno,
-                                //   widget.time,
-                                //   widget.token.tokentime,
-                                //   _radioValue3,
-                                //   widget.token.doctorid,
-                                //   _radiovalue4,
-                                // );
-                              }
+                              // if (result == true) {
+                              //   response = await bookToken(
+                              //     _name,
+                              //     _age,
+                              //     _mobileno,
+                              //     _address,
+                              //     _radioValue2,
+                              //     _radioValue,
+                              //     widget.tokenno,
+                              //     widget.time,
+                              //     widget.token.tokentime,
+                              //     _radioValue3,
+                              //     widget.token.doctorid,
+                              //     _radiovalue4,
+                              //   );
+                              // }
                               print("GUID" + response);
-                              // database.updateData(
-                              //     widget.token.copyWith(
-                              //         name: _name,
-                              //         mobileno: int.parse(_mobileno),
-                              //         address: _address,
-                              //         age: int.parse(_age),
-                              //         appointmenttype: _radioValue,
-                              //         visittype: _radioValue2,
-                              //         bookedtype: _radioValue3,
-                              //         booked: true,
-                              //         gender: _radiovalue4,
-                              //         guid: response),
-                              //     response.toString());
+                              widget.database.updateData(
+                                  widget.token.copyWith(
+                                      name: _name,
+                                      mobileno: int.parse(_mobileno),
+                                      address: _address,
+                                      age: int.parse(_age),
+                                      appointmenttype: _radioValue,
+                                      visittype: _radioValue2,
+                                      bookedtype: _radioValue3,
+                                      booked: true,
+                                      gender: _radiovalue4,
+                                      guid: response),
+                                  response.toString());
 
                               setState(() {
-//                                widget.count(database);
+                                // widget.count(database);
                               });
                               _btnController.success();
                               Timer(Duration(seconds: 1),

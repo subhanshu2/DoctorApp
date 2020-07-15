@@ -6,6 +6,7 @@ import 'package:flutter_holo_date_picker/flutter_holo_date_picker.dart';
 import 'package:getcure_doctor/Helpers/Requesthttp.dart';
 import 'package:getcure_doctor/Helpers/colors.dart';
 import 'package:getcure_doctor/Logic/GenerateTokens.dart';
+import 'package:getcure_doctor/Models/ClinicDoctorModel.dart' as cdm;
 import 'package:getcure_doctor/Models/DoctorLogin.dart';
 import 'package:getcure_doctor/Widgets/Drawer.dart';
 import 'package:getcure_doctor/Widgets/dataTable.dart';
@@ -23,22 +24,22 @@ class Appointments extends StatefulWidget {
 }
 
 class _AppointmentsState extends State<Appointments> {
-  // List<ClinicDoctors> doc = [];
-  DoctorLogin docUser;
+  List<cdm.Data> doc = [];
+  cdm.ClinicDoctorModel docUser;
   Token tokens;
   String query = '';
 
   Timer T;
   getdoctors() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    String doctors = pref.getString('dresponse');
-    docUser = DoctorLogin.fromJson(json.decode(doctors));
+    String doctors = pref.getString('clinicresponse');
+    docUser = cdm.ClinicDoctorModel.fromJson(json.decode(doctors));
     // dropdownvalue = frontDeskUser.data.clinicDoctors[0];
-    // for (int i = 0; i < frontDeskUser.data.clinicDoctors.length; i++) {
-    //   setState(() {
-    //     doc.add(frontDeskUser.data.clinicDoctors[i]);
-    //   });
-    // }
+    for (int i = 0; i < docUser.data.length; i++) {
+      setState(() {
+        doc.add(docUser.data[i]);
+      });
+    }
   }
 
   GenerateTokens token = GenerateTokens();
@@ -47,44 +48,42 @@ class _AppointmentsState extends State<Appointments> {
     BuildContext context;
     token.tokens = GeneratedTokens(
         fees: 100,
-        doctorid: docUser.data.id,
+        doctorid: doc[0].doctorId,
         date: datePicked,
-        starttime: DateTime.parse('10:00:00'), //timee(datePicked, 'startTime'),
-        startbreaktime:
-            DateTime.parse('13:00:00'), //timee(datePicked, 'breakStart'),
-        endbreaktime:
-            DateTime.parse('14:00:00'), //timee(datePicked, 'breakEnd'),
-        endtime: DateTime.parse('18:00:00'), //timee(datePicked, 'endTime'),
+        starttime: timee(datePicked, 'startTime'),
+        startbreaktime: timee(datePicked, 'breakStart'),
+        endbreaktime: timee(datePicked, 'breakEnd'),
+        endtime: timee(datePicked, 'endTime'),
         nfp: 15);
     token.generateToken(context, database);
   }
 
-  // DateTime timee(DateTime selecteddate, t) {
-  //   dynamic s = DateFormat('EEEE').format(selecteddate);
-  //   DateTime p;
-  //   s = s.toString().toUpperCase();
-  //   for (var i in dropdownvalue.doctorTimings) {
-  //     var o;
-  //     if (s.toString().compareTo(i.day.toUpperCase()) == 0) {
-  //       switch (t) {
-  //         case "startTime":
-  //           o = i.startTime;
-  //           break;
-  //         case "endTime":
-  //           o = i.endTime;
-  //           break;
-  //         case "breakStart":
-  //           o = i.breakStart;
-  //           break;
-  //         default:
-  //           o = i.breakEnd;
-  //       }
-  //       String e = DateFormat("yyyy-MM-dd").format(selecteddate) + " " + o;
-  //       p = DateTime.parse(e);
-  //     }
-  //   }
-  //   return p;
-  // }
+  DateTime timee(DateTime selecteddate, t) {
+    dynamic s = DateFormat('EEEE').format(selecteddate);
+    DateTime p;
+    s = s.toString().toUpperCase();
+    for (var i in doc[0].doctorTimings) {
+      var o;
+      if (s.toString().compareTo(i.day.toUpperCase()) == 0) {
+        switch (t) {
+          case "startTime":
+            o = i.startTime;
+            break;
+          case "endTime":
+            o = i.endTime;
+            break;
+          case "breakStart":
+            o = i.breakStart;
+            break;
+          default:
+            o = i.breakEnd;
+        }
+        String e = DateFormat("yyyy-MM-dd").format(selecteddate) + " " + o;
+        p = DateTime.parse(e);
+      }
+    }
+    return p;
+  }
 
   var countRows;
   var countoncall;
@@ -94,10 +93,11 @@ class _AppointmentsState extends State<Appointments> {
 
   @override
   void initState() {
+    clinicDoctors();
     getdoctors();
     const oneSec = const Duration(seconds: 5);
     new Timer.periodic(oneSec, (Timer t) => tokenfetch());
-    counting(widget.database);
+    // counting(widget.database);
     super.initState();
   }
 
@@ -439,8 +439,8 @@ StreamBuilder<List<Token>> _buildTaskList(
         itemBuilder: (_, index) {
           final itemTask = tasks[index];
           return Slots(
-            // itemTask: itemTask,
-            // database: database,
+            itemTask: itemTask,
+            database: database,
             count: counting,
           );
         },
