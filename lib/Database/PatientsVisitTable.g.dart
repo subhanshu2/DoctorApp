@@ -18,11 +18,11 @@ class PatientsVisitData extends DataClass
   final int weight;
   final int patientId;
   final int clinicDoctorId;
-  final String briefHistory;
-  final String visitReason;
-  final String examination;
-  final String diagnosis;
-  final String medication;
+  final BriefHistorygenerated briefHistory;
+  final VisitReasongenerated visitReason;
+  final Examinationgenerated examination;
+  final Dignosisgenerated diagnosis;
+  final Medicationgenerated medication;
   final String allergies;
   final String lifestyle;
   final bool isOnline;
@@ -36,11 +36,11 @@ class PatientsVisitData extends DataClass
       this.weight,
       @required this.patientId,
       this.clinicDoctorId,
-      @required this.briefHistory,
-      @required this.visitReason,
-      @required this.examination,
-      @required this.diagnosis,
-      @required this.medication,
+      this.briefHistory,
+      this.visitReason,
+      this.examination,
+      this.diagnosis,
+      this.medication,
       @required this.allergies,
       @required this.lifestyle,
       @required this.isOnline});
@@ -66,16 +66,16 @@ class PatientsVisitData extends DataClass
           intType.mapFromDatabaseResponse(data['${effectivePrefix}patient_id']),
       clinicDoctorId: intType
           .mapFromDatabaseResponse(data['${effectivePrefix}clinic_doctor_id']),
-      briefHistory: stringType
-          .mapFromDatabaseResponse(data['${effectivePrefix}brief_history']),
-      visitReason: stringType
-          .mapFromDatabaseResponse(data['${effectivePrefix}visit_reason']),
-      examination: stringType
-          .mapFromDatabaseResponse(data['${effectivePrefix}examination']),
-      diagnosis: stringType
-          .mapFromDatabaseResponse(data['${effectivePrefix}diagnosis']),
-      medication: stringType
-          .mapFromDatabaseResponse(data['${effectivePrefix}medication']),
+      briefHistory: $PatientsVisitTable.$converter0.mapToDart(stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}brief_history'])),
+      visitReason: $PatientsVisitTable.$converter1.mapToDart(stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}visit_reason'])),
+      examination: $PatientsVisitTable.$converter2.mapToDart(stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}examination'])),
+      diagnosis: $PatientsVisitTable.$converter3.mapToDart(stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}diagnosis'])),
+      medication: $PatientsVisitTable.$converter4.mapToDart(stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}medication'])),
       allergies: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}allergies']),
       lifestyle: stringType
@@ -115,19 +115,24 @@ class PatientsVisitData extends DataClass
       map['clinic_doctor_id'] = Variable<int>(clinicDoctorId);
     }
     if (!nullToAbsent || briefHistory != null) {
-      map['brief_history'] = Variable<String>(briefHistory);
+      final converter = $PatientsVisitTable.$converter0;
+      map['brief_history'] = Variable<String>(converter.mapToSql(briefHistory));
     }
     if (!nullToAbsent || visitReason != null) {
-      map['visit_reason'] = Variable<String>(visitReason);
+      final converter = $PatientsVisitTable.$converter1;
+      map['visit_reason'] = Variable<String>(converter.mapToSql(visitReason));
     }
     if (!nullToAbsent || examination != null) {
-      map['examination'] = Variable<String>(examination);
+      final converter = $PatientsVisitTable.$converter2;
+      map['examination'] = Variable<String>(converter.mapToSql(examination));
     }
     if (!nullToAbsent || diagnosis != null) {
-      map['diagnosis'] = Variable<String>(diagnosis);
+      final converter = $PatientsVisitTable.$converter3;
+      map['diagnosis'] = Variable<String>(converter.mapToSql(diagnosis));
     }
     if (!nullToAbsent || medication != null) {
-      map['medication'] = Variable<String>(medication);
+      final converter = $PatientsVisitTable.$converter4;
+      map['medication'] = Variable<String>(converter.mapToSql(medication));
     }
     if (!nullToAbsent || allergies != null) {
       map['allergies'] = Variable<String>(allergies);
@@ -204,11 +209,14 @@ class PatientsVisitData extends DataClass
       weight: serializer.fromJson<int>(json['weight']),
       patientId: serializer.fromJson<int>(json['patientId']),
       clinicDoctorId: serializer.fromJson<int>(json['clinicDoctorId']),
-      briefHistory: serializer.fromJson<String>(json['briefHistory']),
-      visitReason: serializer.fromJson<String>(json['visitReason']),
-      examination: serializer.fromJson<String>(json['examination']),
-      diagnosis: serializer.fromJson<String>(json['diagnosis']),
-      medication: serializer.fromJson<String>(json['medication']),
+      briefHistory:
+          serializer.fromJson<BriefHistorygenerated>(json['briefHistory']),
+      visitReason:
+          serializer.fromJson<VisitReasongenerated>(json['visitReason']),
+      examination:
+          serializer.fromJson<Examinationgenerated>(json['examination']),
+      diagnosis: serializer.fromJson<Dignosisgenerated>(json['diagnosis']),
+      medication: serializer.fromJson<Medicationgenerated>(json['medication']),
       allergies: serializer.fromJson<String>(json['allergies']),
       lifestyle: serializer.fromJson<String>(json['lifestyle']),
       isOnline: serializer.fromJson<bool>(json['isOnline']),
@@ -227,11 +235,11 @@ class PatientsVisitData extends DataClass
       'weight': serializer.toJson<int>(weight),
       'patientId': serializer.toJson<int>(patientId),
       'clinicDoctorId': serializer.toJson<int>(clinicDoctorId),
-      'briefHistory': serializer.toJson<String>(briefHistory),
-      'visitReason': serializer.toJson<String>(visitReason),
-      'examination': serializer.toJson<String>(examination),
-      'diagnosis': serializer.toJson<String>(diagnosis),
-      'medication': serializer.toJson<String>(medication),
+      'briefHistory': serializer.toJson<BriefHistorygenerated>(briefHistory),
+      'visitReason': serializer.toJson<VisitReasongenerated>(visitReason),
+      'examination': serializer.toJson<Examinationgenerated>(examination),
+      'diagnosis': serializer.toJson<Dignosisgenerated>(diagnosis),
+      'medication': serializer.toJson<Medicationgenerated>(medication),
       'allergies': serializer.toJson<String>(allergies),
       'lifestyle': serializer.toJson<String>(lifestyle),
       'isOnline': serializer.toJson<bool>(isOnline),
@@ -248,11 +256,11 @@ class PatientsVisitData extends DataClass
           int weight,
           int patientId,
           int clinicDoctorId,
-          String briefHistory,
-          String visitReason,
-          String examination,
-          String diagnosis,
-          String medication,
+          BriefHistorygenerated briefHistory,
+          VisitReasongenerated visitReason,
+          Examinationgenerated examination,
+          Dignosisgenerated diagnosis,
+          Medicationgenerated medication,
           String allergies,
           String lifestyle,
           bool isOnline}) =>
@@ -369,11 +377,11 @@ class PatientsVisitCompanion extends UpdateCompanion<PatientsVisitData> {
   final Value<int> weight;
   final Value<int> patientId;
   final Value<int> clinicDoctorId;
-  final Value<String> briefHistory;
-  final Value<String> visitReason;
-  final Value<String> examination;
-  final Value<String> diagnosis;
-  final Value<String> medication;
+  final Value<BriefHistorygenerated> briefHistory;
+  final Value<VisitReasongenerated> visitReason;
+  final Value<Examinationgenerated> examination;
+  final Value<Dignosisgenerated> diagnosis;
+  final Value<Medicationgenerated> medication;
   final Value<String> allergies;
   final Value<String> lifestyle;
   final Value<bool> isOnline;
@@ -406,22 +414,17 @@ class PatientsVisitCompanion extends UpdateCompanion<PatientsVisitData> {
     this.weight = const Value.absent(),
     @required int patientId,
     this.clinicDoctorId = const Value.absent(),
-    @required String briefHistory,
-    @required String visitReason,
-    @required String examination,
-    @required String diagnosis,
-    @required String medication,
+    this.briefHistory = const Value.absent(),
+    this.visitReason = const Value.absent(),
+    this.examination = const Value.absent(),
+    this.diagnosis = const Value.absent(),
+    this.medication = const Value.absent(),
     @required String allergies,
     @required String lifestyle,
     this.isOnline = const Value.absent(),
   })  : mobileNo = Value(mobileNo),
         patientName = Value(patientName),
         patientId = Value(patientId),
-        briefHistory = Value(briefHistory),
-        visitReason = Value(visitReason),
-        examination = Value(examination),
-        diagnosis = Value(diagnosis),
-        medication = Value(medication),
         allergies = Value(allergies),
         lifestyle = Value(lifestyle);
   static Insertable<PatientsVisitData> custom({
@@ -474,11 +477,11 @@ class PatientsVisitCompanion extends UpdateCompanion<PatientsVisitData> {
       Value<int> weight,
       Value<int> patientId,
       Value<int> clinicDoctorId,
-      Value<String> briefHistory,
-      Value<String> visitReason,
-      Value<String> examination,
-      Value<String> diagnosis,
-      Value<String> medication,
+      Value<BriefHistorygenerated> briefHistory,
+      Value<VisitReasongenerated> visitReason,
+      Value<Examinationgenerated> examination,
+      Value<Dignosisgenerated> diagnosis,
+      Value<Medicationgenerated> medication,
       Value<String> allergies,
       Value<String> lifestyle,
       Value<bool> isOnline}) {
@@ -534,19 +537,28 @@ class PatientsVisitCompanion extends UpdateCompanion<PatientsVisitData> {
       map['clinic_doctor_id'] = Variable<int>(clinicDoctorId.value);
     }
     if (briefHistory.present) {
-      map['brief_history'] = Variable<String>(briefHistory.value);
+      final converter = $PatientsVisitTable.$converter0;
+      map['brief_history'] =
+          Variable<String>(converter.mapToSql(briefHistory.value));
     }
     if (visitReason.present) {
-      map['visit_reason'] = Variable<String>(visitReason.value);
+      final converter = $PatientsVisitTable.$converter1;
+      map['visit_reason'] =
+          Variable<String>(converter.mapToSql(visitReason.value));
     }
     if (examination.present) {
-      map['examination'] = Variable<String>(examination.value);
+      final converter = $PatientsVisitTable.$converter2;
+      map['examination'] =
+          Variable<String>(converter.mapToSql(examination.value));
     }
     if (diagnosis.present) {
-      map['diagnosis'] = Variable<String>(diagnosis.value);
+      final converter = $PatientsVisitTable.$converter3;
+      map['diagnosis'] = Variable<String>(converter.mapToSql(diagnosis.value));
     }
     if (medication.present) {
-      map['medication'] = Variable<String>(medication.value);
+      final converter = $PatientsVisitTable.$converter4;
+      map['medication'] =
+          Variable<String>(converter.mapToSql(medication.value));
     }
     if (allergies.present) {
       map['allergies'] = Variable<String>(allergies.value);
@@ -705,7 +717,7 @@ class $PatientsVisitTable extends PatientsVisit
     return GeneratedTextColumn(
       'brief_history',
       $tableName,
-      false,
+      true,
     );
   }
 
@@ -719,7 +731,7 @@ class $PatientsVisitTable extends PatientsVisit
     return GeneratedTextColumn(
       'visit_reason',
       $tableName,
-      false,
+      true,
     );
   }
 
@@ -733,7 +745,7 @@ class $PatientsVisitTable extends PatientsVisit
     return GeneratedTextColumn(
       'examination',
       $tableName,
-      false,
+      true,
     );
   }
 
@@ -745,7 +757,7 @@ class $PatientsVisitTable extends PatientsVisit
     return GeneratedTextColumn(
       'diagnosis',
       $tableName,
-      false,
+      true,
     );
   }
 
@@ -757,7 +769,7 @@ class $PatientsVisitTable extends PatientsVisit
     return GeneratedTextColumn(
       'medication',
       $tableName,
-      false,
+      true,
     );
   }
 
@@ -872,44 +884,11 @@ class $PatientsVisitTable extends PatientsVisit
           clinicDoctorId.isAcceptableOrUnknown(
               data['clinic_doctor_id'], _clinicDoctorIdMeta));
     }
-    if (data.containsKey('brief_history')) {
-      context.handle(
-          _briefHistoryMeta,
-          briefHistory.isAcceptableOrUnknown(
-              data['brief_history'], _briefHistoryMeta));
-    } else if (isInserting) {
-      context.missing(_briefHistoryMeta);
-    }
-    if (data.containsKey('visit_reason')) {
-      context.handle(
-          _visitReasonMeta,
-          visitReason.isAcceptableOrUnknown(
-              data['visit_reason'], _visitReasonMeta));
-    } else if (isInserting) {
-      context.missing(_visitReasonMeta);
-    }
-    if (data.containsKey('examination')) {
-      context.handle(
-          _examinationMeta,
-          examination.isAcceptableOrUnknown(
-              data['examination'], _examinationMeta));
-    } else if (isInserting) {
-      context.missing(_examinationMeta);
-    }
-    if (data.containsKey('diagnosis')) {
-      context.handle(_diagnosisMeta,
-          diagnosis.isAcceptableOrUnknown(data['diagnosis'], _diagnosisMeta));
-    } else if (isInserting) {
-      context.missing(_diagnosisMeta);
-    }
-    if (data.containsKey('medication')) {
-      context.handle(
-          _medicationMeta,
-          medication.isAcceptableOrUnknown(
-              data['medication'], _medicationMeta));
-    } else if (isInserting) {
-      context.missing(_medicationMeta);
-    }
+    context.handle(_briefHistoryMeta, const VerificationResult.success());
+    context.handle(_visitReasonMeta, const VerificationResult.success());
+    context.handle(_examinationMeta, const VerificationResult.success());
+    context.handle(_diagnosisMeta, const VerificationResult.success());
+    context.handle(_medicationMeta, const VerificationResult.success());
     if (data.containsKey('allergies')) {
       context.handle(_allergiesMeta,
           allergies.isAcceptableOrUnknown(data['allergies'], _allergiesMeta));
@@ -941,6 +920,17 @@ class $PatientsVisitTable extends PatientsVisit
   $PatientsVisitTable createAlias(String alias) {
     return $PatientsVisitTable(_db, alias);
   }
+
+  static TypeConverter<BriefHistorygenerated, String> $converter0 =
+      const BriefHistoryConverter();
+  static TypeConverter<VisitReasongenerated, String> $converter1 =
+      const VisitReasonConverter();
+  static TypeConverter<Examinationgenerated, String> $converter2 =
+      const ExaminationConverter();
+  static TypeConverter<Dignosisgenerated, String> $converter3 =
+      const DignosisConverter();
+  static TypeConverter<Medicationgenerated, String> $converter4 =
+      const MedicationConverter();
 }
 
 abstract class _$PatientsVisitDB extends GeneratedDatabase {

@@ -14,7 +14,7 @@ class Patient extends DataClass implements Insertable<Patient> {
   final String name;
   final Gender gender;
   final String address;
-  final int patientId;
+  final String patientId;
   final int clinicDoctorId;
   final bool isOnline;
   Patient(
@@ -43,8 +43,8 @@ class Patient extends DataClass implements Insertable<Patient> {
           intType.mapFromDatabaseResponse(data['${effectivePrefix}gender'])),
       address:
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}address']),
-      patientId:
-          intType.mapFromDatabaseResponse(data['${effectivePrefix}patient_id']),
+      patientId: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}patient_id']),
       clinicDoctorId: intType
           .mapFromDatabaseResponse(data['${effectivePrefix}clinic_doctor_id']),
       isOnline:
@@ -74,7 +74,7 @@ class Patient extends DataClass implements Insertable<Patient> {
       map['address'] = Variable<String>(address);
     }
     if (!nullToAbsent || patientId != null) {
-      map['patient_id'] = Variable<int>(patientId);
+      map['patient_id'] = Variable<String>(patientId);
     }
     if (!nullToAbsent || clinicDoctorId != null) {
       map['clinic_doctor_id'] = Variable<int>(clinicDoctorId);
@@ -120,7 +120,7 @@ class Patient extends DataClass implements Insertable<Patient> {
       name: serializer.fromJson<String>(json['name']),
       gender: serializer.fromJson<Gender>(json['gender']),
       address: serializer.fromJson<String>(json['address']),
-      patientId: serializer.fromJson<int>(json['patientId']),
+      patientId: serializer.fromJson<String>(json['patientId']),
       clinicDoctorId: serializer.fromJson<int>(json['clinicDoctorId']),
       isOnline: serializer.fromJson<bool>(json['isOnline']),
     );
@@ -135,7 +135,7 @@ class Patient extends DataClass implements Insertable<Patient> {
       'name': serializer.toJson<String>(name),
       'gender': serializer.toJson<Gender>(gender),
       'address': serializer.toJson<String>(address),
-      'patientId': serializer.toJson<int>(patientId),
+      'patientId': serializer.toJson<String>(patientId),
       'clinicDoctorId': serializer.toJson<int>(clinicDoctorId),
       'isOnline': serializer.toJson<bool>(isOnline),
     };
@@ -148,7 +148,7 @@ class Patient extends DataClass implements Insertable<Patient> {
           String name,
           Gender gender,
           String address,
-          int patientId,
+          String patientId,
           int clinicDoctorId,
           bool isOnline}) =>
       Patient(
@@ -217,7 +217,7 @@ class PatientsCompanion extends UpdateCompanion<Patient> {
   final Value<String> name;
   final Value<Gender> gender;
   final Value<String> address;
-  final Value<int> patientId;
+  final Value<String> patientId;
   final Value<int> clinicDoctorId;
   final Value<bool> isOnline;
   const PatientsCompanion({
@@ -238,7 +238,7 @@ class PatientsCompanion extends UpdateCompanion<Patient> {
     @required String name,
     @required Gender gender,
     this.address = const Value.absent(),
-    @required int patientId,
+    @required String patientId,
     this.clinicDoctorId = const Value.absent(),
     this.isOnline = const Value.absent(),
   })  : mobileNo = Value(mobileNo),
@@ -252,7 +252,7 @@ class PatientsCompanion extends UpdateCompanion<Patient> {
     Expression<String> name,
     Expression<int> gender,
     Expression<String> address,
-    Expression<int> patientId,
+    Expression<String> patientId,
     Expression<int> clinicDoctorId,
     Expression<bool> isOnline,
   }) {
@@ -276,7 +276,7 @@ class PatientsCompanion extends UpdateCompanion<Patient> {
       Value<String> name,
       Value<Gender> gender,
       Value<String> address,
-      Value<int> patientId,
+      Value<String> patientId,
       Value<int> clinicDoctorId,
       Value<bool> isOnline}) {
     return PatientsCompanion(
@@ -315,7 +315,7 @@ class PatientsCompanion extends UpdateCompanion<Patient> {
       map['address'] = Variable<String>(address.value);
     }
     if (patientId.present) {
-      map['patient_id'] = Variable<int>(patientId.value);
+      map['patient_id'] = Variable<String>(patientId.value);
     }
     if (clinicDoctorId.present) {
       map['clinic_doctor_id'] = Variable<int>(clinicDoctorId.value);
@@ -417,11 +417,11 @@ class $PatientsTable extends Patients with TableInfo<$PatientsTable, Patient> {
   }
 
   final VerificationMeta _patientIdMeta = const VerificationMeta('patientId');
-  GeneratedIntColumn _patientId;
+  GeneratedTextColumn _patientId;
   @override
-  GeneratedIntColumn get patientId => _patientId ??= _constructPatientId();
-  GeneratedIntColumn _constructPatientId() {
-    return GeneratedIntColumn(
+  GeneratedTextColumn get patientId => _patientId ??= _constructPatientId();
+  GeneratedTextColumn _constructPatientId() {
+    return GeneratedTextColumn(
       'patient_id',
       $tableName,
       false,

@@ -15,7 +15,7 @@ class Patients extends Table {
   TextColumn get name => text()();
   IntColumn get gender => intEnum<Gender>()();
   TextColumn get address => text().nullable()();
-  IntColumn get patientId => integer()();
+  TextColumn get patientId => text()();
   IntColumn get clinicDoctorId => integer().nullable()();
   BoolColumn get isOnline => boolean().withDefault(Constant(false))();
 }
@@ -33,4 +33,5 @@ class PatientsDB extends _$PatientsDB {
   PatientsDB() : super(_openConnection());
   @override
   int get schemaVersion => 1;
+
 }
