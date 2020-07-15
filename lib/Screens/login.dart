@@ -10,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Helpers/Navigation.dart';
 import '../Helpers/Network/Requesthttp.dart';
+import 'Appointments/Appointment.dart';
 import 'Treatment/HomeConnector.dart';
 
 class LoginPage extends StatefulWidget {
@@ -84,10 +85,11 @@ class LoginPageState extends State<LoginPage> {
         SharedPreferences pref = await SharedPreferences.getInstance();
         String doctors = pref.getString('dresponse');
         DoctorLogin docUser = DoctorLogin.fromJson(json.decode(doctors));
+
         if (!docUser.data.isVerified) {
           _btnController.success();
           Timer(Duration(seconds: 1),
-              () => changeScreenRepacement(context, HomeConnector()));
+              () => changeScreenRepacement(context, Appointments()));
         } else {
           _btnController.reset();
         }

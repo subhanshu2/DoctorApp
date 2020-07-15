@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:getcure_doctor/Models/PatientsVisitTableModels.dart';
 import 'package:moor/moor.dart';
 import 'package:moor_ffi/moor_ffi.dart';
 import 'package:path_provider/path_provider.dart';
@@ -16,11 +17,16 @@ class PatientsVisit extends Table {
   IntColumn get weight => integer().nullable()();
   IntColumn get patientId => integer()();
   IntColumn get clinicDoctorId => integer().nullable()();
-  TextColumn get briefHistory => text()();
-  TextColumn get visitReason => text()();
-  TextColumn get examination => text()();
-  TextColumn get diagnosis => text()();
-  TextColumn get medication => text()();
+  TextColumn get briefHistory => 
+  text().map(const BriefHistoryConverter()).nullable()();
+  TextColumn get visitReason => 
+  text().map(const VisitReasonConverter()).nullable()();
+  TextColumn get examination => 
+   text().map(const ExaminationConverter()).nullable()();
+  TextColumn get diagnosis => 
+  text().map(const DignosisConverter()).nullable()();
+  TextColumn get medication => 
+  text().map(const MedicationConverter()).nullable()();
   TextColumn get allergies => text()();
   TextColumn get lifestyle => text()();
   BoolColumn get isOnline => boolean().withDefault(Constant(false))();

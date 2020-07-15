@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:getcure_doctor/Database/TokenTable.dart';
+import 'package:getcure_doctor/Models/ClinicDoctorModel.dart';
 import 'package:getcure_doctor/Models/DoctorLogin.dart';
 import 'package:getcure_doctor/Models/TokenMode.dart';
 import 'package:http/http.dart' as http;
@@ -19,6 +20,20 @@ Future<String> loginDoctor(mobNo, pass) async {
     pref.setString('dresponse', json.encode(doctor));
   }
   return response.body;
+}
+
+Future<String> clinicDoctors() async {
+  SharedPreferences pref = await SharedPreferences.getInstance();
+  String token = pref.getString('docToken');
+  var response =
+      await http.get(MYCLINICS + '/1', headers: {'Authorization': token});
+  print("Clinic doctor = " + response.statusCode.toString());
+  if (response.statusCode == 200) {
+    ClinicDoctorModel docmodel =
+        ClinicDoctorModel.fromJson(json.decode(response.body));
+    pref.setString('clinicresponse', json.encode(docmodel));
+    return response.body;
+  }
 }
 
 // Future<String> generateOtp(mobno) async {
@@ -133,34 +148,34 @@ Future<String> loginDoctor(mobNo, pass) async {
 //   }
 // }
 
-// Future<String> bookToken(name, age, mobileno, address, vtype, atype, tno, ttime,
-//     tdate, btype, docid, gender) async {
-//   SharedPreferences prefs = await SharedPreferences.getInstance();
-//   String token = prefs.getString('token');
-//   var response = await http.post(TOKENSBOOKING, headers: {
-//     "Authorization": token
-//   }, body: {
-//     "patient[name]": name,
-//     "patient[age]": age.toString(),
-//     "patient[gender]": gender,
-//     "patient[address]": address,
-//     "patient[mobile_no]": mobileno.toString(),
-//     "visit_type": vtype,
-//     "booking_type": btype,
-//     "appointment_type": atype,
-//     "date": DateFormat('yyyy-MM-dd').format(tdate).toString(),
-//     "time": DateFormat.Hms().format(tdate).toString(),
-//     "token_no": tno.toString(),
-//     "clinic_doctor_id": docid.toString(),
-//     "is_present": 'true'
-//   });
-//   print(response.body);
-//   if (response.statusCode == 200) {
-//     return json.decode(response.body)["data"]["patient_id"];
-//   } else {
-//     return 'NIL';
-//   }
-// }
+Future<String> bookToken(name, age, mobileno, address, vtype, atype, tno, ttime,
+    tdate, btype, docid, gender) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String token = prefs.getString('token');
+  var response = await http.post(TOKENSBOOKING, headers: {
+    "Authorization": token
+  }, body: {
+    "patient[name]": name,
+    "patient[age]": age.toString(),
+    "patient[gender]": gender,
+    "patient[address]": address,
+    "patient[mobile_no]": mobileno.toString(),
+    "visit_type": vtype,
+    "booking_type": btype,
+    "appointment_type": atype,
+    "date": DateFormat('yyyy-MM-dd').format(tdate).toString(),
+    "time": DateFormat.Hms().format(tdate).toString(),
+    "token_no": tno.toString(),
+    "clinic_doctor_id": docid.toString(),
+    "is_present": 'true'
+  });
+  print(response.body);
+  if (response.statusCode == 200) {
+    return json.decode(response.body)["data"]["patient_id"];
+  } else {
+    return 'NIL';
+  }
+}
 
 Future<void> getTokens(date, TokenDB db) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
