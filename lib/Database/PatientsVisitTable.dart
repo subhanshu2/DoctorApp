@@ -19,9 +19,12 @@ class PatientsVisit extends Table {
   IntColumn get clinicDoctorId => integer().nullable()();
   TextColumn get briefHistory => 
   text().map(const BriefHistoryConverter()).nullable()();
-  TextColumn get visitReason => text()();
-  TextColumn get examination => text()();
-  TextColumn get diagnosis => text()();
+  TextColumn get visitReason => 
+  text().map(const VisitReasonConverter()).nullable()();
+  TextColumn get examination => 
+   text().map(const ExaminationConverter()).nullable()();
+  TextColumn get diagnosis => 
+  text().map(const DignosisConverter()).nullable()();
   TextColumn get medication => 
   text().map(const MedicationConverter()).nullable()();
   TextColumn get allergies => text()();
