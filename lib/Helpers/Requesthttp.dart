@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'package:getcure_doctor/Database/TokenTable.dart';
 import 'package:getcure_doctor/Models/DoctorLogin.dart';
+import 'package:getcure_doctor/Models/TokenMode.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Apis.dart';
+import 'package:intl/intl.dart';
 
 Future<String> loginDoctor(mobNo, pass) async {
   var response = await http
@@ -159,38 +162,38 @@ Future<String> loginDoctor(mobNo, pass) async {
 //   }
 // }
 
-// Future<void> getTokens(id, date, TokenDB db) async {
-//   SharedPreferences prefs = await SharedPreferences.getInstance();
-//   String token = prefs.getString('token');
-//   var response = await http.get(
-//     GETTOKENSBYDATE +
-//         id.toString() +
-//         "?${DateFormat('yyyy-MM-dd').format(date).toString()}",
-//     headers: {"Authorization": token},
-//   );
-//   print(response.body);
-//   if (response.statusCode == 200) {
-//     TokenModel tokens = TokenModel.fromJson(json.decode(response.body));
-//     for (final i in tokens.data) {
-//       final token = Token(
-//         doctorid: i.clinicDoctorId,
-//         booked: true,
-//         name: i.patientName,
-//         tokentime: DateTime.parse(DateFormat("yyyy-MM-dd").format(DateTime.now()) + " " + i.time),
-//         isOnline: true,
-//         tokenno: i.tokenNo,
-//         address: i.patient.address,
-//         age: i.patient.age,
-//         fees: 100,
-//         appointmenttype: i.appointmentType,
-//         bookedtype: i.bookingType,
-//         updatedAt: DateTime.now(),
-//         mobileno: int.parse(i.patient.mobileNo),
-//         visittype: i.visitType,
-//         guid: i.patientId,
-//         cancelled: false
-//       );
-//       db.updateOnline(token);
-//     }
-//   }
-// }
+Future<void> getTokens(date, TokenDB db) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String token = prefs.getString('token');
+  var response = await http.get(
+    GETTOKENSBYDATE +
+        '2' +
+        "?${DateFormat('yyyy-MM-dd').format(date).toString()}",
+    headers: {"Authorization": token},
+  );
+  print(response.body);
+  if (response.statusCode == 200) {
+    TokenModel tokens = TokenModel.fromJson(json.decode(response.body));
+    for (final i in tokens.data) {
+      final token = Token(
+          doctorid: i.clinicDoctorId,
+          booked: true,
+          name: i.patientName,
+          tokentime: DateTime.parse(
+              DateFormat("yyyy-MM-dd").format(DateTime.now()) + " " + i.time),
+          isOnline: true,
+          tokenno: i.tokenNo,
+          address: i.patient.address,
+          age: i.patient.age,
+          fees: 100,
+          appointmenttype: i.appointmentType,
+          bookedtype: i.bookingType,
+          updatedAt: DateTime.now(),
+          mobileno: int.parse(i.patient.mobileNo),
+          visittype: i.visitType,
+          guid: i.patientId,
+          cancelled: false);
+      db.updateOnline(token);
+    }
+  }
+}

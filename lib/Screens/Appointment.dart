@@ -1,83 +1,90 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_holo_date_picker/flutter_holo_date_picker.dart';
+// import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:getcure_doctor/Helpers/Requesthttp.dart';
 import 'package:getcure_doctor/Helpers/colors.dart';
+import 'package:getcure_doctor/Logic/GenerateTokens.dart';
+import 'package:getcure_doctor/Models/DoctorLogin.dart';
 import 'package:getcure_doctor/Widgets/Drawer.dart';
 import 'package:getcure_doctor/Widgets/dataTable.dart';
 import 'package:getcure_doctor/Widgets/slots.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:getcure_doctor/Database/TokenTable.dart';
 
 class Appointments extends StatefulWidget {
-  // final TokenDB database;
-  // const Appointments({this.database});
+  final TokenDB database;
+  const Appointments({this.database});
   @override
   _AppointmentsState createState() => _AppointmentsState();
 }
 
 class _AppointmentsState extends State<Appointments> {
   // List<ClinicDoctors> doc = [];
-  // FrontDeskUser frontDeskUser;
-  // Token tokens;
-  // String query = '';
+  DoctorLogin docUser;
+  Token tokens;
+  String query = '';
 
-  // Timer T;
-  // getdoctors() async {
-  //   SharedPreferences pref = await SharedPreferences.getInstance();
-  //   String doctors = pref.getString('fresponse');
-  //   frontDeskUser = FrontDeskUser.fromJson(json.decode(doctors));
-  //   dropdownvalue = frontDeskUser.data.clinicDoctors[0];
-  //   for (int i = 0; i < frontDeskUser.data.clinicDoctors.length; i++) {
-  //     setState(() {
-  //       doc.add(frontDeskUser.data.clinicDoctors[i]);
-  //     });
-  //   }
-  // }
-
-  // GenerateTokens token = GenerateTokens();
-
-  // generate(TokenDB database) {
-  //   BuildContext context;
-  //   token.tokens = GeneratedTokens(
-  //       fees: dropdownvalue.consultationFee,
-  //       doctorid: dropdownvalue.id,
-  //       date: datePicked,
-  //       starttime: timee(datePicked, 'startTime'),
-  //       startbreaktime: timee(datePicked, 'breakStart'),
-  //       endbreaktime: timee(datePicked, 'breakEnd'),
-  //       endtime: timee(datePicked, 'endTime'),
-  //       nfp: dropdownvalue.patientsPerHour);
-  //   token.generateToken(context, database);
-  // }
-
-  DateTime timee(DateTime selecteddate, t) {
-    dynamic s = DateFormat('EEEE').format(selecteddate);
-    DateTime p;
-    s = s.toString().toUpperCase();
-    // for (var i in dropdownvalue.doctorTimings) {
-    //   var o;
-    //   if (s.toString().compareTo(i.day.toUpperCase()) == 0) {
-    //     switch (t) {
-    //       case "startTime":
-    //         o = i.startTime;
-    //         break;
-    //       case "endTime":
-    //         o = i.endTime;
-    //         break;
-    //       case "breakStart":
-    //         o = i.breakStart;
-    //         break;
-    //       default:
-    //         o = i.breakEnd;
-    //     }
-    //     String e = DateFormat("yyyy-MM-dd").format(selecteddate) + " " + o;
-    //     p = DateTime.parse(e);
-    //   }
+  Timer T;
+  getdoctors() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    String doctors = pref.getString('dresponse');
+    docUser = DoctorLogin.fromJson(json.decode(doctors));
+    // dropdownvalue = frontDeskUser.data.clinicDoctors[0];
+    // for (int i = 0; i < frontDeskUser.data.clinicDoctors.length; i++) {
+    //   setState(() {
+    //     doc.add(frontDeskUser.data.clinicDoctors[i]);
+    //   });
     // }
-    return p;
   }
+
+  GenerateTokens token = GenerateTokens();
+
+  generate(TokenDB database) {
+    BuildContext context;
+    token.tokens = GeneratedTokens(
+        fees: 100,
+        doctorid: docUser.data.id,
+        date: datePicked,
+        starttime: DateTime.parse('10:00:00'), //timee(datePicked, 'startTime'),
+        startbreaktime:
+            DateTime.parse('13:00:00'), //timee(datePicked, 'breakStart'),
+        endbreaktime:
+            DateTime.parse('14:00:00'), //timee(datePicked, 'breakEnd'),
+        endtime: DateTime.parse('18:00:00'), //timee(datePicked, 'endTime'),
+        nfp: 15);
+    token.generateToken(context, database);
+  }
+
+  // DateTime timee(DateTime selecteddate, t) {
+  //   dynamic s = DateFormat('EEEE').format(selecteddate);
+  //   DateTime p;
+  //   s = s.toString().toUpperCase();
+  //   for (var i in dropdownvalue.doctorTimings) {
+  //     var o;
+  //     if (s.toString().compareTo(i.day.toUpperCase()) == 0) {
+  //       switch (t) {
+  //         case "startTime":
+  //           o = i.startTime;
+  //           break;
+  //         case "endTime":
+  //           o = i.endTime;
+  //           break;
+  //         case "breakStart":
+  //           o = i.breakStart;
+  //           break;
+  //         default:
+  //           o = i.breakEnd;
+  //       }
+  //       String e = DateFormat("yyyy-MM-dd").format(selecteddate) + " " + o;
+  //       p = DateTime.parse(e);
+  //     }
+  //   }
+  //   return p;
+  // }
 
   var countRows;
   var countoncall;
@@ -87,56 +94,56 @@ class _AppointmentsState extends State<Appointments> {
 
   @override
   void initState() {
-    // getdoctors();
-    // const oneSec = const Duration(seconds: 5);
-    // new Timer.periodic(oneSec, (Timer t) => tokenfetch());
-    // counting(widget.database);
+    getdoctors();
+    const oneSec = const Duration(seconds: 5);
+    new Timer.periodic(oneSec, (Timer t) => tokenfetch());
+    counting(widget.database);
     super.initState();
   }
+
   @override
-  void dispose() { 
-    //T.cancel();
+  void dispose() {
+    T.cancel();
     super.dispose();
   }
 
-  // tokenfetch() async {
-  //   print(dropdownvalue.id);
-  //   dynamic li =
-  //       await widget.database.getAllTasks(datePicked, dropdownvalue.id);
-  //   if (li.length != 0) {
-  //     getTokens(dropdownvalue.id, datePicked, widget.database);
-  //   }else{
-  //      generate(widget.database);
-  //   }
-  // }
+  tokenfetch() async {
+    // print(dropdownvalue.id);
+    dynamic li = await widget.database.getAllTasks(datePicked);
+    if (li.length != 0) {
+      getTokens(datePicked, widget.database);
+    } else {
+      generate(widget.database);
+    }
+  }
 
-  // void counting(TokenDB x) async {
-  //   countRows = await x.getcount();
-  //   print("counting booked= " + countRows.toString());
-  //   countoncall = await x.getcountoncall();
-  //   print("counting on call booked= " + countoncall.toString());
-  //   countonfront = await x.getcountonfront();
-  //   countOnline= await x.getcountOnline();
-  //   print("count online= "+ countOnline.toString());
-  //   countPresent = await x.getcountPresent();
-  //   setState(() {
-  //     countRows = countRows;
-  //     countoncall = countoncall;
-  //     countonfront = countonfront;
-  //     countOnline = countOnline;
-  //     countPresent = countPresent;
-  //   });
-  // }
+  void counting(TokenDB x) async {
+    countRows = await x.getcount();
+    print("counting booked= " + countRows.toString());
+    countoncall = await x.getcountoncall();
+    print("counting on call booked= " + countoncall.toString());
+    countonfront = await x.getcountonfront();
+    countOnline = await x.getcountOnline();
+    print("count online= " + countOnline.toString());
+    countPresent = await x.getcountPresent();
+    setState(() {
+      countRows = countRows;
+      countoncall = countoncall;
+      countonfront = countonfront;
+      countOnline = countOnline;
+      countPresent = countPresent;
+    });
+  }
 
-  //ClinicDoctors dropdownvalue = ClinicDoctors(doctorName: '');
+  // ClinicDoctors dropdownvalue = ClinicDoctors(doctorName: '');
   var datePicked = DateTime.now();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: DrawerWidget(
-        // name: dropdownvalue.doctorName,
-        // clinicid: dropdownvalue.doctorId.toString(),
-      ),
+          // name: dropdownvalue.doctorName,
+          // clinicid: dropdownvalue.doctorId.toString(),
+          ),
       appBar: AppBar(
         iconTheme: IconThemeData(
           color: orangep,
@@ -144,7 +151,7 @@ class _AppointmentsState extends State<Appointments> {
         backgroundColor: white,
         // title: Center(
         //   child: DropdownButton<ClinicDoctors>(
-        //    // value: dropdownvalue == null ? null : dropdownvalue,
+        //    value: dropdownvalue == null ? null : dropdownvalue,
         //     hint: Text('Select Doctor'),
         //     iconSize: 24,
         //     elevation: 16,
@@ -153,18 +160,18 @@ class _AppointmentsState extends State<Appointments> {
         //       height: 2,
         //       color: grey,
         //     ),
-        //     // onChanged: (ClinicDoctors newValue) {
-        //     //   setState(() {
-        //     //     dropdownvalue = newValue;
-        //     //   });
-        //     // },
-        //     // items:
-        //     //     doc.map<DropdownMenuItem<ClinicDoctors>>((ClinicDoctors value) {
-        //     //   return DropdownMenuItem<ClinicDoctors>(
-        //     //     value: value,
-        //     //     child: Text(value.doctorName),
-        //     //   );
-        //     // }).toList(),
+        //     onChanged: (ClinicDoctors newValue) {
+        //       setState(() {
+        //         dropdownvalue = newValue;
+        //       });
+        //     },
+        //     items:
+        //         doc.map<DropdownMenuItem<ClinicDoctors>>((ClinicDoctors value) {
+        //       return DropdownMenuItem<ClinicDoctors>(
+        //         value: value,
+        //         child: Text(value.doctorName),
+        //       );
+        //     }).toList(),
         //   ),
         // ),
         actions: <Widget>[
@@ -174,9 +181,7 @@ class _AppointmentsState extends State<Appointments> {
               color: pcolor,
               size: 30,
             ),
-            onPressed: (){
-              
-            },
+            onPressed: () {},
           ),
         ],
       ),
@@ -202,12 +207,12 @@ class _AppointmentsState extends State<Appointments> {
                         child: Padding(
                           padding: const EdgeInsets.only(left: 5.0, right: 5),
                           child: Center(
-                              child: Text(
-                            'Dr.', /*dropdownvalue.doctorName*/
-                            style: TextStyle(color: black, fontSize: 18),
-                            overflow: TextOverflow.ellipsis,
-                          )
-                          ),
+                              //     child: Text(
+                              //   'Dr.', dropdownvalue.doctorName
+                              //   style: TextStyle(color: black, fontSize: 18),
+                              //   overflow: TextOverflow.ellipsis,
+                              // )
+                              ),
                         ),
                       ),
                     ),
@@ -237,22 +242,22 @@ class _AppointmentsState extends State<Appointments> {
                             padding: const EdgeInsets.all(9.0),
                             child: GestureDetector(
                               onTap: () async {
-                                // var selected =
-                                //     await DatePicker.showSimpleDatePicker(
-                                //   context,
-                                //   initialDate: datePicked,
-                                //   firstDate: DateTime.now(),
-                                //   dateFormat: "dd-MMMM-yyyy",
-                                //   //locale: DateTimePickerLocale.en_us,
-                                //   looping: true,
-                                // );
-                                // selected != null
-                                //     ? setState(() {
-                                //         datePicked = selected;
-                                //       })
-                                //     : setState(() {
-                                //         datePicked = datePicked;
-                                //       });
+                                var selected =
+                                    await DatePicker.showSimpleDatePicker(
+                                  context,
+                                  initialDate: datePicked,
+                                  firstDate: DateTime.now(),
+                                  dateFormat: "dd-MMMM-yyyy",
+                                  locale: DateTimePickerLocale.en_us,
+                                  looping: true,
+                                );
+                                selected != null
+                                    ? setState(() {
+                                        datePicked = selected;
+                                      })
+                                    : setState(() {
+                                        datePicked = datePicked;
+                                      });
                               },
                               child: Container(
                                   width: 35,
@@ -267,15 +272,12 @@ class _AppointmentsState extends State<Appointments> {
                             ),
                           ),
                           GestureDetector(
-                            onTap: (){
-                            //  if(widget.database!=null){
-                            //     widget.database.updateData(
-                            //       tokens.copyWith(
-                            //         shift:false
-                            //       )," ");
-                            //   generate(widget.database);
-                            //  }
-                             
+                            onTap: () {
+                              if (widget.database != null) {
+                                widget.database.updateData(
+                                    tokens.copyWith(shift: false), " ");
+                                generate(widget.database);
+                              }
                             },
                             child: Container(
                                 width: 35,
@@ -317,41 +319,41 @@ class _AppointmentsState extends State<Appointments> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
-                      //     IconBuilder(
-                      //       EvilIcons.calendar,
-                      //       countRows,
-                      //       'Booked',
-                      //     ),
-                      //     IconBuilder(
-                      //       EvilIcons.check,
-                      //       500,
-                      //       'Completed',
-                      //     ),
-                      //     IconBuilder(
-                      //       MaterialCommunityIcons.web,
-                      //       countOnline,
-                      //       'Online',
-                      //     ),
-                      //   ],
-                      // ),
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      //   children: <Widget>[
-                      //     IconBuilder(
-                      //       MaterialCommunityIcons.deskphone,
-                      //       countonfront,
-                      //       'Fornt Desk',
-                      //     ),
-                      //     IconBuilder(
-                      //       SimpleLineIcons.call_end,
-                      //       countoncall,
-                      //       'On Call',
-                      //     ),
-                      //     IconBuilder(
-                      //       SimpleLineIcons.user,
-                      //       countPresent,
-                      //       'Present',
-                      //     ),
+                          // IconBuilder(
+                          //   EvilIcons.calendar,
+                          //   countRows,
+                          //   'Booked',
+                          // ),
+                          // IconBuilder(
+                          //   EvilIcons.check,
+                          //   500,
+                          //   'Completed',
+                          // ),
+                          // IconBuilder(
+                          //   MaterialCommunityIcons.web,
+                          //   countOnline,
+                          //   'Online',
+                          // ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          // IconBuilder(
+                          //   MaterialCommunityIcons.deskphone,
+                          //   countonfront,
+                          //   'Fornt Desk',
+                          // ),
+                          // IconBuilder(
+                          //   SimpleLineIcons.call_end,
+                          //   countoncall,
+                          //   'On Call',
+                          // ),
+                          // IconBuilder(
+                          //   SimpleLineIcons.user,
+                          //   countPresent,
+                          //   'Present',
+                          // ),
                         ],
                       ),
                     ],
@@ -363,34 +365,29 @@ class _AppointmentsState extends State<Appointments> {
                 Text('Available Tokens',
                     style:
                         TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
-                // IconButton(
-                //     icon: Icon(Icons.file_download),
-                //     onPressed: () async {
-                //       print(datePicked);
-                //       dynamic li = await widget.database
-                //           .getAllTasks(datePicked, dropdownvalue.id);
-                //       if (li.length == 0) {
-                //         generate(widget.database);
-                //       }
-                //       // } else {
-                //       //   getTokens(dropdownvalue.doctorId, datePicked,
-                //       //       widget.database);
-                //       // }
-                //     }),
+                IconButton(
+                    icon: Icon(Icons.file_download),
+                    onPressed: () async {
+                      print(datePicked);
+                      dynamic li =
+                          await widget.database.getAllTasks(datePicked);
+                      if (li.length == 0) {
+                        generate(widget.database);
+                      } else {
+                        getTokens(datePicked, widget.database);
+                      }
+                    }),
                 IconButton(
                     icon: Icon(Icons.delete),
-                  //  onPressed: () => widget.database.deleteallTask()
-                  ),
+                    onPressed: () => widget.database.deleteallTask()),
               ],
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
                   height: 80,
-                  // color: orangep,
-                  // child: _buildTaskList(
-                  //     context, datePicked, dropdownvalue.id, counting)
-                  ),
+                  color: orangep,
+                  child: _buildTaskList(context, datePicked, counting)),
             ),
             SizedBox(
               height: 20,
@@ -409,7 +406,7 @@ class _AppointmentsState extends State<Appointments> {
                       icon: Icon(Icons.search)),
                   onChanged: (val) {
                     setState(() {
-//                      query = val;
+                      query = val;
                     });
                   },
                 ),
@@ -429,25 +426,25 @@ class _AppointmentsState extends State<Appointments> {
   }
 }
 
-// StreamBuilder<List<Token>> _buildTaskList(
-//     BuildContext context, DateTime datePicked, int id, Function counting) {
-//   final database = Provider.of<TokenDB>(context);
-  // return StreamBuilder(
-  //   stream: database.watchondate(datePicked, id),
-  //   builder: (context, AsyncSnapshot<List<Token>> snapshot) {
-  //     final tasks = snapshot.data ?? List();
-  //     return ListView.builder(
-  //       scrollDirection: Axis.horizontal,
-  //       itemCount: tasks.length,
-  //       itemBuilder: (_, index) {
-  //         final itemTask = tasks[index];
-  //         return Slots(
-  //           // itemTask: itemTask,
-  //           // database: database,
-  //           count: counting,
-  //         );
-  //       },
-  //     );
-  //   },
-  // );
-//}
+StreamBuilder<List<Token>> _buildTaskList(
+    BuildContext context, DateTime datePicked, Function counting) {
+  final database = Provider.of<TokenDB>(context);
+  return StreamBuilder(
+    stream: database.watchondate(datePicked),
+    builder: (context, AsyncSnapshot<List<Token>> snapshot) {
+      final tasks = snapshot.data ?? List();
+      return ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: tasks.length,
+        itemBuilder: (_, index) {
+          final itemTask = tasks[index];
+          return Slots(
+            // itemTask: itemTask,
+            // database: database,
+            count: counting,
+          );
+        },
+      );
+    },
+  );
+}
