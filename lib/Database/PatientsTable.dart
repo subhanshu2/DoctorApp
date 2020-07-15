@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:getcure_doctor/Models/TokenMode.dart';
 import 'package:moor/moor.dart';
 import 'package:moor_ffi/moor_ffi.dart';
 import 'package:path_provider/path_provider.dart';
@@ -34,10 +35,18 @@ class PatientsDB extends _$PatientsDB {
   @override
   int get schemaVersion => 1;
   Future<List<Patient>> showFamilyPatient(int mobileNo) async
-{
-  String mob = mobileNo.toString();
-  dynamic ans =  select(patients)..where((u) => u.patientId.contains(mob));
-  return ans.get();
-}
-
+  {
+    String mob = mobileNo.toString();
+    dynamic ans =  select(patients)..where((u) => u.patientId.contains(mob));
+    return ans.get();
+  }
+  Future<List<String>> showFamily() async
+  {
+    List<dynamic> names = [];
+    for(patients in Patient)
+    {
+      names.add(patients.patientId);
+    }
+    return names;
+  }
 }
