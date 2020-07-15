@@ -27,10 +27,12 @@ const UPDATECLINIC = BASEURL +
     "/my-clinic-timing/+clinicId"; // (put request to add/update my clinic timings) (body: {doctor_timings: Timing[];
 //patients_per_hour: number;}) here Timing represents array of object=> {day: DaysEnum; start_time: string;  end_time: string;  break_start?: string;  break_end?: string;}
 
+const MYCLINICS = BASEURL + "/my-clinics";
+
 // III) CLINIC=>
 const ADDCLINIC = BASEURL +
     "/add-clinic"; //(post req to add clinic) (body: {name: string;  city_id: number;  city: string;  address: string;  landmark?: string;
-  //pin_code: string;  phone_no: string;  timings: Timing[]; emergency_fee: float; consultaion_fee: float;  registration_no?: string;}) here Timing is same as above object
+//pin_code: string;  phone_no: string;  timings: Timing[]; emergency_fee: float; consultaion_fee: float;  registration_no?: string;}) here Timing is same as above object
 const ADDCLINICBYCODE = BASEURL +
     "/add-clinic-by-code"; //(post request to add clinic by code) (body: {clinic_code: string})
 
@@ -56,17 +58,23 @@ const GETCITIES =
     BASEURL + "/cities/+stateId"; // (get api to view cities of a state)
 
 // VII) INVOICE =>
-const GETDOCINVO = BASEURL + "/doctors-invoice/"; //(get api to view invoice in decr date)
-const GETHOSINVO = BASEURL + "/clinics-invoice/"; //(get api to view invoice of clinic)(body: {date: YYYY-MM-DD})
+const GETDOCINVO =
+    BASEURL + "/doctors-invoice/"; //(get api to view invoice in decr date)
+const GETHOSINVO = BASEURL +
+    "/clinics-invoice/"; //(get api to view invoice of clinic)(body: {date: YYYY-MM-DD})
 
 //VIII) SYMPTOMS =>
-const GETBRIEFHISTORY= BASEURL+ "/brief-histories"; // (get api) (doc token)
-const GETVISITREASON=BASEURL+ "/visit-reasons"; // (get api) (doc token)
-const ADDSYMPTOM = BASEURL+ "/symptom"; //(post api) (doc token) (body: {doctor_id: number; title: string; type: [Visit Reason, Brief History]})
-const DELETESYMPTOM = BASEURL + "/symptom/(+symptomId)"; //(delete api) (doc token)
+const GETBRIEFHISTORY = BASEURL + "/brief-histories"; // (get api) (doc token)
+const GETVISITREASON = BASEURL + "/visit-reasons"; // (get api) (doc token)
+const ADDSYMPTOM = BASEURL +
+    "/symptom"; //(post api) (doc token) (body: {doctor_id: number; title: string; type: [Visit Reason, Brief History]})
+const DELETESYMPTOM =
+    BASEURL + "/symptom/(+symptomId)"; //(delete api) (doc token)
 
 //IX) EXAMINATION =>
 const GETEXAMINATION = BASEURL + "/examinations"; //(get api) (doc token)
-const ADDEXAMINATION = BASEURL + "/examinations";//(post api) (doc token) (body: {doctor_id: number; title: string; parameters: Parameter[]; price?: number}) here Parameter is {title: string, within_range: number[]};
+const ADDEXAMINATION = BASEURL +
+    "/examinations"; //(post api) (doc token) (body: {doctor_id: number; title: string; parameters: Parameter[]; price?: number}) here Parameter is {title: string, within_range: number[]};
 //const changeit = BASEURL+"/examinations/(+examinationId)"; //(doc token) (put api) (body: {title, parameters, price} => not compulsory)
-const DELETEEXAMINATION = BASEURL+ "/examinations/(+examinationId)";// (doc token) (delete api)
+const DELETEEXAMINATION =
+    BASEURL + "/examinations/(+examinationId)"; // (doc token) (delete api)

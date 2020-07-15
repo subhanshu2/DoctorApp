@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:getcure_doctor/Helpers/colors.dart';
 import 'package:getcure_doctor/Models/DoctorLogin.dart';
+import 'package:getcure_doctor/Screens/Appointment.dart';
 import 'package:getcure_doctor/Screens/HomeScreen/HomeConnector.dart';
 import 'package:getcure_doctor/Screens/Signup.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -84,10 +85,11 @@ class LoginPageState extends State<LoginPage> {
         SharedPreferences pref = await SharedPreferences.getInstance();
         String doctors = pref.getString('dresponse');
         DoctorLogin docUser = DoctorLogin.fromJson(json.decode(doctors));
+
         if (!docUser.data.isVerified) {
           _btnController.success();
           Timer(Duration(seconds: 1),
-              () => changeScreenRepacement(context, HomeConnector()));
+              () => changeScreenRepacement(context, Appointments()));
         } else {
           _btnController.reset();
         }
