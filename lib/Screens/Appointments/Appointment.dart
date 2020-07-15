@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_holo_date_picker/flutter_holo_date_picker.dart';
 // import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:getcure_doctor/Helpers/Requesthttp.dart';
-import 'package:getcure_doctor/Helpers/colors.dart';
+import 'package:getcure_doctor/Helpers/Network/Requesthttp.dart';
+import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
 import 'package:getcure_doctor/Logic/GenerateTokens.dart';
 import 'package:getcure_doctor/Models/DoctorLogin.dart';
 import 'package:getcure_doctor/Widgets/Drawer.dart';
@@ -437,7 +437,7 @@ StreamBuilder<List<Token>> _buildTaskList(
         scrollDirection: Axis.horizontal,
         itemCount: tasks.length,
         itemBuilder: (_, index) {
-          final itemTask = tasks[index];
+          // final itemTask = tasks[index];
           return Slots(
             // itemTask: itemTask,
             // database: database,

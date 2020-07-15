@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:getcure_doctor/Helpers/colors.dart';
+import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class Otp extends StatefulWidget {

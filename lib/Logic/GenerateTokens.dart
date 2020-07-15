@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:getcure_doctor/Database/TokenTable.dart';
-import 'package:getcure_doctor/Helpers/Requesthttp.dart';
+import 'package:getcure_doctor/Helpers/Network/Requesthttp.dart';
 
 class GeneratedTokens {
   final int doctorid;

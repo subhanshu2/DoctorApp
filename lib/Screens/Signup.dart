@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:getcure_doctor/Helpers/colors.dart';
+import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
 import '../Helpers/Navigation.dart';
 import 'login.dart';
 

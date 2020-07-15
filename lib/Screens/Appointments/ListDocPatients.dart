@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:getcure_doctor/Screens/PatientInfo.dart';
+import 'package:getcure_doctor/Screens/Appointments/PatientInfo.dart';
 
 class ListDocPatients extends StatefulWidget {
   @override

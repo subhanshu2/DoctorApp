@@ -1,7 +1,7 @@
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:getcure_doctor/Helpers/colors.dart';
+import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
 import 'package:intl/intl.dart';
 
 class AddClinic extends StatefulWidget {

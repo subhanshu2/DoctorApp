@@ -1,9 +1,8 @@
 import 'dart:async';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/material.dart';
-import 'package:getcure_doctor/Helpers/colors.dart';
+import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class UpdateBooking extends StatefulWidget {

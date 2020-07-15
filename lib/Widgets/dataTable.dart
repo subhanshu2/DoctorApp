@@ -1,9 +1,8 @@
-import 'package:getcure_doctor/Helpers/GetBigggerData.dart';
-import 'package:getcure_doctor/Helpers/colors.dart';
+import 'package:getcure_doctor/Helpers/AppConfig/GetBigggerData.dart';
+import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
 import 'package:getcure_doctor/Widgets/updatebooking.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class TokenTable extends StatefulWidget {
   final Function count;

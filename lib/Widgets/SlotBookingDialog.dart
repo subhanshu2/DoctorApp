@@ -3,7 +3,7 @@ import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
-import '../Helpers/colors.dart';
+import '../Helpers/AppConfig/colors.dart';
 
 class SlotBooking extends StatefulWidget {
   final int tokenno;

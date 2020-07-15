@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../Helpers/colors.dart';
+import '../../Helpers/AppConfig/colors.dart';
 
 String temp;
 String bp;

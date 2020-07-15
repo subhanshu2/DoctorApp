@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:getcure_doctor/Helpers/colors.dart';
+import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
 
 class ClinicDetails extends StatefulWidget {
   ClinicDetails({Key key}) : super(key: key);

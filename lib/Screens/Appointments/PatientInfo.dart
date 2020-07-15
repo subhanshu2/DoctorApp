@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:getcure_doctor/Helpers/colors.dart';
+import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
 
 String temp;
 String bp;
@@ -173,7 +173,7 @@ class _PatientInfoState extends State<PatientInfo>
   Widget build(BuildContext context) {
     getDesigns();
     return Scaffold(
-      //  drawer: DoctorDrawer(),
+        //  drawer: DoctorDrawer(),
         appBar: AppBar(
           iconTheme: IconThemeData(
             color: orange,
@@ -239,14 +239,14 @@ class _PatientInfoState extends State<PatientInfo>
                         ],
                       ),
                     ),
-                    if(tabController.index==0)
+                    if (tabController.index == 0)
                       upperDesign0
-                    else if(tabController.index ==1 )
+                    else if (tabController.index == 1)
                       upperDesign1
-                    else if(tabController.index==3)
+                    else if (tabController.index == 3)
                       upperDesign3
                     else
-                      upperDesign1,  
+                      upperDesign1,
                     // getDesigns(),
                     DefaultTabController(
                         length: tabs.length,
@@ -284,10 +284,10 @@ class _PatientInfoState extends State<PatientInfo>
 }
 
 class CustomBoxes extends StatefulWidget {
-  String label;
-  String unit;
-  String value;
-  Icon icon;
+  final String label;
+  final String unit;
+  final String value;
+  final Icon icon;
   CustomBoxes({this.label, this.value, this.unit, this.icon});
 
   @override

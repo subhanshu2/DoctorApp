@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:getcure_doctor/Helpers/colors.dart';
+import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
 import 'package:getcure_doctor/Widgets/SlotBookingDialog.dart';
 
 import 'package:intl/intl.dart';

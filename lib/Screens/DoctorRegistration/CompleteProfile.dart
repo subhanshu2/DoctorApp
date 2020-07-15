@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:getcure_doctor/Helpers/colors.dart';
+import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
 
 class CompleteProfile extends StatefulWidget {
   CompleteProfile({Key key}) : super(key: key);
