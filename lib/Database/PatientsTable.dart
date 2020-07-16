@@ -34,19 +34,37 @@ class PatientsDB extends _$PatientsDB {
   PatientsDB() : super(_openConnection());
   @override
   int get schemaVersion => 1;
+  
+  Future<List<String>> showFamily(dynamic p) async
+  {
+    List<String> names = [];
+    for(patients in p)
+    {
+      names.add(patients.patientId.toString());
+    }
+    return names;
+  }
+
   Future<List<Patient>> showFamilyPatient(int mobileNo) async
   {
     String mob = mobileNo.toString();
     dynamic ans =  select(patients)..where((u) => u.patientId.contains(mob));
     return ans.get();
   }
-  Future<List<String>> showFamily() async
-  {
-    List<dynamic> names = [];
-    for(patients in Patient)
-    {
-      names.add(patients.patientId);
+
+  Future<Patient> createPatient(int mobileNo,String name) async{
+    String unique_id = "A"+mobileNo.toString();
+    var family = await this.showFamilyPatient(mobileNo);
+    var unique_ids = await this.showFamily(family);
+    List<String> names = await family.map((e) => e.name);
+    if(names.indexOf(name) !=-1 ) {
+      return family[names.indexOf(name)];
     }
-    return names;
+    
+  int len = unique_ids.length;
+     int char = int.parse(unique_id[0]);
+     unique_id = unique_id.replaceAll(String.fromCharCode(char), String.fromCharCode(char + len));
+     
+      //return create
+     }
   }
-}
