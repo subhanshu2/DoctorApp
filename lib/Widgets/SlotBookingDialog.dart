@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/material.dart';
+import 'package:getcure_doctor/Database/PatientsTable.dart';
 import 'package:getcure_doctor/Database/TokenTable.dart';
 import 'package:getcure_doctor/Helpers/Network/Requesthttp.dart';
 import 'package:intl/intl.dart';
@@ -14,7 +15,7 @@ class SlotBooking extends StatefulWidget {
   final Function count;
   final Function changeColorAppointment;
   final TokenDB database;
-
+  final PatientsDB patientDatabase;
   const SlotBooking(
       {Key key,
       this.tokenno,
@@ -22,7 +23,8 @@ class SlotBooking extends StatefulWidget {
       this.token,
       this.count,
       this.changeColorAppointment,
-      this.database});
+      this.database,
+      this.patientDatabase});
   @override
   _SlotBookingState createState() => _SlotBookingState();
 }
@@ -44,8 +46,10 @@ class _SlotBookingState extends State<SlotBooking> {
   String _mobileno;
 
   bool result = false;
-
+  String patientId = '';
   String response = 'NIL';
+  Patient patient;
+  var responsePatient;
   checkConnection() async {
     bool res = await DataConnectionChecker().hasConnection;
     print(res);
@@ -174,6 +178,38 @@ class _SlotBookingState extends State<SlotBooking> {
           ),
         ),
         children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(2.0),
+            child: ListTile(
+              title: Container(
+                height: 40,
+                width: MediaQuery.of(context).size.width * .75,
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10.0, right: 10),
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      labelText: 'search existing record',
+                      border: OutlineInputBorder(),
+                      // icon: Icon(Icons.search)
+                    ),
+                    onChanged: (val) {
+                      setState(() {
+                        patientId = val;
+                      });
+                    },
+                  ),
+                ),
+              ),
+              trailing: IconButton(
+                  icon: Icon(
+                    Icons.search,
+                    color: orangep,
+                  ),
+                  onPressed: () {}),
+            ),
+          ),
           Form(
               key: _formKey,
               child: Padding(
@@ -453,6 +489,18 @@ class _SlotBookingState extends State<SlotBooking> {
                                 );
                               }
                               print("GUID" + response);
+                              var pat = Patient(
+                                  mobileNo: int.parse(_mobileno),
+                                  name: _name,
+                                  gender: _radiovalue4 == 'male'
+                                      ? Gender.Male
+                                      : Gender.Female,
+                                  age: int.parse(_age),
+                                  address: _address);
+                              responsePatient =
+                                  widget.patientDatabase.createPatient2(pat);
+                              print("Patient reponse" +
+                                  responsePatient.toString());
                               widget.database.updateData(
                                   widget.token.copyWith(
                                       name: _name,
@@ -466,6 +514,7 @@ class _SlotBookingState extends State<SlotBooking> {
                                       gender: _radiovalue4,
                                       guid: response),
                                   response.toString());
+
                               setState(() {
                                 // widget.count(widget.database);
                               });

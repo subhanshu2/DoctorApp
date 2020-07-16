@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:getcure_doctor/Database/PatientsTable.dart';
 import 'package:getcure_doctor/Database/TokenTable.dart';
 import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
 import 'package:getcure_doctor/Widgets/SlotBookingDialog.dart';
@@ -10,9 +11,14 @@ class Slots extends StatelessWidget {
   final TokenDB database;
   final Function count;
   final Function colorChange;
-
+  final PatientsDB patientDatabase;
   const Slots(
-      {Key key, this.itemTask, this.database, this.count, this.colorChange})
+      {Key key,
+      this.itemTask,
+      this.database,
+      this.count,
+      this.colorChange,
+      this.patientDatabase})
       : super(key: key);
 
   @override
@@ -23,13 +29,13 @@ class Slots extends StatelessWidget {
         onTap: () => showDialog(
             context: context,
             builder: (BuildContext context) => SlotBooking(
-                  time: itemTask.tokentime,
-                  tokenno: itemTask.tokenno,
-                  token: itemTask,
-                  count: count,
-                  changeColorAppointment: colorChange,
-                  database: database,
-                )),
+                time: itemTask.tokentime,
+                tokenno: itemTask.tokenno,
+                token: itemTask,
+                count: count,
+                changeColorAppointment: colorChange,
+                database: database,
+                patientDatabase: patientDatabase)),
         child: Container(
           height: 50,
           width: 50,
