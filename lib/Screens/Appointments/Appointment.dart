@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_holo_date_picker/flutter_holo_date_picker.dart';
+import 'package:getcure_doctor/Database/PatientsTable.dart';
 // import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:getcure_doctor/Helpers/Network/Requesthttp.dart';
 import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
@@ -17,7 +18,8 @@ import 'package:getcure_doctor/Database/TokenTable.dart';
 
 class Appointments extends StatefulWidget {
   final TokenDB database;
-  const Appointments({this.database});
+  final PatientsDB patientDatabase;
+  const Appointments({this.database, this.patientDatabase});
   @override
   _AppointmentsState createState() => _AppointmentsState();
 }
@@ -180,7 +182,10 @@ class _AppointmentsState extends State<Appointments> {
               color: pcolor,
               size: 30,
             ),
-            onPressed: () {},
+            onPressed: () async {
+              var res = await widget.patientDatabase.getAll();
+              print(res[0].name);
+            },
           ),
         ],
       ),
@@ -386,7 +391,8 @@ class _AppointmentsState extends State<Appointments> {
               child: Container(
                   height: 80,
                   color: orangep,
-                  child: _buildTaskList(context, datePicked, counting)),
+                  child: _buildTaskList(
+                      context, datePicked, counting, widget.patientDatabase)),
             ),
             SizedBox(
               height: 20,
@@ -425,8 +431,8 @@ class _AppointmentsState extends State<Appointments> {
   }
 }
 
-StreamBuilder<List<Token>> _buildTaskList(
-    BuildContext context, DateTime datePicked, Function counting) {
+StreamBuilder<List<Token>> _buildTaskList(BuildContext context,
+    DateTime datePicked, Function counting, PatientsDB patientDatabase) {
   final database = Provider.of<TokenDB>(context);
   return StreamBuilder(
     stream: database.watchondate(datePicked),
@@ -441,6 +447,7 @@ StreamBuilder<List<Token>> _buildTaskList(
             itemTask: itemTask,
             database: database,
             count: counting,
+            patientDatabase: patientDatabase,
           );
         },
       );

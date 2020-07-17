@@ -40,7 +40,7 @@ LazyDatabase _openConnection() {
 class TokenDB extends _$TokenDB {
   TokenDB() : super(_openConnection());
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 1;
 
   Future<List<Token>> getAllTasks(DateTime time) {
     final query = select(tokens)

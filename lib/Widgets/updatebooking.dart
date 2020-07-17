@@ -1,14 +1,16 @@
 import 'dart:async';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/material.dart';
+import 'package:getcure_doctor/Database/TokenTable.dart';
 import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class UpdateBooking extends StatefulWidget {
   final int tokenno;
   final DateTime time;
-  //final Token token;
+  final Token token;
   final String initialName;
   final String initialAge;
   final String initialAddress;
@@ -24,7 +26,7 @@ class UpdateBooking extends StatefulWidget {
     Key key,
     this.tokenno,
     this.time,
-//    this.token,
+    this.token,
     this.initialName,
     this.initialAge,
     this.initialAddress,
@@ -71,13 +73,13 @@ class _UpdateBookingState extends State<UpdateBooking> {
   String _fees;
   @override
   void initState() {
-        checkConnection();
+    checkConnection();
 
     setState(() {
       _radioValue = widget.initialAppointmentType;
       _radioValue2 = widget.visitType;
       _radioValue3 = widget.initialBookigType;
-      _radiovalue4 =widget.gender;
+      _radiovalue4 = widget.gender;
     });
     myFocusNode = FocusNode();
     super.initState();
@@ -133,6 +135,7 @@ class _UpdateBookingState extends State<UpdateBooking> {
       debugPrint(choice3); //Debug the choice in console
     });
   }
+
   final RoundedLoadingButtonController _btnController =
       new RoundedLoadingButtonController();
 
@@ -155,8 +158,8 @@ class _UpdateBookingState extends State<UpdateBooking> {
 
   @override
   Widget build(BuildContext context) {
-    // final database = Provider.of<TokenDB>(context);
-    // _fees = widget.token.fees.toString();
+    final database = Provider.of<TokenDB>(context);
+    _fees = widget.token.fees.toString();
 
     return SimpleDialog(
       elevation: 20,
@@ -293,8 +296,6 @@ class _UpdateBookingState extends State<UpdateBooking> {
                       },
                     ),
                   ),
-                 
-                 
                   Row(
                     children: <Widget>[
                       SizedBox(
@@ -303,7 +304,7 @@ class _UpdateBookingState extends State<UpdateBooking> {
                           padding: const EdgeInsets.fromLTRB(8.0, 2, 8, 2),
                           child: TextFormField(
                             keyboardType: TextInputType.number,
-                           // initialValue: widget.token.fees.toString(),
+                            // initialValue: widget.token.fees.toString(),
                             decoration: InputDecoration(
                               labelText: 'Fees',
                               border: OutlineInputBorder(
@@ -356,8 +357,6 @@ class _UpdateBookingState extends State<UpdateBooking> {
                       ),
                     ],
                   ),
-                  
-                  
                   Row(
                     children: <Widget>[
                       Text('Appointment \nType:'),
@@ -447,79 +446,83 @@ class _UpdateBookingState extends State<UpdateBooking> {
                       Text(
                           'Time: ${DateFormat.Hm().format(widget.time).toString()}'),
                     ],
-                  ),SizedBox(height: 10,),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       RoundedLoadingButton(
                         height: 45,
-                          width: 140,
-                          color: pcolor,
-                          child: Text(
-                            'Cancel Appointment',
-                            style: TextStyle(color: white),
-                          ),controller: _btnController,
+                        width: 140,
+                        color: pcolor,
+                        child: Text(
+                          'Cancel Appointment',
+                          style: TextStyle(color: white),
+                        ),
+                        controller: _btnController,
                         onPressed: () {
-                          // database.updateData(
-                          //     widget.token.copyWith(
-                          //       booked: false,
-                          //     ),
-                          //     _name);
-                          // database.insertTask(Token(
-                          //   name: widget.token.name,
-                          //   tokenno: widget.token.tokenno,
-                          //   doctorid: widget.token.doctorid,
-                          //   fees: widget.token.fees,
-                          //   mobileno: widget.token.mobileno,
-                          //   address: widget.token.address,
-                          //   age: widget.token.age,
-                          //   tokentime: widget.token.tokentime,
-                          //   appointmenttype: widget.token.appointmenttype,
-                          //   visittype: widget.token.visittype,
-                          //   bookedtype: widget.token.bookedtype,
-                          //   booked: false,
-                          //   cancelled: true,
-                          // ));
-                          // setState(() {
-                          //   widget.counter(database);
-                          // });
+                          database.updateData(
+                              widget.token.copyWith(
+                                booked: false,
+                              ),
+                              _name);
+                          database.insertTask(Token(
+                            name: widget.token.name,
+                            tokenno: widget.token.tokenno,
+                            doctorid: widget.token.doctorid,
+                            fees: widget.token.fees,
+                            mobileno: widget.token.mobileno,
+                            address: widget.token.address,
+                            age: widget.token.age,
+                            tokentime: widget.token.tokentime,
+                            appointmenttype: widget.token.appointmenttype,
+                            visittype: widget.token.visittype,
+                            bookedtype: widget.token.bookedtype,
+                            booked: false,
+                            cancelled: true,
+                          ));
+                          setState(() {
+                            widget.counter(database);
+                          });
                           _btnController.success();
                           Timer(Duration(seconds: 1),
-                          () => Navigator.of(context).pop());
+                              () => Navigator.of(context).pop());
                         },
                       ),
                       RoundedLoadingButton(
                         height: 45,
-                          width: 120,
-                          color: pcolor,
-                          child: Text(
-                            'Update Data',
-                            style: TextStyle(color: white),
-                          ),controller: _btnController,
+                        width: 120,
+                        color: pcolor,
+                        child: Text(
+                          'Update Data',
+                          style: TextStyle(color: white),
+                        ),
+                        controller: _btnController,
                         onPressed: () {
-                          // if (_formKey.currentState.validate()) {
-                          //   _formKey.currentState.save();
-                          //   database.updateData(
-                          //       widget.token.copyWith(
-                          //           name: _name,
-                          //           fees: int.parse(_fees),
-                          //           mobileno: int.parse(_mobileno),
-                          //           address: _address,
-                          //           age: int.parse(_age),
-                          //           appointmenttype: _radioValue,
-                          //           visittype: _radioValue2,
-                          //           bookedtype: _radioValue3,
-                          //           booked: true,
-                          //           isOnline: result,
-                          //           updatedAt: DateTime.now()
-                          //           ),
-                          //       _name);
-                          //      _btnController.success();
-                          //       Timer(Duration(seconds: 1),
-                          //  ()=> Navigator.of(context).pop());
-                          // }else{
-                          //    _btnController.reset();
-                          // }
+                          if (_formKey.currentState.validate()) {
+                            _formKey.currentState.save();
+                            database.updateData(
+                                widget.token.copyWith(
+                                    name: _name,
+                                    fees: int.parse(_fees),
+                                    mobileno: int.parse(_mobileno),
+                                    address: _address,
+                                    age: int.parse(_age),
+                                    appointmenttype: _radioValue,
+                                    visittype: _radioValue2,
+                                    bookedtype: _radioValue3,
+                                    booked: true,
+                                    isOnline: result,
+                                    updatedAt: DateTime.now()),
+                                _name);
+                            _btnController.success();
+                            Timer(Duration(seconds: 1),
+                                () => Navigator.of(context).pop());
+                          } else {
+                            _btnController.reset();
+                          }
                         },
                       )
                     ],

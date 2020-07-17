@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:getcure_doctor/Database/PatientsTable.dart';
 import 'package:getcure_doctor/Database/TokenTable.dart';
 import 'package:getcure_doctor/Screens/Appointments/Appointment.dart';
 import 'package:getcure_doctor/Screens/login.dart';
@@ -19,7 +20,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(accentColor: Colors.orange),
-      home: SafeArea(child: SController()),
+      home: SafeArea(
+          child: Provider<PatientsDB>(
+        create: (context) => PatientsDB(),
+        child: SController(),
+        dispose: (context, db) => db.close(),
+      )),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -56,11 +62,15 @@ class _SControllerState extends State<SController> {
   @override
   Widget build(BuildContext context) {
     final database = Provider.of<TokenDB>(context);
+    final patientDatabase = Provider.of<PatientsDB>(context);
     switch (p) {
       case 'login':
         return LoginPage();
       case 'home':
-        return Appointments(database: database);
+        return Appointments(
+          database: database,
+          patientDatabase: patientDatabase,
+        );
       default:
         return LoginPage();
     }
