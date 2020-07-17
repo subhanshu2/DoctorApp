@@ -48,8 +48,15 @@ class _SlotBookingState extends State<SlotBooking> {
   bool result = false;
   String patientId = '';
   String response = 'NIL';
+
   Patient patient;
   var responsePatient;
+
+  TextEditingController ctrl1;
+  TextEditingController ctrl2;
+  TextEditingController ctrl3;
+  TextEditingController ctrl4;
+
   checkConnection() async {
     bool res = await DataConnectionChecker().hasConnection;
     print(res);
@@ -72,6 +79,10 @@ class _SlotBookingState extends State<SlotBooking> {
   void initState() {
     super.initState();
     checkConnection();
+    ctrl1 = TextEditingController();
+    ctrl2 = TextEditingController();
+    ctrl3 = TextEditingController();
+    ctrl4 = TextEditingController();
   }
 
   @override
@@ -154,7 +165,6 @@ class _SlotBookingState extends State<SlotBooking> {
   @override
   Widget build(BuildContext context) {
     // final database = Provider.of<TokenDB>(context);
-    // _fees = widget.token.fees.toString();
     print(listener);
     return SimpleDialog(
         elevation: 20,
@@ -207,7 +217,26 @@ class _SlotBookingState extends State<SlotBooking> {
                     Icons.search,
                     color: orangep,
                   ),
-                  onPressed: () {}),
+                  onPressed: () async {
+                    print(patientId);
+                    Patient doc =
+                        await widget.patientDatabase.checkPatient(patientId);
+                    // print(doc.toString());
+                    setState(() {
+                      // _name = doc.name;
+                      ctrl1.text = doc.name;
+                      ctrl2.text = doc.age.toString();
+                      ctrl3.text = doc.address;
+                      ctrl4.text = doc.mobileNo.toString();
+                      // _age = doc.age.toString();
+                      // _address = doc.address;
+                      // _mobileno = doc.mobileNo.toString();
+                      _radiovalue4 =
+                          doc.gender == Gender.Male ? 'male' : 'female';
+                    });
+                    print(_name);
+                    print(_age);
+                  }),
             ),
           ),
           Form(
@@ -218,7 +247,9 @@ class _SlotBookingState extends State<SlotBooking> {
                     Padding(
                       padding: const EdgeInsets.only(left: 8.0, right: 8),
                       child: TextFormField(
+                        controller: ctrl1,
                         autofocus: true,
+                        // initialValue: _name,
                         decoration: InputDecoration(
                           labelText: 'Patients name',
                           border: OutlineInputBorder(
@@ -239,6 +270,7 @@ class _SlotBookingState extends State<SlotBooking> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(8.0, 2, 8, 2),
                       child: TextFormField(
+                        controller: ctrl2,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           labelText: 'Age',
@@ -260,6 +292,7 @@ class _SlotBookingState extends State<SlotBooking> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(8.0, 2, 8, 2),
                       child: TextFormField(
+                        controller: ctrl3,
                         maxLines: 3,
                         decoration: InputDecoration(
                           labelText: 'Address',
@@ -281,6 +314,7 @@ class _SlotBookingState extends State<SlotBooking> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(8.0, 2, 8, 2),
                       child: TextFormField(
+                        controller: ctrl4,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           labelText: 'Mobile Number',
@@ -310,7 +344,7 @@ class _SlotBookingState extends State<SlotBooking> {
                             padding: const EdgeInsets.fromLTRB(8.0, 2, 8, 2),
                             child: TextFormField(
                               keyboardType: TextInputType.number,
-                              //initialValue: widget.token.fees.toString(),
+                              initialValue: widget.token.fees.toString(),
                               decoration: InputDecoration(
                                 labelText: 'Fees',
                                 border: OutlineInputBorder(
@@ -515,9 +549,10 @@ class _SlotBookingState extends State<SlotBooking> {
                                       guid: response),
                                   response.toString());
 
-                              setState(() {
-                                // widget.count(widget.database);
-                              });
+                              // setState(() {
+                              //   // widget.count(widget.database);
+                              // });
+
                               _btnController.success();
                               Timer(Duration(seconds: 1),
                                   () => Navigator.pop(context));

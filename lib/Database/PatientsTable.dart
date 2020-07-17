@@ -23,7 +23,7 @@ class Patients extends Table {
 LazyDatabase _openConnection() {
   return LazyDatabase(() async {
     final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbFolder.path, 'get.sqlite'));
+    final file = File(p.join(dbFolder.path, 'getPatients.sqlite'));
     return VmDatabase(file, logStatements: true);
   });
 }
@@ -71,6 +71,12 @@ class PatientsDB extends _$PatientsDB {
   //   //return create
   // }DP laganigaya
 
+  Future<Patient> checkPatient(String patientId) {
+    var query = select(patients)
+      ..where((pat) => pat._patientId.contains(patientId));
+    return query.getSingle();
+  }
+
   Future createPatient2(Patient patient) async {
     String uniqueId = "A" + patient.mobileNo.toString();
     // var family = await this.showFamilyPatient(patient.mobileNo);
@@ -92,6 +98,8 @@ class PatientsDB extends _$PatientsDB {
         patientId: uniqueId,
         address: patient.address,
         age: patient.age);
+    var query = select(patients)
+      ..where((pat) => pat._patientId.contains(pat.patientId.toString()));
     into(patients).insert(pat);
   }
 }

@@ -89,7 +89,7 @@ class Examinations extends Table {
 LazyDatabase _openConnection() {
   return LazyDatabase(() async {
     final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbFolder.path, 'getcure.sqlite'));
+    final file = File(p.join(dbFolder.path, 'getExamination.sqlite'));
     return VmDatabase(file, logStatements: true);
   });
 }

@@ -304,7 +304,7 @@ class _UpdateBookingState extends State<UpdateBooking> {
                           padding: const EdgeInsets.fromLTRB(8.0, 2, 8, 2),
                           child: TextFormField(
                             keyboardType: TextInputType.number,
-                            // initialValue: widget.token.fees.toString(),
+                            initialValue: widget.token.fees.toString(),
                             decoration: InputDecoration(
                               labelText: 'Fees',
                               border: OutlineInputBorder(
