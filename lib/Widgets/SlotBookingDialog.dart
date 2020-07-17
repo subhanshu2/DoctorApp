@@ -57,13 +57,13 @@ class _SlotBookingState extends State<SlotBooking> {
   TextEditingController ctrl3;
   TextEditingController ctrl4;
 
-  checkConnection() async {
-    bool res = await DataConnectionChecker().hasConnection;
-    print(res);
-    setState(() {
-      result = res;
-    });
-  }
+  // checkConnection() async {
+  //   bool res = await DataConnectionChecker().hasConnection;
+  //   print(res);
+  //   setState(() {
+  //     result = res;
+  //   });
+  // }
 
   var listener = DataConnectionChecker().onStatusChange.listen((status) {
     switch (status) {
@@ -78,7 +78,7 @@ class _SlotBookingState extends State<SlotBooking> {
   @override
   void initState() {
     super.initState();
-    checkConnection();
+    // checkConnection();
     ctrl1 = TextEditingController();
     ctrl2 = TextEditingController();
     ctrl3 = TextEditingController();
@@ -196,47 +196,78 @@ class _SlotBookingState extends State<SlotBooking> {
                 width: MediaQuery.of(context).size.width * .75,
                 decoration:
                     BoxDecoration(borderRadius: BorderRadius.circular(10)),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 10.0, right: 10),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'search existing record',
-                      border: OutlineInputBorder(),
-                      // icon: Icon(Icons.search)
-                    ),
-                    onChanged: (val) {
-                      setState(() {
-                        patientId = val;
-                      });
-                    },
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'search existing record',
+                    border: OutlineInputBorder(),
+                    suffixIcon: Icon(Icons.search)
                   ),
-                ),
-              ),
-              trailing: IconButton(
-                  icon: Icon(
-                    Icons.search,
-                    color: orangep,
-                  ),
-                  onPressed: () async {
-                    print(patientId);
-                    Patient doc =
+                  onChanged: (val) async {
+                    setState(() {
+                      patientId = val;
+                    });
+                    List<Patient> doc =
                         await widget.patientDatabase.checkPatient(patientId);
                     // print(doc.toString());
-                    setState(() {
-                      // _name = doc.name;
-                      ctrl1.text = doc.name;
-                      ctrl2.text = doc.age.toString();
-                      ctrl3.text = doc.address;
-                      ctrl4.text = doc.mobileNo.toString();
+                    if (doc.isEmpty) {
+                      ctrl1.clear();
+                      ctrl2.clear();
+                      ctrl3.clear();
+                      ctrl4.clear();
                       // _age = doc.age.toString();
                       // _address = doc.address;
                       // _mobileno = doc.mobileNo.toString();
-                      _radiovalue4 =
-                          doc.gender == Gender.Male ? 'male' : 'female';
-                    });
-                    print(_name);
-                    print(_age);
-                  }),
+                      _radiovalue4 = '';
+                    } else {
+                      setState(() {
+                        // _name = doc.name;
+                        ctrl1.text = doc[0].name;
+                        ctrl2.text = doc[0].age.toString();
+                        ctrl3.text = doc[0].address;
+                        ctrl4.text = doc[0].mobileNo.toString();
+                        // _age = doc.age.toString();
+                        // _address = doc.address;
+                        // _mobileno = doc.mobileNo.toString();
+                        _radiovalue4 =
+                            doc[0].gender == Gender.Male ? 'male' : 'female';
+                      });
+                    }
+                  },
+                ),
+              ),
+              // trailing: InkWell(
+              //     child: Icon(
+              //       Icons.youtube_searched_for,
+              //       color: orangep,
+              //     ),
+              //     onTap: () async {
+              //       print(patientId);
+              //       List<Patient> doc =
+              //           await widget.patientDatabase.checkPatient(patientId);
+              //       if (doc.isEmpty) {
+              //         ctrl1.clear();
+              //         ctrl2.clear();
+              //         ctrl3.clear();
+              //         ctrl4.clear();
+              //         // _age = doc.age.toString();
+              //         // _address = doc.address;
+              //         // _mobileno = doc.mobileNo.toString();
+              //         _radiovalue4 = '';
+              //       } else {
+              //         setState(() {
+              //           // _name = doc.name;
+              //           ctrl1.text = doc[0].name;
+              //           ctrl2.text = doc[0].age.toString();
+              //           ctrl3.text = doc[0].address;
+              //           ctrl4.text = doc[0].mobileNo.toString();
+              //           // _age = doc.age.toString();
+              //           // _address = doc.address;
+              //           // _mobileno = doc.mobileNo.toString();
+              //           _radiovalue4 =
+              //               doc[0].gender == Gender.Male ? 'male' : 'female';
+              //         });
+              //       }
+              //     }),
             ),
           ),
           Form(
@@ -506,22 +537,22 @@ class _SlotBookingState extends State<SlotBooking> {
                             if (_formKey.currentState.validate()) {
                               _formKey.currentState.save();
 
-                              if (result == true) {
-                                response = await bookToken(
-                                  _name,
-                                  _age,
-                                  _mobileno,
-                                  _address,
-                                  _radioValue2,
-                                  _radioValue,
-                                  widget.tokenno,
-                                  widget.time,
-                                  widget.token.tokentime,
-                                  _radioValue3,
-                                  widget.token.doctorid,
-                                  _radiovalue4,
-                                );
-                              }
+                              // if (result == true) {
+                              //   response = await bookToken(
+                              //     _name,
+                              //     _age,
+                              //     _mobileno,
+                              //     _address,
+                              //     _radioValue2,
+                              //     _radioValue,
+                              //     widget.tokenno,
+                              //     widget.time,
+                              //     widget.token.tokentime,
+                              //     _radioValue3,
+                              //     widget.token.doctorid,
+                              //     _radiovalue4,
+                              //   );
+                              // }
                               print("GUID" + response);
                               var pat = Patient(
                                   mobileNo: int.parse(_mobileno),
@@ -531,8 +562,8 @@ class _SlotBookingState extends State<SlotBooking> {
                                       : Gender.Female,
                                   age: int.parse(_age),
                                   address: _address);
-                              responsePatient =
-                                  widget.patientDatabase.createPatient2(pat);
+                              responsePatient = await widget.patientDatabase
+                                  .createPatient2(pat);
                               print("Patient reponse" +
                                   responsePatient.toString());
                               widget.database.updateData(
@@ -546,7 +577,7 @@ class _SlotBookingState extends State<SlotBooking> {
                                       bookedtype: _radioValue3,
                                       booked: true,
                                       gender: _radiovalue4,
-                                      guid: response),
+                                      guid: responsePatient),
                                   response.toString());
 
                               // setState(() {

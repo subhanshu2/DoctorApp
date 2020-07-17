@@ -13,7 +13,7 @@ class _ListDocPatientsState extends State<ListDocPatients> {
   @override
   Widget build(BuildContext context) {
     final database = Provider.of<TokenDB>(context);
-
+     int tokenno=0;
     return Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(

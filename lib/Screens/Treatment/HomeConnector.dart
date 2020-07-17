@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:getcure_doctor/Database/PatientsTable.dart';
+import 'package:getcure_doctor/Database/PatientsVisitTable.dart';
 import 'package:getcure_doctor/Database/TokenTable.dart';
+import 'package:provider/provider.dart';
 import '../../Helpers/AppConfig/colors.dart';
 
 String temp;
@@ -193,6 +196,8 @@ class _HomeConnectorState extends State<HomeConnector>
 
   @override
   Widget build(BuildContext context) {
+    final patient = Provider.of<PatientsVisitDB>(context);
+
     getDesigns();
     return Scaffold(
         // drawer: DoctorDrawer(),
@@ -233,75 +238,113 @@ class _HomeConnectorState extends State<HomeConnector>
         //   ],
         // ),
         body: PageView(
-          controller: controller,
-          scrollDirection: scrollDirection,
-          children: <Widget>[
-            Container(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      color: grey300,
-                      height: 50,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      controller: controller,
+      scrollDirection: scrollDirection,
+      children: <Widget>[
+        Container(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  color: grey300,
+                  height: 50,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Row(
                         children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              Icon(Icons.person),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Text(widget.token.name),
-                            ],
+                          Icon(
+                            Icons.person,
                           ),
-                          Text(widget.token.age.toString()+" yr"),
-                          Text(widget.token.gender.toUpperCase())
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(widget.token.name),
                         ],
                       ),
-                    ),
-                    if (tabController.index == 0)
-                      upperDesign0
-                    else if (tabController.index == 1)
-                      upperDesign1
-                    else if (tabController.index == 3)
-                      upperDesign3
-                    else
-                      upperDesign1,
-                    // getDesigns(),
-                    DefaultTabController(
-                        length: tabs.length,
-                        // initialIndex: 0,
-                        child: SizedBox(
-                          height: 500,
-                          child: Column(
-                            children: <Widget>[
-                              TabBar(
-                                onTap: (value) {
-                                  setState(() {
-                                    getDesigns();
-                                  });
-                                },
-                                controller: tabController,
-                                tabs: tabs,
-                                labelColor: black,
-                                isScrollable: true,
-                              ),
-                              Expanded(
-                                child: TabBarView(
-                                    controller: tabController,
-                                    children: tabsFun(context)),
-                              )
-                            ],
-                          ),
-                        ))
-                  ],
+                      Text(widget.token.age.toString() + " yr"),
+                      Text(widget.token.gender.toUpperCase()),
+                      IconButton(
+                          icon: Icon(Icons.create),
+                          onPressed: () async {
+                            List<PatientsVisitData> result =
+                                await patient.checkPatient(widget.token.guid);
+                            if (result.isEmpty) {
+                              final p = PatientsVisitData(
+                                mobileNo: widget.token.mobileno,
+                                patientName: widget.token.name,
+                                patientId: widget.token.guid.toString(),
+                                age: widget.token.age,clinicDoctorId: widget.token.doctorid
+                              );
+                              patient.insert(p);
+                            } else {
+                              print('preseent');
+                              PatientsVisitData r=result[0];
+                              final p = PatientsVisitData(
+                                  mobileNo: r.mobileNo,
+                                  patientName: r.patientName,
+                                  temperature: r.temperature,
+                                  pulse: r.pulse,
+                                  patientId: r.patientId,
+                                  visitReason: r.visitReason,
+                                  age: r.age,
+                                  briefHistory: r.briefHistory,
+                                  allergies: r.allergies,
+                                  clinicDoctorId: r.clinicDoctorId,
+                                  diagnosis: r.diagnosis,
+                                  examination: r.examination,
+                                  lifestyle: r.lifestyle,
+                                  medication: r.medication,
+                                  weight: r.weight
+                                  );
+                              patient.insert(p);
+                            }
+                          })
+                    ],
+                  ),
                 ),
-              ),
-            )
-          ],
-        ));
+                if (tabController.index == 0)
+                  upperDesign0
+                else if (tabController.index == 1)
+                  upperDesign1
+                else if (tabController.index == 3)
+                  upperDesign3
+                else
+                  upperDesign1,
+                // getDesigns(),
+                DefaultTabController(
+                    length: tabs.length,
+                    // initialIndex: 0,
+                    child: SizedBox(
+                      height: 500,
+                      child: Column(
+                        children: <Widget>[
+                          TabBar(
+                            onTap: (value) {
+                              setState(() {
+                                getDesigns();
+                              });
+                            },
+                            controller: tabController,
+                            tabs: tabs,
+                            labelColor: black,
+                            isScrollable: true,
+                          ),
+                          Expanded(
+                            child: TabBarView(
+                                controller: tabController,
+                                children: tabsFun(context)),
+                          )
+                        ],
+                      ),
+                    ))
+              ],
+            ),
+          ),
+        )
+      ],
+    ));
   }
 }
 

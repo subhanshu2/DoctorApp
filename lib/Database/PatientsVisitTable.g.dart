@@ -16,7 +16,7 @@ class PatientsVisitData extends DataClass
   final int temperature;
   final int pulse;
   final int weight;
-  final int patientId;
+  final String patientId;
   final int clinicDoctorId;
   final BriefHistorygenerated briefHistory;
   final VisitReasongenerated visitReason;
@@ -41,8 +41,8 @@ class PatientsVisitData extends DataClass
       this.examination,
       this.diagnosis,
       this.medication,
-      @required this.allergies,
-      @required this.lifestyle,
+      this.allergies,
+      this.lifestyle,
       @required this.isOnline});
   factory PatientsVisitData.fromData(
       Map<String, dynamic> data, GeneratedDatabase db,
@@ -62,8 +62,8 @@ class PatientsVisitData extends DataClass
           .mapFromDatabaseResponse(data['${effectivePrefix}temperature']),
       pulse: intType.mapFromDatabaseResponse(data['${effectivePrefix}pulse']),
       weight: intType.mapFromDatabaseResponse(data['${effectivePrefix}weight']),
-      patientId:
-          intType.mapFromDatabaseResponse(data['${effectivePrefix}patient_id']),
+      patientId: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}patient_id']),
       clinicDoctorId: intType
           .mapFromDatabaseResponse(data['${effectivePrefix}clinic_doctor_id']),
       briefHistory: $PatientsVisitTable.$converter0.mapToDart(stringType
@@ -109,7 +109,7 @@ class PatientsVisitData extends DataClass
       map['weight'] = Variable<int>(weight);
     }
     if (!nullToAbsent || patientId != null) {
-      map['patient_id'] = Variable<int>(patientId);
+      map['patient_id'] = Variable<String>(patientId);
     }
     if (!nullToAbsent || clinicDoctorId != null) {
       map['clinic_doctor_id'] = Variable<int>(clinicDoctorId);
@@ -207,7 +207,7 @@ class PatientsVisitData extends DataClass
       temperature: serializer.fromJson<int>(json['temperature']),
       pulse: serializer.fromJson<int>(json['pulse']),
       weight: serializer.fromJson<int>(json['weight']),
-      patientId: serializer.fromJson<int>(json['patientId']),
+      patientId: serializer.fromJson<String>(json['patientId']),
       clinicDoctorId: serializer.fromJson<int>(json['clinicDoctorId']),
       briefHistory:
           serializer.fromJson<BriefHistorygenerated>(json['briefHistory']),
@@ -233,7 +233,7 @@ class PatientsVisitData extends DataClass
       'temperature': serializer.toJson<int>(temperature),
       'pulse': serializer.toJson<int>(pulse),
       'weight': serializer.toJson<int>(weight),
-      'patientId': serializer.toJson<int>(patientId),
+      'patientId': serializer.toJson<String>(patientId),
       'clinicDoctorId': serializer.toJson<int>(clinicDoctorId),
       'briefHistory': serializer.toJson<BriefHistorygenerated>(briefHistory),
       'visitReason': serializer.toJson<VisitReasongenerated>(visitReason),
@@ -254,7 +254,7 @@ class PatientsVisitData extends DataClass
           int temperature,
           int pulse,
           int weight,
-          int patientId,
+          String patientId,
           int clinicDoctorId,
           BriefHistorygenerated briefHistory,
           VisitReasongenerated visitReason,
@@ -375,7 +375,7 @@ class PatientsVisitCompanion extends UpdateCompanion<PatientsVisitData> {
   final Value<int> temperature;
   final Value<int> pulse;
   final Value<int> weight;
-  final Value<int> patientId;
+  final Value<String> patientId;
   final Value<int> clinicDoctorId;
   final Value<BriefHistorygenerated> briefHistory;
   final Value<VisitReasongenerated> visitReason;
@@ -412,21 +412,19 @@ class PatientsVisitCompanion extends UpdateCompanion<PatientsVisitData> {
     this.temperature = const Value.absent(),
     this.pulse = const Value.absent(),
     this.weight = const Value.absent(),
-    @required int patientId,
+    @required String patientId,
     this.clinicDoctorId = const Value.absent(),
     this.briefHistory = const Value.absent(),
     this.visitReason = const Value.absent(),
     this.examination = const Value.absent(),
     this.diagnosis = const Value.absent(),
     this.medication = const Value.absent(),
-    @required String allergies,
-    @required String lifestyle,
+    this.allergies = const Value.absent(),
+    this.lifestyle = const Value.absent(),
     this.isOnline = const Value.absent(),
   })  : mobileNo = Value(mobileNo),
         patientName = Value(patientName),
-        patientId = Value(patientId),
-        allergies = Value(allergies),
-        lifestyle = Value(lifestyle);
+        patientId = Value(patientId);
   static Insertable<PatientsVisitData> custom({
     Expression<int> id,
     Expression<int> mobileNo,
@@ -435,7 +433,7 @@ class PatientsVisitCompanion extends UpdateCompanion<PatientsVisitData> {
     Expression<int> temperature,
     Expression<int> pulse,
     Expression<int> weight,
-    Expression<int> patientId,
+    Expression<String> patientId,
     Expression<int> clinicDoctorId,
     Expression<String> briefHistory,
     Expression<String> visitReason,
@@ -475,7 +473,7 @@ class PatientsVisitCompanion extends UpdateCompanion<PatientsVisitData> {
       Value<int> temperature,
       Value<int> pulse,
       Value<int> weight,
-      Value<int> patientId,
+      Value<String> patientId,
       Value<int> clinicDoctorId,
       Value<BriefHistorygenerated> briefHistory,
       Value<VisitReasongenerated> visitReason,
@@ -531,7 +529,7 @@ class PatientsVisitCompanion extends UpdateCompanion<PatientsVisitData> {
       map['weight'] = Variable<int>(weight.value);
     }
     if (patientId.present) {
-      map['patient_id'] = Variable<int>(patientId.value);
+      map['patient_id'] = Variable<String>(patientId.value);
     }
     if (clinicDoctorId.present) {
       map['clinic_doctor_id'] = Variable<int>(clinicDoctorId.value);
@@ -682,11 +680,11 @@ class $PatientsVisitTable extends PatientsVisit
   }
 
   final VerificationMeta _patientIdMeta = const VerificationMeta('patientId');
-  GeneratedIntColumn _patientId;
+  GeneratedTextColumn _patientId;
   @override
-  GeneratedIntColumn get patientId => _patientId ??= _constructPatientId();
-  GeneratedIntColumn _constructPatientId() {
-    return GeneratedIntColumn(
+  GeneratedTextColumn get patientId => _patientId ??= _constructPatientId();
+  GeneratedTextColumn _constructPatientId() {
+    return GeneratedTextColumn(
       'patient_id',
       $tableName,
       false,
@@ -781,7 +779,7 @@ class $PatientsVisitTable extends PatientsVisit
     return GeneratedTextColumn(
       'allergies',
       $tableName,
-      false,
+      true,
     );
   }
 
@@ -793,7 +791,7 @@ class $PatientsVisitTable extends PatientsVisit
     return GeneratedTextColumn(
       'lifestyle',
       $tableName,
-      false,
+      true,
     );
   }
 
@@ -892,14 +890,10 @@ class $PatientsVisitTable extends PatientsVisit
     if (data.containsKey('allergies')) {
       context.handle(_allergiesMeta,
           allergies.isAcceptableOrUnknown(data['allergies'], _allergiesMeta));
-    } else if (isInserting) {
-      context.missing(_allergiesMeta);
     }
     if (data.containsKey('lifestyle')) {
       context.handle(_lifestyleMeta,
           lifestyle.isAcceptableOrUnknown(data['lifestyle'], _lifestyleMeta));
-    } else if (isInserting) {
-      context.missing(_lifestyleMeta);
     }
     if (data.containsKey('is_online')) {
       context.handle(_isOnlineMeta,

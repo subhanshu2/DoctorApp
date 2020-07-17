@@ -69,12 +69,18 @@ class PatientsDB extends _$PatientsDB {
   //       String.fromCharCode(char), String.fromCharCode(char + len));
 
   //   //return create
-  // }DP laganigaya
+  // }
 
-  Future<Patient> checkPatient(String patientId) {
-    var query = select(patients)
-      ..where((pat) => pat._patientId.contains(patientId));
-    return query.getSingle();
+  Future<List<Patient>> checkPatient(String patientId) {
+    try {
+      var query = select(patients)
+      ..where((pat) => pat.patientId.contains(patientId));
+      return query.get();
+    } catch (e) {
+      print("Error"+e);
+      return null;
+    }
+    
   }
 
   Future createPatient2(Patient patient) async {
@@ -98,9 +104,10 @@ class PatientsDB extends _$PatientsDB {
         patientId: uniqueId,
         address: patient.address,
         age: patient.age);
-    Patient part = await checkPatient(pat.patientId);
-    if (pat.patientId.toString() != part.patientId) {
+     List<Patient> part = await checkPatient(pat.patientId);
+  //  if (pat.patientId.toString() != part.patientId) {
       into(patients).insert(pat);
-    }
+    // }
+    return uniqueId;
   }
 }

@@ -15,7 +15,7 @@ class PatientsVisit extends Table {
   IntColumn get temperature => integer().withDefault(Constant(98))();
   IntColumn get pulse => integer().withDefault(Constant(60))();
   IntColumn get weight => integer().nullable()();
-  IntColumn get patientId => integer()();
+  TextColumn get patientId => text()();
   IntColumn get clinicDoctorId => integer().nullable()();
   TextColumn get briefHistory => 
   text().map(const BriefHistoryConverter()).nullable()();
@@ -27,8 +27,8 @@ class PatientsVisit extends Table {
   text().map(const DignosisConverter()).nullable()();
   TextColumn get medication => 
   text().map(const MedicationConverter()).nullable()();
-  TextColumn get allergies => text()();
-  TextColumn get lifestyle => text()();
+  TextColumn get allergies => text().nullable()();
+  TextColumn get lifestyle => text().nullable()();
   BoolColumn get isOnline => boolean().withDefault(Constant(false))();
 }
 
@@ -44,5 +44,17 @@ LazyDatabase _openConnection() {
 class PatientsVisitDB extends _$PatientsVisitDB {
   PatientsVisitDB() : super(_openConnection());
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+  Future insert(PatientsVisitData p)=> into(patientsVisit).insert(p);
+   Future<List<PatientsVisitData>> checkPatient(String patientId) {
+    try {
+      var query = select(patientsVisit)
+      ..where((pat) => pat.patientId.contains(patientId));
+      return query.get();
+    } catch (e) {
+      print("Error"+e);
+      return null;
+    }
+    
+  }
 }

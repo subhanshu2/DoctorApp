@@ -184,7 +184,7 @@ class _AppointmentsState extends State<Appointments> {
             ),
             onPressed: () async {
               var res = await widget.patientDatabase.getAll();
-              print(res[1].patientId);
+              print(res[0].patientId);
             },
           ),
         ],

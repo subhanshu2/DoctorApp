@@ -140,7 +140,7 @@ class _TokenTableState extends State<TokenTable> {
                                                     : blueGrey)))),
                               )),
                               DataCell(Text(
-                                p.guid == null ? '-NIL-' : p.guid.toString(),
+                                 p.guid.toString(),
                                 style: TextStyle(
                                     color: (p.isOnline)
                                         ? (green)

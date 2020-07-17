@@ -62,18 +62,18 @@ class _UpdateBookingState extends State<UpdateBooking> {
   FocusNode myFocusNode;
 
   bool result = false;
-  checkConnection() async {
-    bool res = await DataConnectionChecker().hasConnection;
-    print(res);
-    setState(() {
-      result = res;
-    });
-  }
+  // checkConnection() async {
+  //   bool res = await DataConnectionChecker().hasConnection;
+  //   print(res);
+  //   setState(() {
+  //     result = res;
+  //   });
+  // }
 
   String _fees;
   @override
   void initState() {
-    checkConnection();
+    // checkConnection();
 
     setState(() {
       _radioValue = widget.initialAppointmentType;

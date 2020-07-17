@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:getcure_doctor/Database/PatientsTable.dart';
+import 'package:getcure_doctor/Database/PatientsVisitTable.dart';
 import 'package:getcure_doctor/Database/TokenTable.dart';
 import 'package:getcure_doctor/Screens/Appointments/Appointment.dart';
 import 'package:getcure_doctor/Screens/login.dart';
@@ -7,12 +8,21 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  runApp(Provider<TokenDB>(
-    create: (context) => TokenDB(),
-    child: MyApp(),
-    dispose: (context, db) => db.close(),
-  ));
-  // MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(MultiProvider(providers: [
+    Provider<TokenDB>(
+      create: (context) => TokenDB(),
+      dispose: (context, db) => db.close(),
+    ),
+      Provider<PatientsVisitDB>(
+      create: (context) => PatientsVisitDB(),
+      dispose: (context, db) => db.close(),
+    ),
+     Provider<PatientsDB>(
+      create: (context) => PatientsDB(),
+      dispose: (context, db) => db.close(),
+    ),
+  ], child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -21,11 +31,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(accentColor: Colors.orange),
       home: SafeArea(
-          child: Provider<PatientsDB>(
-        create: (context) => PatientsDB(),
-        child: SController(),
-        dispose: (context, db) => db.close(),
-      )),
+          child:SController()),
       debugShowCheckedModeBanner: false,
     );
   }
