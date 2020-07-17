@@ -98,8 +98,9 @@ class PatientsDB extends _$PatientsDB {
         patientId: uniqueId,
         address: patient.address,
         age: patient.age);
-    var query = select(patients)
-      ..where((pat) => pat._patientId.contains(pat.patientId.toString()));
-    into(patients).insert(pat);
+    Patient part = await checkPatient(pat.patientId);
+    if (pat.patientId.toString() != part.patientId) {
+      into(patients).insert(pat);
+    }
   }
 }
