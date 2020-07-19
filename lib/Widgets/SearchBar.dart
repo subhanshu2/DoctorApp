@@ -16,7 +16,7 @@ class _SearchBarState extends State<SearchBar> {
 
   @override
   Widget build(BuildContext context) {
-  final database = Provider.of<SymptomsDB>(context);
+    final database = Provider.of<SymptomsDB>(context);
     return SingleChildScrollView(
       child: AlertDialog(
         title: Row(
@@ -45,30 +45,22 @@ class _SearchBarState extends State<SearchBar> {
                             labelText: 'search',
                             labelStyle: TextStyle(color: blue),
                             border: InputBorder.none),
-                        onChanged: (val) {
+                        // onChanged: (val) {
+                        //   setState(() {
+                        //     query = val;
+                        //   });
+                        // },
+                        onSubmitted: (val) {
                           setState(() {
                             query = val;
                           });
                         },
                       ),
                     ),
-                    // StreamBuilder(
-                    //   stream: database.watchAllTasks(query),
-                    //   builder: (context, AsyncSnapshot<List<Symptom>> snapshot) {
-                    //     final tasks = snapshot.data ?? List();
-                    //     return ListView.builder(
-                    //       scrollDirection: Axis.horizontal,
-                    //       itemCount: tasks.length,
-                    //       itemBuilder: (_, index) {
-                    //         final itemTask = tasks[index];
-                    //       return;
-                    //       },
-                    //     );
-                    //   },
-                    // )
                   ],
                 ),
               ),
+              _buildTaskList(context, query, database),
               Positioned(
                 bottom: 0,
                 right: 0,
@@ -89,4 +81,29 @@ class _SearchBarState extends State<SearchBar> {
       ),
     );
   }
+}
+
+StreamBuilder<List<Symptom>> _buildTaskList(BuildContext context, String query,
+     SymptomsDB database) {
+  // final database = Provider.of<SymptomsDB>(context);
+  return StreamBuilder(
+    stream: database.watchAllTasks(query),
+    builder: (context, AsyncSnapshot<List<Symptom>> snapshot) {
+      print(query);
+      final tasks = snapshot.data ?? List();
+      return Container(
+        height: 200,
+        width: 200,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: tasks.length,
+          shrinkWrap: true,
+          itemBuilder: (_, index) {
+            final itemTask = tasks[index];
+            return;
+          },
+        ),
+      );
+    },
+  );
 }
