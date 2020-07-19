@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:getcure_doctor/Database/PatientsTable.dart';
 import 'package:getcure_doctor/Database/PatientsVisitTable.dart';
 import 'package:getcure_doctor/Database/TokenTable.dart';
+import 'package:getcure_doctor/Screens/Treatment/Examination.dart' as ex;
+import 'package:getcure_doctor/Screens/Treatment/Symptoms.dart';
 import 'package:provider/provider.dart';
 import '../../Helpers/AppConfig/colors.dart';
 
@@ -35,20 +36,20 @@ class _HomeConnectorState extends State<HomeConnector>
   );
   List<Widget> tabsFun(BuildContext context) {
     final tabpages = <Widget>[
-      // Symtoms(),
-      // Examination(),
-      Center(
-          child: Icon(
-        Icons.gavel,
-        size: 64,
-        color: orange,
-      )),
-      Center(
-          child: Icon(
-        Icons.gavel,
-        size: 64,
-        color: orange,
-      )),
+      Symtoms(),
+      ex.Examination(),
+      // Center(
+      //     child: Icon(
+      //   Icons.gavel,
+      //   size: 64,
+      //   color: orange,
+      // )),
+      // Center(
+      //     child: Icon(
+      //   Icons.gavel,
+      //   size: 64,
+      //   color: orange,
+      // )),
       Center(
           child: Icon(
         Icons.gavel,
@@ -272,15 +273,15 @@ class _HomeConnectorState extends State<HomeConnector>
                                 await patient.checkPatient(widget.token.guid);
                             if (result.isEmpty) {
                               final p = PatientsVisitData(
-                                mobileNo: widget.token.mobileno,
-                                patientName: widget.token.name,
-                                patientId: widget.token.guid.toString(),
-                                age: widget.token.age,clinicDoctorId: widget.token.doctorid
-                              );
+                                  mobileNo: widget.token.mobileno,
+                                  patientName: widget.token.name,
+                                  patientId: widget.token.guid.toString(),
+                                  age: widget.token.age,
+                                  clinicDoctorId: widget.token.doctorid);
                               patient.insert(p);
                             } else {
                               print('preseent');
-                              PatientsVisitData r=result[0];
+                              PatientsVisitData r = result[0];
                               final p = PatientsVisitData(
                                   mobileNo: r.mobileNo,
                                   patientName: r.patientName,
@@ -296,8 +297,7 @@ class _HomeConnectorState extends State<HomeConnector>
                                   examination: r.examination,
                                   lifestyle: r.lifestyle,
                                   medication: r.medication,
-                                  weight: r.weight
-                                  );
+                                  weight: r.weight);
                               patient.insert(p);
                             }
                           })

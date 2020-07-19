@@ -1,10 +1,10 @@
-
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_syntax_view/flutter_syntax_view.dart';
 import 'package:flutter_tagging/flutter_tagging.dart';
 import 'package:getcure_doctor/Models/addItemmodel.dart';
+import 'package:getcure_doctor/Provider/UserProvider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +20,8 @@ class Symtoms extends StatefulWidget {
 }
 
 class _SymtomsState extends State<Symtoms> {
-  List<AddItemsDoctor> _selectedAddItemsDoctors;
+  List<AddItemsDoctor> _briefhistory;
+  List<AddItemsDoctor> _todayVisit;
   String dropdownValue = '1';
   var imageUrl;
   bool isloading = false;
@@ -65,13 +66,15 @@ class _SymtomsState extends State<Symtoms> {
 
   @override
   void initState() {
-    _selectedAddItemsDoctors = [];
+    _briefhistory = [];
+    _todayVisit = [];
     super.initState();
   }
 
   @override
   void dispose() {
-    _selectedAddItemsDoctors.clear();
+    _briefhistory.clear();
+    _todayVisit.clear();
     super.dispose();
   }
 
@@ -100,398 +103,379 @@ class _SymtomsState extends State<Symtoms> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(child:
-        Consumer/*<DoctorProvider>*/(builder: (context, doctorprovider, child) {
-      return Center(
-          child: Column(
-        children: <Widget>[
-          Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Flexible(
-                  child: ExpansionTile(title: Text('Brief History'), children: [
-                    for (int i = 0; i < doctorprovider.itemsBreif.length; i++)
-                      Container(
-                        child: InkWell(
-                          onTap: () {
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return SingleChildScrollView(
-                                      child: AlertDialog(
-                                    titlePadding: EdgeInsets.zero,
-                                    title: Container(
-                                      alignment: Alignment.center,
-                                      color: orangep,
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 8.0, right: 8),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: <Widget>[
-                                            Text(
-                                              'Add Duration',
-                                              style: TextStyle(color: white),
-                                            ),
-                                            IconButton(
-                                                icon: Icon(Icons.cancel),
-                                                onPressed: () =>
-                                                    Navigator.pop(context))
-                                          ],
-                                        ),
+    return SingleChildScrollView(
+        child:
+            // Consumer<DoctorProvider>(builder: (context, doctorprovider, child) {
+            Center(
+                child: Column(
+      children: <Widget>[
+        Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Flexible(
+                child: ExpansionTile(title: Text('Brief History'), children: [
+                  for (int i = 0; i < _briefhistory.length; i++)
+                    Container(
+                      child: InkWell(
+                        onTap: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return SingleChildScrollView(
+                                    child: AlertDialog(
+                                  titlePadding: EdgeInsets.zero,
+                                  title: Container(
+                                    alignment: Alignment.center,
+                                    color: orangep,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 8.0, right: 8),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          Text(
+                                            'Add Duration',
+                                            style: TextStyle(color: white),
+                                          ),
+                                          IconButton(
+                                              icon: Icon(Icons.cancel),
+                                              onPressed: () =>
+                                                  Navigator.pop(context))
+                                        ],
                                       ),
                                     ),
-                                    actions: <Widget>[
-                                      Container(
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.7,
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.8,
-                                        child: Column(
-                                          children: <Widget>[
-                                            Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: <Widget>[
-                                                  Text('Days'),
-                                                  DropdownButton<String>(
-                                                    value: dropdownValue,
-                                                    hint: Text('Slect days'),
-                                                    // icon: Icon(Icons.arrow_downward),
-                                                    iconSize: 24,
-                                                    elevation: 16,
-                                                    style:
-                                                        TextStyle(color: black),
-                                                    underline: Container(
-                                                      height: 2,
-                                                      color: grey,
-                                                    ),
-                                                    onChanged:
-                                                        (String newValue) {
-                                                      setState(() {
-                                                        dropdownValue =
-                                                            newValue;
-                                                      });
-                                                    },
-                                                    items: <String>[
-                                                      '1',
-                                                      '2'
-                                                    ].map<
-                                                            DropdownMenuItem<
-                                                                String>>(
-                                                        (String value) {
-                                                      return DropdownMenuItem<
-                                                          String>(
-                                                        value: value,
-                                                        child: Text(value),
-                                                      );
-                                                    }).toList(),
+                                  ),
+                                  actions: <Widget>[
+                                    Container(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.7,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.8,
+                                      child: Column(
+                                        children: <Widget>[
+                                          Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: <Widget>[
+                                                Text('Days'),
+                                                DropdownButton<String>(
+                                                  value: dropdownValue,
+                                                  hint: Text('Slect days'),
+                                                  // icon: Icon(Icons.arrow_downward),
+                                                  iconSize: 24,
+                                                  elevation: 16,
+                                                  style:
+                                                      TextStyle(color: black),
+                                                  underline: Container(
+                                                    height: 2,
+                                                    color: grey,
                                                   ),
-                                                ]),
-                                            Container(
-                                              color: green,
-                                              height: 200.0,
-                                              width: 200.0,
-                                              child: Icon(Icons.add_a_photo),
-                                            ),
-                                            RaisedButton(
-                                                color: orangef,
-                                                child: Text('Add Image'),
-                                                onPressed: uploadImage)
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  ));
-                                });
-                          },
-                          child: ListTile(
-                            title: Text(doctorprovider.itemsBreif[i].name),
-                          ),
+                                                  onChanged: (String newValue) {
+                                                    setState(() {
+                                                      dropdownValue = newValue;
+                                                    });
+                                                  },
+                                                  items: <String>['1', '2'].map<
+                                                          DropdownMenuItem<
+                                                              String>>(
+                                                      (String value) {
+                                                    return DropdownMenuItem<
+                                                        String>(
+                                                      value: value,
+                                                      child: Text(value),
+                                                    );
+                                                  }).toList(),
+                                                ),
+                                              ]),
+                                          Container(
+                                            color: green,
+                                            height: 200.0,
+                                            width: 200.0,
+                                            child: Icon(Icons.add_a_photo),
+                                          ),
+                                          RaisedButton(
+                                              color: orangef,
+                                              child: Text('Add Image'),
+                                              onPressed: uploadImage)
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ));
+                              });
+                        },
+                        child: ListTile(
+                          title: Text(_briefhistory[i].name),
                         ),
                       ),
-                  ]),
-                ),
-                IconButton(
-                    icon: Icon(
-                      Icons.local_hospital,
-                      color: orange,
                     ),
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return SingleChildScrollView(
-                            child: AlertDialog(
-                              title: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Container(child: Text('Brief History')),
-                                  InkWell(
-                                      onTap: () => Navigator.pop(context),
-                                      child: Icon(Icons.close))
-                                ],
-                              ),
-                              actions: <Widget>[
-                                Container(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.7,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.8,
-                                  child: Column(
-                                    children: <Widget>[
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: FlutterTagging<AddItemsDoctor>(
-                                          initialItems:
-                                              doctorprovider.itemsBreif,
-                                          textFieldConfiguration:
-                                              TextFieldConfiguration(
-                                            decoration: InputDecoration(
-                                              border: InputBorder.none,
-                                              filled: true,
-                                              fillColor:
-                                                  Colors.green.withAlpha(30),
-                                              hintText: 'Search Disease',
-                                              labelText: 'Select Disease',
-                                            ),
-                                          ),
-                                          findSuggestions: AddItemsDoctorService
-                                              .getAddItemsDoctors,
-                                          additionCallback: (value) {
-                                            return AddItemsDoctor(
-                                              name: value,
-                                            );
-                                          },
-                                          onAdded: (addItemsDoctor) {
-                                            // api calls here, triggered when add to tag button is pressed
-                                            return AddItemsDoctor();
-                                          },
-                                          configureSuggestion: (lang) {
-                                            return SuggestionConfiguration(
-                                              title: Text(lang.name),
-                                              additionWidget: Chip(
-                                                avatar: IconButton(
-                                                  icon: Icon(
-                                                    Icons.add_circle,
-                                                    color: Colors.white,
-                                                  ),
-                                                  onPressed: () {
-                                                    doctorprovider
-                                                        .addItems(lang);
-                                                    setState(() {
-                                                      // _selectedAddItemsDoctors
-                                                      //     .add(lang);
-                                                    });
-                                                  },
-                                                ),
-                                                label: Text('Add New Tag'),
-                                                labelStyle: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 14.0,
-                                                  fontWeight: FontWeight.w300,
-                                                ),
-                                                backgroundColor: Colors.green,
-                                              ),
-                                            );
-                                          },
-                                          configureChip: (lang) {
-                                            return ChipConfiguration(
-                                              label: Text(lang.name),
-                                              backgroundColor: Colors.green,
-                                              labelStyle: TextStyle(
-                                                  color: Colors.white),
-                                              deleteIconColor: Colors.white,
-                                            );
-                                          },
-                                          onChanged: () {
-                                            setState(() {
-                                              doctorprovider.addStringValues(
-                                                  doctorprovider.itemsBreif
-                                                      .map<String>(
-                                                          (lang) => lang.name)
-                                                      .toString());
-                                            });
-                                          },
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 20.0,
-                                      ),
-                                      Expanded(
-                                        child: SyntaxView(
-                                          code: doctorprovider
-                                              .selectedValuesJsonBrief,
-                                          syntax: Syntax.JAVASCRIPT,
-                                          withLinesCount: false,
-                                          syntaxTheme: SyntaxTheme.standard(),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
+                ]),
+              ),
+              IconButton(
+                  icon: Icon(
+                    Icons.local_hospital,
+                    color: orange,
+                  ),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return SingleChildScrollView(
+                          child: AlertDialog(
+                            title: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Container(child: Text('Brief History')),
+                                InkWell(
+                                    onTap: () => Navigator.pop(context),
+                                    child: Icon(Icons.close))
                               ],
                             ),
-                          );
-                        },
-                      );
-                    }),
-              ],
-            ),
-          ),
-          Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Flexible(
-                  child: ExpansionTile(
-                      title: Text('Todays visit Reason'),
-                      children: [
-                        for (int i = 0;
-                            i < doctorprovider.itemsVisit.length;
-                            i++)
-                          Container(
-                            child: ListTile(
-                              title: Text(doctorprovider.itemsVisit[i].name),
-                            ),
+                            actions: <Widget>[
+                              Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.7,
+                                width: MediaQuery.of(context).size.width * 0.8,
+                                child: Column(
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: FlutterTagging<AddItemsDoctor>(
+                                        initialItems: _briefhistory,
+                                        textFieldConfiguration:
+                                            TextFieldConfiguration(
+                                          decoration: InputDecoration(
+                                            border: InputBorder.none,
+                                            filled: true,
+                                            fillColor:
+                                                Colors.green.withAlpha(30),
+                                            hintText: 'Search Disease',
+                                            labelText: 'Select Disease',
+                                          ),
+                                        ),
+                                        findSuggestions: AddItemsDoctorService
+                                            .getAddItemsDoctors,
+                                        additionCallback: (value) {
+                                          return AddItemsDoctor(
+                                            name: value,
+                                          );
+                                        },
+                                        onAdded: (addItemsDoctor) {
+                                          // api calls here, triggered when add to tag button is pressed
+                                          return AddItemsDoctor();
+                                        },
+                                        configureSuggestion: (lang) {
+                                          return SuggestionConfiguration(
+                                            title: Text(lang.name),
+                                            additionWidget: Chip(
+                                              avatar: IconButton(
+                                                icon: Icon(
+                                                  Icons.add_circle,
+                                                  color: Colors.white,
+                                                ),
+                                                onPressed: () {
+                                                  _briefhistory.add(lang);
+                                                  setState(() {
+                                                    // _selectedAddItemsDoctors
+                                                    //     .add(lang);
+                                                  });
+                                                },
+                                              ),
+                                              label: Text('Add New Tag'),
+                                              labelStyle: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 14.0,
+                                                fontWeight: FontWeight.w300,
+                                              ),
+                                              backgroundColor: Colors.green,
+                                            ),
+                                          );
+                                        },
+                                        configureChip: (lang) {
+                                          return ChipConfiguration(
+                                            label: Text(lang.name),
+                                            backgroundColor: Colors.green,
+                                            labelStyle:
+                                                TextStyle(color: Colors.white),
+                                            deleteIconColor: Colors.white,
+                                          );
+                                        },
+                                        onChanged: () {
+                                          setState(() {
+                                            _briefhistory
+                                                .map<String>(
+                                                    (lang) => lang.name)
+                                                .toString();
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 20.0,
+                                    ),
+                                    // Expanded(
+                                    //   child: SyntaxView(
+                                    //     code: _briefhistory[0].name
+                                    //         .selectedValuesJsonBrief,
+                                    //     syntax: Syntax.JAVASCRIPT,
+                                    //     withLinesCount: false,
+                                    //     syntaxTheme: SyntaxTheme.standard(),
+                                    //   ),
+                                    // ),
+                                  ],
+                                ),
+                              )
+                            ],
                           ),
-                      ]),
-                ),
-                IconButton(
-                    icon: Icon(
-                      Icons.local_hospital,
-                      color: orange,
-                    ),
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return SingleChildScrollView(
-                            child: AlertDialog(
-                              title: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Container(child: Text('Todays visit Reason')),
-                                  InkWell(
-                                      onTap: () => Navigator.pop(context),
-                                      child: Icon(Icons.close))
-                                ],
-                              ),
-                              actions: <Widget>[
-                                Container(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.7,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.8,
-                                  child: Column(
-                                    children: <Widget>[
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: FlutterTagging<AddItemsDoctor>(
-                                          initialItems:
-                                              doctorprovider.itemsVisit,
-                                          textFieldConfiguration:
-                                              TextFieldConfiguration(
-                                            decoration: InputDecoration(
-                                              border: InputBorder.none,
-                                              filled: true,
-                                              fillColor:
-                                                  Colors.green.withAlpha(30),
-                                              hintText: 'Search Disease',
-                                              labelText: 'Select Disease',
-                                            ),
-                                          ),
-                                          findSuggestions: AddItemsDoctorService
-                                              .getAddItemsDoctors,
-                                          additionCallback: (value) {
-                                            return AddItemsDoctor(
-                                              name: value,
-                                            );
-                                          },
-                                          onAdded: (addItemsDoctor) {
-                                            // api calls here, triggered when add to tag button is pressed
-                                            return AddItemsDoctor();
-                                          },
-                                          configureSuggestion: (lang) {
-                                            return SuggestionConfiguration(
-                                              title: Text(lang.name),
-                                              additionWidget: Chip(
-                                                avatar: IconButton(
-                                                  icon: Icon(
-                                                    Icons.add_circle,
-                                                    color: Colors.white,
-                                                  ),
-                                                  onPressed: () {
-                                                    setState(() {
-                                                      doctorprovider
-                                                          .addItemsVisit(lang);
-                                                    });
-                                                  },
-                                                ),
-                                                label: Text('Add New Tag'),
-                                                labelStyle: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 14.0,
-                                                  fontWeight: FontWeight.w300,
-                                                ),
-                                                backgroundColor: Colors.green,
-                                              ),
-                                            );
-                                          },
-                                          configureChip: (lang) {
-                                            return ChipConfiguration(
-                                              label: Text(lang.name),
-                                              backgroundColor: Colors.green,
-                                              labelStyle: TextStyle(
-                                                  color: Colors.white),
-                                              deleteIconColor: Colors.white,
-                                            );
-                                          },
-                                          onChanged: () {
-                                            setState(() {
-                                              doctorprovider
-                                                  .addStringValuesVisit(
-                                                      doctorprovider.itemsVisit
-                                                          .map<String>((lang) =>
-                                                              lang.name)
-                                                          .toString());
-                                            });
-                                          },
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 20.0,
-                                      ),
-                                      Expanded(
-                                        child: SyntaxView(
-                                          code: doctorprovider
-                                              .selectedValuesJsonVisit,
-                                          syntax: Syntax.JAVASCRIPT,
-                                          withLinesCount: false,
-                                          syntaxTheme: SyntaxTheme.standard(),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
+                        );
+                      },
+                    );
+                  }),
+            ],
+          ),
+        ),
+        Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Flexible(
+                child: ExpansionTile(
+                    title: Text('Todays visit Reason'),
+                    children: [
+                      for (int i = 0; i < _todayVisit.length; i++)
+                        Container(
+                          child: ListTile(
+                            title: Text(_todayVisit[i].name),
+                          ),
+                        ),
+                    ]),
+              ),
+              IconButton(
+                  icon: Icon(
+                    Icons.local_hospital,
+                    color: orange,
+                  ),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return SingleChildScrollView(
+                          child: AlertDialog(
+                            title: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Container(child: Text('Todays visit Reason')),
+                                InkWell(
+                                    onTap: () => Navigator.pop(context),
+                                    child: Icon(Icons.close))
                               ],
                             ),
-                          );
-                        },
-                      );
-                    }),
-              ],
-            ),
+                            actions: <Widget>[
+                              Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.7,
+                                width: MediaQuery.of(context).size.width * 0.8,
+                                child: Column(
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: FlutterTagging<AddItemsDoctor>(
+                                        initialItems: _todayVisit,
+                                        textFieldConfiguration:
+                                            TextFieldConfiguration(
+                                          decoration: InputDecoration(
+                                            border: InputBorder.none,
+                                            filled: true,
+                                            fillColor:
+                                                Colors.green.withAlpha(30),
+                                            hintText: 'Search Disease',
+                                            labelText: 'Select Disease',
+                                          ),
+                                        ),
+                                        findSuggestions: AddItemsDoctorService
+                                            .getAddItemsDoctors,
+                                        additionCallback: (value) {
+                                          return AddItemsDoctor(
+                                            name: value,
+                                          );
+                                        },
+                                        onAdded: (addItemsDoctor) {
+                                          // api calls here, triggered when add to tag button is pressed
+                                          return AddItemsDoctor();
+                                        },
+                                        configureSuggestion: (lang) {
+                                          return SuggestionConfiguration(
+                                            title: Text(lang.name),
+                                            additionWidget: Chip(
+                                              avatar: IconButton(
+                                                icon: Icon(
+                                                  Icons.add_circle,
+                                                  color: Colors.white,
+                                                ),
+                                                onPressed: () {
+                                                  setState(() {
+                                                    _todayVisit.add(lang);
+                                                  });
+                                                },
+                                              ),
+                                              label: Text('Add New Tag'),
+                                              labelStyle: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 14.0,
+                                                fontWeight: FontWeight.w300,
+                                              ),
+                                              backgroundColor: Colors.green,
+                                            ),
+                                          );
+                                        },
+                                        configureChip: (lang) {
+                                          return ChipConfiguration(
+                                            label: Text(lang.name),
+                                            backgroundColor: Colors.green,
+                                            labelStyle:
+                                                TextStyle(color: Colors.white),
+                                            deleteIconColor: Colors.white,
+                                          );
+                                        },
+                                        onChanged: () {
+                                          setState(() {
+                                            _todayVisit
+                                                .map<String>(
+                                                    (lang) => lang.name)
+                                                .toString();
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 20.0,
+                                    ),
+                                    // Expanded(
+                                    //   child: SyntaxView(
+                                    //     code: _todayVisit[0].name
+                                    //         .selectedValuesJsonVisit,
+                                    //     syntax: Syntax.JAVASCRIPT,
+                                    //     withLinesCount: false,
+                                    //     syntaxTheme: SyntaxTheme.standard(),
+                                    //   ),
+                                    // ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  }),
+            ],
           ),
-        ],
-      ));
-    }));
+        ),
+      ],
+    )));
   }
 }
