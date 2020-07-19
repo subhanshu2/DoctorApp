@@ -1,9 +1,8 @@
 import 'package:flutter_tagging/flutter_tagging.dart';
 
 class AddItemsDoctorService {
-  /// Mocks fetching AddItemsDoctor from network API with delay of 500ms.
   static Future<List<AddItemsDoctor>> getAddItemsDoctors(String query) async {
-    await Future.delayed(Duration(milliseconds: 400), null);
+    // await Future.delayed(Duration(milliseconds: 400), null);
     return <AddItemsDoctor>[
       AddItemsDoctor(name: 'Asthama'),
       AddItemsDoctor(name: 'Heart Attack'),

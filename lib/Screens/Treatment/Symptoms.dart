@@ -1,15 +1,16 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_syntax_view/flutter_syntax_view.dart';
+// import 'package:flutter_syntax_view/flutter_syntax_view.dart';
 import 'package:flutter_tagging/flutter_tagging.dart';
 import 'package:getcure_doctor/Models/addItemmodel.dart';
-import 'package:getcure_doctor/Provider/UserProvider.dart';
+import 'package:getcure_doctor/Widgets/SearchBar.dart';
+// import 'package:getcure_doctor/Provider/UserProvider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
+// import 'package:provider/provider.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 
 class Symtoms extends StatefulWidget {
@@ -28,6 +29,8 @@ class _SymtomsState extends State<Symtoms> {
   bool showResponse = false;
   String error = '';
   final picker = ImagePicker();
+
+  String query='';
   Future uploadImage() async {
     const url = "";
     var image = await picker.getImage(source: ImageSource.gallery);
@@ -224,114 +227,7 @@ class _SymtomsState extends State<Symtoms> {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                        return SingleChildScrollView(
-                          child: AlertDialog(
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Container(child: Text('Brief History')),
-                                InkWell(
-                                    onTap: () => Navigator.pop(context),
-                                    child: Icon(Icons.close))
-                              ],
-                            ),
-                            actions: <Widget>[
-                              Container(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.7,
-                                width: MediaQuery.of(context).size.width * 0.8,
-                                child: Column(
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: FlutterTagging<AddItemsDoctor>(
-                                        initialItems: _briefhistory,
-                                        textFieldConfiguration:
-                                            TextFieldConfiguration(
-                                          decoration: InputDecoration(
-                                            border: InputBorder.none,
-                                            filled: true,
-                                            fillColor:
-                                                Colors.green.withAlpha(30),
-                                            hintText: 'Search Disease',
-                                            labelText: 'Select Disease',
-                                          ),
-                                        ),
-                                        findSuggestions: AddItemsDoctorService
-                                            .getAddItemsDoctors,
-                                        additionCallback: (value) {
-                                          return AddItemsDoctor(
-                                            name: value,
-                                          );
-                                        },
-                                        onAdded: (addItemsDoctor) {
-                                          // api calls here, triggered when add to tag button is pressed
-                                          return AddItemsDoctor();
-                                        },
-                                        configureSuggestion: (lang) {
-                                          return SuggestionConfiguration(
-                                            title: Text(lang.name),
-                                            additionWidget: Chip(
-                                              avatar: IconButton(
-                                                icon: Icon(
-                                                  Icons.add_circle,
-                                                  color: Colors.white,
-                                                ),
-                                                onPressed: () {
-                                                  _briefhistory.add(lang);
-                                                  setState(() {
-                                                    // _selectedAddItemsDoctors
-                                                    //     .add(lang);
-                                                  });
-                                                },
-                                              ),
-                                              label: Text('Add New Tag'),
-                                              labelStyle: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 14.0,
-                                                fontWeight: FontWeight.w300,
-                                              ),
-                                              backgroundColor: Colors.green,
-                                            ),
-                                          );
-                                        },
-                                        configureChip: (lang) {
-                                          return ChipConfiguration(
-                                            label: Text(lang.name),
-                                            backgroundColor: Colors.green,
-                                            labelStyle:
-                                                TextStyle(color: Colors.white),
-                                            deleteIconColor: Colors.white,
-                                          );
-                                        },
-                                        onChanged: () {
-                                          setState(() {
-                                            _briefhistory
-                                                .map<String>(
-                                                    (lang) => lang.name)
-                                                .toString();
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 20.0,
-                                    ),
-                                    // Expanded(
-                                    //   child: SyntaxView(
-                                    //     code: _briefhistory[0].name
-                                    //         .selectedValuesJsonBrief,
-                                    //     syntax: Syntax.JAVASCRIPT,
-                                    //     withLinesCount: false,
-                                    //     syntaxTheme: SyntaxTheme.standard(),
-                                    //   ),
-                                    // ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        );
+                        return SearchBar();
                       },
                     );
                   }),

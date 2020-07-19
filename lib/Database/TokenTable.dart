@@ -63,7 +63,13 @@ class TokenDB extends _$TokenDB {
     }
     return query.watch();
   }
+  Stream<List<Token>> watchAllbookedTasks() {
+    dynamic query;
+      query = select(tokens)
+        ..where((t) => t.booked.equals(true));
 
+    return query.watch();
+  }
   Future<int> allBooked() async {
     final query = select(tokens)..where((t) => t.booked.equals(true));
     print(await query.watch().length);

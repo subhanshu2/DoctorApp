@@ -36,11 +36,20 @@ LazyDatabase _openConnection() {
 }
 
 @UseMoor(tables: [Symptoms])
-class SymptomsDB extends _$SymptomsDB{
+class SymptomsDB extends _$SymptomsDB {
   SymptomsDB() : super(_openConnection());
- @override
-  int get schemaVersion => 1; 
-  
+  @override
+  int get schemaVersion => 1;
+
+  Stream<List<Symptom>> watchAllbookedTasks() => select(symptoms).watch();
+  Stream<List<Symptom>> watchAllTasks(String q) {
+    dynamic query;
+    if (q.isNotEmpty) {
+      query = select(symptoms)
+        ..where((t) => t.title.contains(query));
+    } else {
+      query = select(symptoms);
+    }
+    return query.watch();
+  }
 }
-
-

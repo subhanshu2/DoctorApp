@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'package:moor/moor.dart';
+
 //Brief History
-class BriefHistorygenerated {
+class BriefHistorygenerated  {
   List<BriefHistoryData> data;
 
   BriefHistorygenerated({this.data});
