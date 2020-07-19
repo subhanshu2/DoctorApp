@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:getcure_doctor/Database/PatientsTable.dart';
 import 'package:getcure_doctor/Database/PatientsVisitTable.dart';
+import 'package:getcure_doctor/Database/SymptomsTable.dart';
 import 'package:getcure_doctor/Database/TokenTable.dart';
 import 'package:getcure_doctor/Screens/Appointments/Appointment.dart';
 import 'package:getcure_doctor/Screens/login.dart';
@@ -20,6 +21,9 @@ void main() {
     ),
      Provider<PatientsDB>(
       create: (context) => PatientsDB(),
+      dispose: (context, db) => db.close(),
+    ),Provider<SymptomsDB>(
+      create: (context) => SymptomsDB(),
       dispose: (context, db) => db.close(),
     ),
   ], child: MyApp()));

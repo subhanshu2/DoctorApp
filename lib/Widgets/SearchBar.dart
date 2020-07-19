@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:getcure_doctor/Database/SymptomsTable.dart';
 import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
+import 'package:provider/provider.dart';
 
 class SearchBar extends StatefulWidget {
   SearchBar({Key key}) : super(key: key);
@@ -14,7 +16,7 @@ class _SearchBarState extends State<SearchBar> {
 
   @override
   Widget build(BuildContext context) {
-    print(query);
+  final database = Provider.of<SymptomsDB>(context);
     return SingleChildScrollView(
       child: AlertDialog(
         title: Row(
@@ -49,14 +51,37 @@ class _SearchBarState extends State<SearchBar> {
                           });
                         },
                       ),
-                    )
+                    ),
+                    // StreamBuilder(
+                    //   stream: database.watchAllTasks(query),
+                    //   builder: (context, AsyncSnapshot<List<Symptom>> snapshot) {
+                    //     final tasks = snapshot.data ?? List();
+                    //     return ListView.builder(
+                    //       scrollDirection: Axis.horizontal,
+                    //       itemCount: tasks.length,
+                    //       itemBuilder: (_, index) {
+                    //         final itemTask = tasks[index];
+                    //       return;
+                    //       },
+                    //     );
+                    //   },
+                    // )
                   ],
                 ),
               ),
               Positioned(
                 bottom: 0,
                 right: 0,
-                child: FloatingActionButton(onPressed: (){print('object');},child: Icon(Icons.add,color: white,size: 40,),),
+                child: FloatingActionButton(
+                  onPressed: () {
+                    print('object');
+                  },
+                  child: Icon(
+                    Icons.add,
+                    color: white,
+                    size: 40,
+                  ),
+                ),
               )
             ],
           )
