@@ -53,11 +53,13 @@ class SymptomsDB extends _$SymptomsDB {
     return query.watch();
   }
 
-  Future addBrief(BriefHistoryData obj) {
+  Future addBrief(String name, VisibilityPeriod period) {
     Symptom object = Symptom(
+      doctorId: 2,
+      clinicDoctorId: 1,
       type: Type.BriefHistory,
-      title: obj.title,
-      visibilityPeriod: VisibilityPeriod.Always,
+      title: name,
+      visibilityPeriod: period,
     );
 
     into(symptoms).insert(object);
