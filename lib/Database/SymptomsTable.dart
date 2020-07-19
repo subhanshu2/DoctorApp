@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:getcure_doctor/Models/PatientsVisitTableModels.dart';
 import 'package:moor/moor.dart';
 import 'package:moor_ffi/moor_ffi.dart';
 import 'package:path_provider/path_provider.dart';
@@ -45,11 +46,20 @@ class SymptomsDB extends _$SymptomsDB {
   Stream<List<Symptom>> watchAllTasks(String q) {
     dynamic query;
     if (q.isNotEmpty) {
-      query = select(symptoms)
-        ..where((t) => t.title.contains(query));
+      query = select(symptoms)..where((t) => t.title.contains(query));
     } else {
       query = select(symptoms);
     }
     return query.watch();
+  }
+
+  Future addBrief(BriefHistoryData obj) {
+    Symptom object = Symptom(
+      type: Type.BriefHistory,
+      title: obj.title,
+      visibilityPeriod: VisibilityPeriod.Always,
+    );
+
+    into(symptoms).insert(object);
   }
 }

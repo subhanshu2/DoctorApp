@@ -198,10 +198,9 @@ class _SlotBookingState extends State<SlotBooking> {
                     BoxDecoration(borderRadius: BorderRadius.circular(10)),
                 child: TextFormField(
                   decoration: InputDecoration(
-                    labelText: 'search existing record',
-                    border: OutlineInputBorder(),
-                    suffixIcon: Icon(Icons.search)
-                  ),
+                      labelText: 'search existing record',
+                      border: OutlineInputBorder(),
+                      suffixIcon: Icon(Icons.search)),
                   onChanged: (val) async {
                     setState(() {
                       patientId = val;
@@ -235,39 +234,6 @@ class _SlotBookingState extends State<SlotBooking> {
                   },
                 ),
               ),
-              // trailing: InkWell(
-              //     child: Icon(
-              //       Icons.youtube_searched_for,
-              //       color: orangep,
-              //     ),
-              //     onTap: () async {
-              //       print(patientId);
-              //       List<Patient> doc =
-              //           await widget.patientDatabase.checkPatient(patientId);
-              //       if (doc.isEmpty) {
-              //         ctrl1.clear();
-              //         ctrl2.clear();
-              //         ctrl3.clear();
-              //         ctrl4.clear();
-              //         // _age = doc.age.toString();
-              //         // _address = doc.address;
-              //         // _mobileno = doc.mobileNo.toString();
-              //         _radiovalue4 = '';
-              //       } else {
-              //         setState(() {
-              //           // _name = doc.name;
-              //           ctrl1.text = doc[0].name;
-              //           ctrl2.text = doc[0].age.toString();
-              //           ctrl3.text = doc[0].address;
-              //           ctrl4.text = doc[0].mobileNo.toString();
-              //           // _age = doc.age.toString();
-              //           // _address = doc.address;
-              //           // _mobileno = doc.mobileNo.toString();
-              //           _radiovalue4 =
-              //               doc[0].gender == Gender.Male ? 'male' : 'female';
-              //         });
-              //       }
-              //     }),
             ),
           ),
           Form(
