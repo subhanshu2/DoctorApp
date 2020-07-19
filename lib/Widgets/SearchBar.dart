@@ -98,7 +98,7 @@ class _SearchBarState extends State<SearchBar> {
                 right: 0,
                 child: FloatingActionButton(
                   onPressed: () {
-                    // Navigator.of(context).pop();
+                    Navigator.of(context).pop();
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
@@ -132,105 +132,95 @@ class _SearchBarState extends State<SearchBar> {
                                     MediaQuery.of(context).size.height * 0.7,
                                 width: MediaQuery.of(context).size.width * 0.8,
                                 child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    Padding(
-                                      padding: const EdgeInsets.all(2.0),
-                                      child: ListTile(
-                                        title: Container(
-                                          height: 40,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              .75,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          child: TextFormField(
-                                            decoration: InputDecoration(
-                                              labelText: 'Enter Disease Name',
-                                              border: OutlineInputBorder(),
-                                              // suffixIcon: Icon(Icons.search)
-                                            ),
+                                   Container(
+                                        height: 40,
+                                        width: MediaQuery.of(context)
+                                                .size
+                                                .width *
+                                            .75,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        child: TextFormField(
+                                          decoration: InputDecoration(
+                                            labelText: 'Enter Disease Name',
+                                            border: OutlineInputBorder(),
+                                            // suffixIcon: Icon(Icons.search)
                                           ),
                                         ),
                                       ),
-                                    ),
                                     Padding(
                                       padding:
                                           EdgeInsets.symmetric(vertical: 10.0),
                                     ),
                                     Text('Visible in Brief History for'),
-                                    Container(
-                                      child: Column(
-                                        children: <Widget>[
-                                          Row(
-                                            children: <Widget>[
-                                              Radio(
-                                                  activeColor: orangep,
-                                                  value: '1month',
-                                                  groupValue: _radioValue,
-                                                  onChanged:
-                                                      radioButtonChanges),
-                                              Text('1 Month'),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: <Widget>[
-                                              Radio(
-                                                  activeColor: orangep,
-                                                  value: '3month',
-                                                  groupValue: _radioValue,
-                                                  onChanged:
-                                                      radioButtonChanges),
-                                              Text('3 Months'),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: <Widget>[
-                                              Radio(
-                                                  activeColor: orangep,
-                                                  value: '6month',
-                                                  groupValue: _radioValue,
-                                                  onChanged:
-                                                      radioButtonChanges),
-                                              Text('6 Months'),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: <Widget>[
-                                              Radio(
-                                                  activeColor: orangep,
-                                                  value: '1year',
-                                                  groupValue: _radioValue,
-                                                  onChanged:
-                                                      radioButtonChanges),
-                                              Text('1 Year'),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: <Widget>[
-                                              Radio(
-                                                  activeColor: orangep,
-                                                  value: '5year',
-                                                  groupValue: _radioValue,
-                                                  onChanged:
-                                                      radioButtonChanges),
-                                              Text('5 Years'),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: <Widget>[
-                                              Radio(
-                                                  activeColor: orangep,
-                                                  value: 'Always',
-                                                  groupValue: _radioValue,
-                                                  onChanged:
-                                                      radioButtonChanges),
-                                              Text('Always'),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
+                                    Row(
+                                      children: <Widget>[
+                                        Radio(
+                                            activeColor: orangep,
+                                            value: '1month',
+                                            groupValue: _radioValue,
+                                            onChanged:
+                                                radioButtonChanges),
+                                        Text('1 Month'),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: <Widget>[
+                                        Radio(
+                                            activeColor: orangep,
+                                            value: '3month',
+                                            groupValue: _radioValue,
+                                            onChanged:
+                                                radioButtonChanges),
+                                        Text('3 Months'),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: <Widget>[
+                                        Radio(
+                                            activeColor: orangep,
+                                            value: '6month',
+                                            groupValue: _radioValue,
+                                            onChanged:
+                                                radioButtonChanges),
+                                        Text('6 Months'),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: <Widget>[
+                                        Radio(
+                                            activeColor: orangep,
+                                            value: '1year',
+                                            groupValue: _radioValue,
+                                            onChanged:
+                                                radioButtonChanges),
+                                        Text('1 Year'),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: <Widget>[
+                                        Radio(
+                                            activeColor: orangep,
+                                            value: '5year',
+                                            groupValue: _radioValue,
+                                            onChanged:
+                                                radioButtonChanges),
+                                        Text('5 Years'),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: <Widget>[
+                                        Radio(
+                                            activeColor: orangep,
+                                            value: 'Always',
+                                            groupValue: _radioValue,
+                                            onChanged:
+                                                radioButtonChanges),
+                                        Text('Always'),
+                                      ],
                                     )
                                   ],
                                 ),
@@ -258,7 +248,6 @@ class _SearchBarState extends State<SearchBar> {
 
 StreamBuilder<List<Symptom>> _buildTaskList(BuildContext context, String query,
      SymptomsDB database) {
-  // final database = Provider.of<SymptomsDB>(context);
   return StreamBuilder(
     stream: database.watchAllTasks(query),
     builder: (context, AsyncSnapshot<List<Symptom>> snapshot) {
