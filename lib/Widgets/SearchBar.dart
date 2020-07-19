@@ -151,6 +151,11 @@ class _SearchBarState extends State<SearchBar> {
                                               border: OutlineInputBorder(),
                                               // suffixIcon: Icon(Icons.search)
                                             ),
+                                            onChanged: (value) {
+                                              setState(() {
+                                                diseaseName = value;
+                                              });
+                                            },
                                           ),
                                         ),
                                       ),
@@ -234,6 +239,34 @@ class _SearchBarState extends State<SearchBar> {
                                     )
                                   ],
                                 ),
+                              ),
+                              SizedBox(
+                                width: 150,
+                                child: RaisedButton(
+                                    color: pcolor,
+                                    child: Text(
+                                      'Add',
+                                      style: TextStyle(color: white),
+                                    ),
+                                    onPressed: () {
+                                      VisibilityPeriod period;
+                                      setState(() {
+                                        if (_radioValue == '1month') {
+                                          period = VisibilityPeriod.OneMonth;
+                                        } else if (_radioValue == '3month') {
+                                          period = VisibilityPeriod.ThreeMonth;
+                                        } else if (_radioValue == '6month') {
+                                          period = VisibilityPeriod.SixMonth;
+                                        } else if (_radioValue == '1year') {
+                                          period = VisibilityPeriod.OneYear;
+                                        } else if (_radioValue == '5year') {
+                                          period = VisibilityPeriod.FiveYear;
+                                        } else {
+                                          period = VisibilityPeriod.Always;
+                                        }
+                                      });
+                                      database.addBrief(diseaseName, period);
+                                    }),
                               ),
                             ],
                           ),
