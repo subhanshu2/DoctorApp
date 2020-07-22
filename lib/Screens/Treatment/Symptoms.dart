@@ -3,6 +3,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_syntax_view/flutter_syntax_view.dart';
 import 'package:flutter_tagging/flutter_tagging.dart';
+import 'package:getcure_doctor/Database/PatientsVisitTable.dart';
+import 'package:getcure_doctor/Database/TokenTable.dart';
 import 'package:getcure_doctor/Models/addItemmodel.dart';
 import 'package:getcure_doctor/Widgets/SearchBar.dart';
 // import 'package:getcure_doctor/Provider/UserProvider.dart';
@@ -12,9 +14,11 @@ import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
+import 'package:provider/provider.dart';
 
 class Symtoms extends StatefulWidget {
-  Symtoms({Key key}) : super(key: key);
+  final Token token;
+  Symtoms({Key key, this.token}) : super(key: key);
 
   @override
   _SymtomsState createState() => _SymtomsState();
@@ -30,7 +34,7 @@ class _SymtomsState extends State<Symtoms> {
   String error = '';
   final picker = ImagePicker();
 
-  String query='';
+  String query = '';
   Future uploadImage() async {
     const url = "";
     var image = await picker.getImage(source: ImageSource.gallery);
@@ -106,6 +110,8 @@ class _SymtomsState extends State<Symtoms> {
 
   @override
   Widget build(BuildContext context) {
+    final patient = Provider.of<PatientsVisitDB>(context);
+
     return SingleChildScrollView(
         child:
             // Consumer<DoctorProvider>(builder: (context, doctorprovider, child) {
@@ -117,108 +123,8 @@ class _SymtomsState extends State<Symtoms> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Flexible(
-                child: ExpansionTile(title: Text('Brief History'), children: [
-                  for (int i = 0; i < _briefhistory.length; i++)
-                    Container(
-                      child: InkWell(
-                        onTap: () {
-                          showDialog(
-                              context: context,
-                              builder: (context) {
-                                return SingleChildScrollView(
-                                    child: AlertDialog(
-                                  titlePadding: EdgeInsets.zero,
-                                  title: Container(
-                                    alignment: Alignment.center,
-                                    color: orangep,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 8.0, right: 8),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          Text(
-                                            'Add Duration',
-                                            style: TextStyle(color: white),
-                                          ),
-                                          IconButton(
-                                              icon: Icon(Icons.cancel),
-                                              onPressed: () =>
-                                                  Navigator.pop(context))
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  actions: <Widget>[
-                                    Container(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.7,
-                                      width: MediaQuery.of(context).size.width *
-                                          0.8,
-                                      child: Column(
-                                        children: <Widget>[
-                                          Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: <Widget>[
-                                                Text('Days'),
-                                                DropdownButton<String>(
-                                                  value: dropdownValue,
-                                                  hint: Text('Slect days'),
-                                                  // icon: Icon(Icons.arrow_downward),
-                                                  iconSize: 24,
-                                                  elevation: 16,
-                                                  style:
-                                                      TextStyle(color: black),
-                                                  underline: Container(
-                                                    height: 2,
-                                                    color: grey,
-                                                  ),
-                                                  onChanged: (String newValue) {
-                                                    setState(() {
-                                                      dropdownValue = newValue;
-                                                    });
-                                                  },
-                                                  items: <String>['1', '2'].map<
-                                                          DropdownMenuItem<
-                                                              String>>(
-                                                      (String value) {
-                                                    return DropdownMenuItem<
-                                                        String>(
-                                                      value: value,
-                                                      child: Text(value),
-                                                    );
-                                                  }).toList(),
-                                                ),
-                                              ]),
-                                          Container(
-                                            color: green,
-                                            height: 200.0,
-                                            width: 200.0,
-                                            child: Icon(Icons.add_a_photo),
-                                          ),
-                                          RaisedButton(
-                                              color: orangef,
-                                              child: Text('Add Image'),
-                                              onPressed: uploadImage)
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ));
-                              });
-                        },
-                        child: ListTile(
-                          title: Text(_briefhistory[i].name),
-                        ),
-                      ),
-                    ),
-                ]),
-              ),
-              IconButton(
+                child: ExpansionTile(title: Text('Brief History'), 
+                trailing:  IconButton(
                   icon: Icon(
                     Icons.local_hospital,
                     color: orange,
@@ -227,10 +133,138 @@ class _SymtomsState extends State<Symtoms> {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                        return SearchBar();
+                        return SearchBar(pId: widget.token.guid);
                       },
                     );
                   }),
+                children: [
+                  StreamBuilder(
+                    stream: patient.getBriefHistory(widget.token.guid),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<PatientsVisitData>> snapshot) {
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.waiting:
+                          return CircularProgressIndicator();
+                          break;
+                        default :
+                          return ListView.builder(
+                            itemCount:
+                                snapshot.data[0].briefHistory.data.length,
+                            shrinkWrap: true,
+                            itemBuilder: (BuildContext context, int index) {
+                              return ListTile(
+                                  title: Text(snapshot
+                                      .data[0].briefHistory.data[index].title));
+                            },
+                          );
+                          break;
+                        // default:
+                        //   return Text('NO Data');
+                        //   break;
+                      }
+                    },
+                  ),
+                  // for (int i = 0; i < _briefhistory.length; i++)
+                  // Container(
+                  //   child: InkWell(
+                  // onTap: () {
+                  //   showDialog(
+                  //       context: context,
+                  //       builder: (context) {
+                  //         return SingleChildScrollView(
+                  //             child: AlertDialog(
+                  //           titlePadding: EdgeInsets.zero,
+                  //           title: Container(
+                  //             alignment: Alignment.center,
+                  //             color: orangep,
+                  //             child: Padding(
+                  //               padding: const EdgeInsets.only(
+                  //                   left: 8.0, right: 8),
+                  //               child: Row(
+                  //                 mainAxisAlignment:
+                  //                     MainAxisAlignment.spaceBetween,
+                  //                 children: <Widget>[
+                  //                   Text(
+                  //                     'Add Duration',
+                  //                     style: TextStyle(color: white),
+                  //                   ),
+                  //                   IconButton(
+                  //                       icon: Icon(Icons.cancel),
+                  //                       onPressed: () =>
+                  //                           Navigator.pop(context))
+                  //                 ],
+                  //               ),
+                  //             ),
+                  //           ),
+                  //           actions: <Widget>[
+                  //             Container(
+                  //               height:
+                  //                   MediaQuery.of(context).size.height *
+                  //                       0.7,
+                  //               width: MediaQuery.of(context).size.width *
+                  //                   0.8,
+                  //               child: Column(
+                  //                 children: <Widget>[
+                  //                   Row(
+                  //                       mainAxisAlignment:
+                  //                           MainAxisAlignment
+                  //                               .spaceBetween,
+                  //                       children: <Widget>[
+                  //                         Text('Days'),
+                  //                         DropdownButton<String>(
+                  //                           value: dropdownValue,
+                  //                           hint: Text('Slect days'),
+                  //                           // icon: Icon(Icons.arrow_downward),
+                  //                           iconSize: 24,
+                  //                           elevation: 16,
+                  //                           style:
+                  //                               TextStyle(color: black),
+                  //                           underline: Container(
+                  //                             height: 2,
+                  //                             color: grey,
+                  //                           ),
+                  //                           onChanged: (String newValue) {
+                  //                             setState(() {
+                  //                               dropdownValue = newValue;
+                  //                             });
+                  //                           },
+                  //                           items: <String>['1', '2'].map<
+                  //                                   DropdownMenuItem<
+                  //                                       String>>(
+                  //                               (String value) {
+                  //                             return DropdownMenuItem<
+                  //                                 String>(
+                  //                               value: value,
+                  //                               child: Text(value),
+                  //                             );
+                  //                           }).toList(),
+                  //                         ),
+                  //                       ]),
+                  //                   Container(
+                  //                     color: green,
+                  //                     height: 200.0,
+                  //                     width: 200.0,
+                  //                     child: Icon(Icons.add_a_photo),
+                  //                   ),
+                  //                   RaisedButton(
+                  //                       color: orangef,
+                  //                       child: Text('Add Image'),
+                  //                       onPressed: uploadImage)
+                  //                 ],
+                  //               ),
+                  //             )
+                  //           ],
+                  //         ));
+                  //       });
+                  // },
+                  //     child: ListTile(
+                  //       title: Text(_briefhistory[i].name),
+                  //     ),
+                  //   ),
+                  // ),
+                ]),
+              ),
+             
             ],
           ),
         ),

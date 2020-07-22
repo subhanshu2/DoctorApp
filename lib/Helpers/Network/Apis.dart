@@ -78,3 +78,5 @@ const ADDEXAMINATION = BASEURL +
 //const changeit = BASEURL+"/examinations/(+examinationId)"; //(doc token) (put api) (body: {title, parameters, price} => not compulsory)
 const DELETEEXAMINATION =
     BASEURL + "/examinations/(+examinationId)"; // (doc token) (delete api)
+
+

@@ -41,18 +41,19 @@ class SymptomsDB extends _$SymptomsDB {
   SymptomsDB() : super(_openConnection());
   @override
   int get schemaVersion => 1;
-
+  //Fetching Data
   Stream<List<Symptom>> watchAllbookedTasks() => select(symptoms).watch();
+  Future<List<Symptom>> watchAll() => select(symptoms).get();
   Stream<List<Symptom>> watchAllTasks(String q) {
     dynamic query;
-    if (q.isNotEmpty) {
-      query = select(symptoms)..where((t) => t.title.contains(query));
+    if (q.length!=0) {
+      query = select(symptoms)..where((t) => t.title.contains(q));
     } else {
       query = select(symptoms);
     }
     return query.watch();
   }
-
+  //Inserting Data
   Future addBrief(String name, VisibilityPeriod period) {
     Symptom object = Symptom(
       doctorId: 2,
@@ -64,4 +65,6 @@ class SymptomsDB extends _$SymptomsDB {
 
     into(symptoms).insert(object);
   }
+
+  
 }

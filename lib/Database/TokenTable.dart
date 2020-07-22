@@ -50,10 +50,11 @@ class TokenDB extends _$TokenDB {
   }
 
   Stream<List<Token>> watchAllTasks(String q) {
-    dynamic query;
+        dynamic query;
+
     if (q.isNotEmpty) {
       query = select(tokens)
-        // ..where((t) => t.name.contains(q) | t.address.contains(q))
+        ..where((t) => t.name.contains(q) | t.address.contains(q))
         ..where((t) => (t.booked.equals(true) |
             t.cancelled.equals(true) &
                 t.tokentime.isBiggerOrEqualValue(DateTime.now())));
@@ -66,7 +67,7 @@ class TokenDB extends _$TokenDB {
   Stream<List<Token>> watchAllbookedTasks() {
     dynamic query;
       query = select(tokens)
-        ..where((t) => t.booked.equals(true));
+        ..where((t) => t.booked.equals(true) );
 
     return query.watch();
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:getcure_doctor/Database/PatientsVisitTable.dart';
+import 'package:getcure_doctor/Database/SymptomsTable.dart';
 import 'package:getcure_doctor/Database/TokenTable.dart';
 import 'package:getcure_doctor/Screens/Appointments/PatientInfo.dart';
 import 'package:getcure_doctor/Screens/Treatment/Examination.dart' as ex;
@@ -37,7 +38,7 @@ class _HomeConnectorState extends State<HomeConnector>
   );
   List<Widget> tabsFun(BuildContext context) {
     final tabpages = <Widget>[
-      Symtoms(),
+      Symtoms(token: widget.token,),
       ex.Examination(),
       // Center(
       //     child: Icon(
@@ -199,6 +200,7 @@ class _HomeConnectorState extends State<HomeConnector>
   @override
   Widget build(BuildContext context) {
     final patient = Provider.of<PatientsVisitDB>(context);
+    final pt = Provider.of<SymptomsDB>(context);
 
     getDesigns();
     return Scaffold(
@@ -233,37 +235,41 @@ class _HomeConnectorState extends State<HomeConnector>
                       IconButton(
                           icon: Icon(Icons.create),
                           onPressed: () async {
-                            List<PatientsVisitData> result =
-                                await patient.checkPatient(widget.token.guid);
-                            if (result.isEmpty) {
-                              final p = PatientsVisitData(
-                                  mobileNo: widget.token.mobileno,
-                                  patientName: widget.token.name,
-                                  patientId: widget.token.guid.toString(),
-                                  age: widget.token.age,
-                                  clinicDoctorId: widget.token.doctorid);
-                              patient.insert(p);
-                            } else {
-                              print('preseent');
-                              PatientsVisitData r = result[0];
-                              final p = PatientsVisitData(
-                                  mobileNo: r.mobileNo,
-                                  patientName: r.patientName,
-                                  temperature: r.temperature,
-                                  pulse: r.pulse,
-                                  patientId: r.patientId,
-                                  visitReason: r.visitReason,
-                                  age: r.age,
-                                  briefHistory: r.briefHistory,
-                                  allergies: r.allergies,
-                                  clinicDoctorId: r.clinicDoctorId,
-                                  diagnosis: r.diagnosis,
-                                  examination: r.examination,
-                                  lifestyle: r.lifestyle,
-                                  medication: r.medication,
-                                  weight: r.weight);
-                              patient.insert(p);
+                            var s = await pt.watchAll();
+                            for(var i in s){
+                              print(i.title);
                             }
+                            // List<PatientsVisitData> result =
+                            //     await patient.checkPatient(widget.token.guid);
+                            // if (result.isEmpty) {
+                            //   final p = PatientsVisitData(
+                            //       mobileNo: widget.token.mobileno,
+                            //       patientName: widget.token.name,
+                            //       patientId: widget.token.guid.toString(),
+                            //       age: widget.token.age,
+                            //       clinicDoctorId: widget.token.doctorid);
+                            //   patient.insert(p);
+                            // } else {
+                            //   print('preseent');
+                            //   PatientsVisitData r = result[0];
+                            //   final p = PatientsVisitData(
+                            //       mobileNo: r.mobileNo,
+                            //       patientName: r.patientName,
+                            //       temperature: r.temperature,
+                            //       pulse: r.pulse,
+                            //       patientId: r.patientId,
+                            //       visitReason: r.visitReason,
+                            //       age: r.age,
+                            //       briefHistory: r.briefHistory,
+                            //       allergies: r.allergies,
+                            //       clinicDoctorId: r.clinicDoctorId,
+                            //       diagnosis: r.diagnosis,
+                            //       examination: r.examination,
+                            //       lifestyle: r.lifestyle,
+                            //       medication: r.medication,
+                            //       weight: r.weight);
+                            //   patient.insert(p);
+                            // }
                           })
                     ],
                   ),
