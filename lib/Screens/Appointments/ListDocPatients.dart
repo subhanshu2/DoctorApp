@@ -1,16 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:getcure_doctor/Database/PatientsVisitTable.dart';
+import 'package:getcure_doctor/Database/SymptomsTable.dart';
 import 'package:getcure_doctor/Database/TokenTable.dart';
 import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
+import 'package:getcure_doctor/Helpers/Network/Requesthttp.dart';
 import 'package:getcure_doctor/Screens/Treatment/HomeConnector.dart';
 import 'package:provider/provider.dart';
 
 class ListDocPatients extends StatefulWidget {
+  final SymptomsDB databse;
+
+  const ListDocPatients({Key key, this.databse}) : super(key: key);
+
   @override
   _ListDocPatientsState createState() => _ListDocPatientsState();
 }
 
 class _ListDocPatientsState extends State<ListDocPatients> {
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  void getData() async {
+    data = await getBriefHistories();
+    for (String x in data) {
+      widget.databse.addBriefHTTP(x);
+    }
+  }
+
+  List<String> data = [];
+
   @override
   Widget build(BuildContext context) {
     final database = Provider.of<TokenDB>(context);

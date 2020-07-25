@@ -46,13 +46,14 @@ class SymptomsDB extends _$SymptomsDB {
   Future<List<Symptom>> watchAll() => select(symptoms).get();
   Stream<List<Symptom>> watchAllTasks(String q) {
     dynamic query;
-    if (q.length!=0) {
+    if (q.length != 0) {
       query = select(symptoms)..where((t) => t.title.contains(q));
     } else {
       query = select(symptoms);
     }
     return query.watch();
   }
+
   //Inserting Data
   Future addBrief(String name, VisibilityPeriod period) {
     Symptom object = Symptom(
@@ -66,5 +67,14 @@ class SymptomsDB extends _$SymptomsDB {
     into(symptoms).insert(object);
   }
 
-  
+  Future addBriefHTTP(String name) {
+    Symptom object = Symptom(
+        doctorId: 2,
+        clinicDoctorId: 1,
+        type: Type.BriefHistory,
+        title: name,
+        visibilityPeriod: VisibilityPeriod.Always);
+
+    into(symptoms).insert(object);
+  }
 }
