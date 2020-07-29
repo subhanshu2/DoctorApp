@@ -54,8 +54,18 @@ class SymptomsDB extends _$SymptomsDB {
     return query.watch();
   }
 
+  Future<List<Symptom>> watchAllTask(String q) {
+    dynamic query;
+    if (q.length != 0) {
+      query = select(symptoms)..where((t) => t.title.equals(q));
+    } else {
+      query = select(symptoms);
+    }
+    return query.get();
+  }
+
   //Inserting Data
-  Future addBrief(String name, VisibilityPeriod period) {
+  void addBrief(String name, VisibilityPeriod period) async {
     Symptom object = Symptom(
       doctorId: 2,
       clinicDoctorId: 1,
@@ -63,18 +73,29 @@ class SymptomsDB extends _$SymptomsDB {
       title: name,
       visibilityPeriod: period,
     );
-
-    into(symptoms).insert(object);
+    var q = await watchAllTask(name);
+    if (q.length == 0) {
+      into(symptoms).insert(object);
+    } else {
+      print('Already Exists in table');
+    }
   }
-
-  Future addBriefHTTP(String name) {
+ Future deleteallTask() => delete(symptoms).go();
+ 
+  void addBriefHTTP(String name) async {
     Symptom object = Symptom(
         doctorId: 2,
         clinicDoctorId: 1,
         type: Type.BriefHistory,
         title: name,
+        isOnline: true,
         visibilityPeriod: VisibilityPeriod.Always);
 
-    into(symptoms).insert(object);
+    var q = await watchAllTask(name);
+    if (q.length == 0) {
+      into(symptoms).insert(object);
+    } else {
+      print('Already Exists in table');
+    }
   }
 }
