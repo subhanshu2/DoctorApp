@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:getcure_doctor/Database/SymptomsTable.dart';
 import 'package:getcure_doctor/Models/PatientsVisitTableModels.dart';
 import 'package:moor/moor.dart';
 import 'package:moor_ffi/moor_ffi.dart';
@@ -62,15 +63,15 @@ class PatientsVisitDB extends _$PatientsVisitDB {
     var query = update(patientsVisit)..where((t) => t.id.equals(data.id));
     List<BriefHistoryData> list = [];
     // list = data.briefHistory.data;
-    if(data.briefHistory!=null){
-    list = data.briefHistory.data;
+    if (data.briefHistory != null) {
+      list = data.briefHistory.data;
     }
     var res = list.where((element) => element.title == bh.data[0].title);
     if (res.length == 0) {
       list.add(bh.data[0]);
       bh.data = list;
-    }else{
-      bh.data =list;
+    } else {
+      bh.data = list;
     }
 
     return query.write(PatientsVisitCompanion(briefHistory: Value(bh)));
@@ -81,5 +82,24 @@ class PatientsVisitDB extends _$PatientsVisitDB {
     dynamic query;
     query = select(patientsVisit)..where((tbl) => tbl.patientId.equals(id));
     return query.watch();
+  }
+
+  //delete briefhistory
+  Future deleteBrief(PatientsVisitData pvd, String title) {
+    var query = update(patientsVisit)..where((t) => t.id.equals(pvd.id));
+    List<BriefHistoryData> list = [];
+    pvd.briefHistory.data.removeWhere((element) => element.title==title);
+    // if (pvd.briefHistory != null) {
+    //   list = pvd.briefHistory.data;
+    // }
+    // var res = list.where((element) => element.title == title);
+    // if (res.length == 0) {
+    //   list.add(bh.data[0]);
+    //   bh.data = list;
+    // } else {
+    //   bh.data = list;
+    // }
+
+    return query.write(PatientsVisitCompanion(briefHistory: Value(pvd.briefHistory)));
   }
 }

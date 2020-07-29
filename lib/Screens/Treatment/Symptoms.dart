@@ -148,27 +148,27 @@ class _SymtomsState extends State<Symtoms> {
                               return CircularProgressIndicator();
                               break;
                             default:
-                              if (snapshot.data.length == 0) {
-                                return ListTile(
-                                  title: Text('data'),
-                                );
-                              } else {
-                                return ListView.builder(
-                                  itemCount:
-                                      snapshot.data[0].briefHistory.data.length,
-                                  shrinkWrap: true,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return ListTile(
-                                      title: Text(snapshot.data[0].briefHistory
-                                          .data[index].title),
-                                      trailing: IconButton(
-                                          icon: Icon(Icons.cancel),
-                                          onPressed: () {}),
-                                    );
-                                  },
-                                );
-                              }
+                              return ListView.builder(
+                                itemCount: snapshot.data[0].briefHistory == null
+                                    ? 0
+                                    : snapshot.data[0].briefHistory.data.length,
+                                shrinkWrap: true,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return ListTile(
+                                    title: Text(snapshot.data[0].briefHistory
+                                        .data[index].title),
+                                    trailing: IconButton(
+                                        icon: Icon(Icons.cancel),
+                                        onPressed: () {
+                                          patient.deleteBrief(
+                                              snapshot.data[0],
+                                              snapshot.data[0].briefHistory
+                                                  .data[index].title);
+                                        }),
+                                  );
+                                },
+                              );
+
                               break;
                             // default:
                             //   return Text('NO Data');
@@ -176,7 +176,6 @@ class _SymtomsState extends State<Symtoms> {
                           }
                         },
                       ),
-                      
                     ]),
               ),
             ],
