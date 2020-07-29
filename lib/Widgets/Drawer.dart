@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:getcure_doctor/Database/SymptomsTable.dart';
 import 'package:getcure_doctor/Database/TokenTable.dart';
 import 'package:getcure_doctor/Helpers/Navigation.dart';
 import 'package:getcure_doctor/Screens/Appointments/ListDocPatients.dart';
@@ -16,6 +17,7 @@ class DrawerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final database = Provider.of<TokenDB>(context);
+    final symptomDatabase = Provider.of<SymptomsDB>(context);
     return Drawer(
       child: new Column(
         children: <Widget>[
@@ -63,7 +65,9 @@ class DrawerWidget extends StatelessWidget {
                   context,
                   ChangeNotifierProvider(
                     create: (context) => DoctorProvider(),
-                    child: ListDocPatients(),
+                    child: ListDocPatients(
+                      databse: symptomDatabase,
+                    ),
                   ));
             },
           ),

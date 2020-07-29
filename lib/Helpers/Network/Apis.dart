@@ -79,4 +79,12 @@ const ADDEXAMINATION = BASEURL +
 const DELETEEXAMINATION =
     BASEURL + "/examinations/(+examinationId)"; // (doc token) (delete api)
 
-
+//20)
+const BRIEFHISTORY = BASEURL + "/brief-histories"; //(get api) (doc token),
+//21)
+const VISITREASON = BASEURL + "/visit-reasons"; //(get api) (doc token),
+//22)
+const POSTSYMPTOM = BASEURL +
+    "/symptom"; //(post api) (doc token) (body: {doctor_id: number; title: string; type: [Visit Reason, Brief History]}),
+//23)
+const DELETESYM = BASEURL + "/symptom/"; //(+symptomid) (delete api) (doc token)

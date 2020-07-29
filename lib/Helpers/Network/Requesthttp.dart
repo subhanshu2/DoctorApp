@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:getcure_doctor/Database/TokenTable.dart';
+import 'package:getcure_doctor/Models/Appointments/BriefHistoryMode.dart';
 import 'package:getcure_doctor/Models/ClinicDoctorModel.dart';
 import 'package:getcure_doctor/Models/DoctorLogin.dart';
 import 'package:getcure_doctor/Models/TokenMode.dart';
@@ -36,6 +37,23 @@ Future<String> clinicDoctors() async {
   }
 }
 
+Future<List<String>> getBriefHistories() async {
+  SharedPreferences pref = await SharedPreferences.getInstance();
+  String token = pref.getString('docToken');
+  var response =
+      await http.get(BRIEFHISTORY, headers: {"Authorization": token});
+  print(response.body);
+  BriefHistoryModel brief =
+      BriefHistoryModel.fromJson(jsonDecode(response.body));
+  List<String> data = [];
+  for (var x in brief.data) {
+    data.add(x.title);
+  }
+  print(data);
+  if (data.length > 0) {
+    return data;
+  }
+}
 // Future<String> generateOtp(mobno) async {
 //   var response = await http.post(OTP, body: {"mobile_no": mobno});
 //   print(response.body);

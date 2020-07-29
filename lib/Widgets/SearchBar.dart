@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:getcure_doctor/Database/PatientsVisitTable.dart';
 import 'package:getcure_doctor/Database/SymptomsTable.dart';
 import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
+import 'package:getcure_doctor/Helpers/Network/Requesthttp.dart';
 import 'package:getcure_doctor/Models/PatientsVisitTableModels.dart';
 import 'package:provider/provider.dart';
 
@@ -16,6 +19,12 @@ class SearchBar extends StatefulWidget {
 
 class _SearchBarState extends State<SearchBar> {
   String query = '';
+
+  @override
+  void initState() {
+    super.initState();
+    // getData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +71,8 @@ class _SearchBarState extends State<SearchBar> {
                         // },
                       ),
                     ),
-                    _buildTaskList(context, query, database, patientsVisit,widget.pId),
+                    _buildTaskList(
+                        context, query, database, patientsVisit, widget.pId),
                   ],
                 ),
               ),
@@ -95,7 +105,7 @@ class _SearchBarState extends State<SearchBar> {
 }
 
 StreamBuilder<List<Symptom>> _buildTaskList(BuildContext context, String query,
-    SymptomsDB database, PatientsVisitDB pv,String pId) {
+    SymptomsDB database, PatientsVisitDB pv, String pId) {
   return StreamBuilder(
     stream: database.watchAllTasks(query),
     builder: (context, AsyncSnapshot<List<Symptom>> snapshot) {
@@ -114,7 +124,7 @@ StreamBuilder<List<Symptom>> _buildTaskList(BuildContext context, String query,
           itemBuilder: (_, index) {
             final itemTask = tasks[index];
             return GestureDetector(
-              onTap: ()async {
+              onTap: () async {
                 List<BriefHistoryData> bhd = [
                   BriefHistoryData(
                       date: DateTime.now().toString(),
@@ -122,10 +132,8 @@ StreamBuilder<List<Symptom>> _buildTaskList(BuildContext context, String query,
                       visibleTill: itemTask.visibilityPeriod.toString())
                 ];
                 BriefHistorygenerated bh = BriefHistorygenerated(data: bhd);
-                var p  = await pv.checkPatient(pId);
-                pv.updateBriefHistory(
-                  p[0],bh
-                );
+                var p = await pv.checkPatient(pId);
+                pv.updateBriefHistory(p[0], bh);
                 Navigator.pop(context);
               },
               child: ListTile(
