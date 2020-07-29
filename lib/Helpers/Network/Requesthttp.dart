@@ -42,7 +42,7 @@ Future<List<String>> getBriefHistories() async {
   String token = pref.getString('docToken');
   var response =
       await http.get(BRIEFHISTORY, headers: {"Authorization": token});
-      print("hello");
+  print("hello");
   print(response.body);
   BriefHistoryModel brief =
       BriefHistoryModel.fromJson(jsonDecode(response.body));
@@ -52,8 +52,27 @@ Future<List<String>> getBriefHistories() async {
   }
   print(data);
   // if (data.length > 0) {
-    return data;
+  return data;
   // }
+}
+
+Future<List<String>> getVisitReason() async {
+  SharedPreferences pref = await SharedPreferences.getInstance();
+  String token = pref.getString('docToken');
+  // var response =
+  //     await http.get(BRIEFHISTORY, headers: {"Authorization": token});
+  //     print("hello");
+  // print(response.body);
+  // BriefHistoryModel brief =
+  //     BriefHistoryModel.fromJson(jsonDecode(response.body));
+  // List<String> data = [];
+  // for (var x in brief.data) {
+  //   data.add(x.title);
+  // }
+  // print(data);
+  // // if (data.length > 0) {
+  //   return data;
+  // // }
 }
 // Future<String> generateOtp(mobno) async {
 //   var response = await http.post(OTP, body: {"mobile_no": mobno});

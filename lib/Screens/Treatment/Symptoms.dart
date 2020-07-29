@@ -7,6 +7,7 @@ import 'package:getcure_doctor/Database/PatientsVisitTable.dart';
 import 'package:getcure_doctor/Database/TokenTable.dart';
 import 'package:getcure_doctor/Models/addItemmodel.dart';
 import 'package:getcure_doctor/Widgets/SearchBar.dart';
+import 'package:getcure_doctor/Widgets/searchBarVisit.dart';
 // import 'package:getcure_doctor/Provider/UserProvider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
@@ -134,7 +135,9 @@ class _SymtomsState extends State<Symtoms> {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
-                              return SearchBar(pId: widget.token.guid);
+                              return SearchBar(
+                                  pId: widget.token.guid,
+                                  docId: widget.token.doctorid);
                             },
                           );
                         }),
@@ -187,134 +190,60 @@ class _SymtomsState extends State<Symtoms> {
             children: <Widget>[
               Flexible(
                 child: ExpansionTile(
-                    title: Text('Todays visit Reason'),
-                    children: [
-                      for (int i = 0; i < _todayVisit.length; i++)
-                        Container(
-                          child: ListTile(
-                            title: Text(_todayVisit[i].name),
-                          ),
+                    title: Text("Today's Visit Reasons"),
+                    trailing: IconButton(
+                        icon: Icon(
+                          Icons.local_hospital,
+                          color: orange,
                         ),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return SearchBarVisit(pId: widget.token.guid);
+                            },
+                          );
+                        }),
+                    children: [
+                      StreamBuilder(
+                        stream: patient.getVisitReason(widget.token.guid),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<PatientsVisitData>> snapshot) {
+                          switch (snapshot.connectionState) {
+                            case ConnectionState.waiting:
+                              return CircularProgressIndicator();
+                              break;
+                            default:
+                              return ListView.builder(
+                                itemCount: snapshot.data[0].visitReason == null
+                                    ? 0
+                                    : snapshot.data[0].visitReason.data.length,
+                                shrinkWrap: true,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return ListTile(
+                                    title: Text(snapshot
+                                        .data[0].visitReason.data[index].title),
+                                    trailing: IconButton(
+                                        icon: Icon(Icons.cancel),
+                                        onPressed: () {
+                                          // patient.deleteBrief(
+                                          //     snapshot.data[0],
+                                          //     snapshot.data[0].briefHistory
+                                          //         .data[index].title);
+                                        }),
+                                  );
+                                },
+                              );
+
+                              break;
+                            // default:
+                            //   return Text('NO Data');
+                            //   break;
+                          }
+                        },
+                      ),
                     ]),
               ),
-              IconButton(
-                  icon: Icon(
-                    Icons.local_hospital,
-                    color: orange,
-                  ),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return SingleChildScrollView(
-                          child: AlertDialog(
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Container(child: Text('Todays visit Reason')),
-                                InkWell(
-                                    onTap: () => Navigator.pop(context),
-                                    child: Icon(Icons.close))
-                              ],
-                            ),
-                            actions: <Widget>[
-                              Container(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.7,
-                                width: MediaQuery.of(context).size.width * 0.8,
-                                child: Column(
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: FlutterTagging<AddItemsDoctor>(
-                                        initialItems: _todayVisit,
-                                        textFieldConfiguration:
-                                            TextFieldConfiguration(
-                                          decoration: InputDecoration(
-                                            border: InputBorder.none,
-                                            filled: true,
-                                            fillColor:
-                                                Colors.green.withAlpha(30),
-                                            hintText: 'Search Disease',
-                                            labelText: 'Select Disease',
-                                          ),
-                                        ),
-                                        findSuggestions: AddItemsDoctorService
-                                            .getAddItemsDoctors,
-                                        additionCallback: (value) {
-                                          return AddItemsDoctor(
-                                            name: value,
-                                          );
-                                        },
-                                        onAdded: (addItemsDoctor) {
-                                          // api calls here, triggered when add to tag button is pressed
-                                          return AddItemsDoctor();
-                                        },
-                                        configureSuggestion: (lang) {
-                                          return SuggestionConfiguration(
-                                            title: Text(lang.name),
-                                            additionWidget: Chip(
-                                              avatar: IconButton(
-                                                icon: Icon(
-                                                  Icons.add_circle,
-                                                  color: Colors.white,
-                                                ),
-                                                onPressed: () {
-                                                  setState(() {
-                                                    _todayVisit.add(lang);
-                                                  });
-                                                },
-                                              ),
-                                              label: Text('Add New Tag'),
-                                              labelStyle: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 14.0,
-                                                fontWeight: FontWeight.w300,
-                                              ),
-                                              backgroundColor: Colors.green,
-                                            ),
-                                          );
-                                        },
-                                        configureChip: (lang) {
-                                          return ChipConfiguration(
-                                            label: Text(lang.name),
-                                            backgroundColor: Colors.green,
-                                            labelStyle:
-                                                TextStyle(color: Colors.white),
-                                            deleteIconColor: Colors.white,
-                                          );
-                                        },
-                                        onChanged: () {
-                                          setState(() {
-                                            _todayVisit
-                                                .map<String>(
-                                                    (lang) => lang.name)
-                                                .toString();
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 20.0,
-                                    ),
-                                    // Expanded(
-                                    //   child: SyntaxView(
-                                    //     code: _todayVisit[0].name
-                                    //         .selectedValuesJsonVisit,
-                                    //     syntax: Syntax.JAVASCRIPT,
-                                    //     withLinesCount: false,
-                                    //     syntaxTheme: SyntaxTheme.standard(),
-                                    //   ),
-                                    // ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        );
-                      },
-                    );
-                  }),
             ],
           ),
         ),

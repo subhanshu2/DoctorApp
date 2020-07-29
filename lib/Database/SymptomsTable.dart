@@ -54,6 +54,18 @@ class SymptomsDB extends _$SymptomsDB {
     return query.watch();
   }
 
+  Stream<List<Symptom>> watchAllVisitTasks(String q) {
+    dynamic query;
+    if (q.length != 0) {
+      query = select(symptoms)
+        ..where((t) => t.title.contains(q))
+        ..where((t) => t.type.equals(1));
+    } else {
+      query = select(symptoms);
+    }
+    return query.watch();
+  }
+
   Future<List<Symptom>> watchAllTask(String q) {
     dynamic query;
     if (q.length != 0) {
@@ -65,9 +77,9 @@ class SymptomsDB extends _$SymptomsDB {
   }
 
   //Inserting Data
-  void addBrief(String name, VisibilityPeriod period) async {
+  void addBrief(String name, VisibilityPeriod period, int docId) async {
     Symptom object = Symptom(
-      doctorId: 2,
+      doctorId: docId,
       clinicDoctorId: 1,
       type: Type.BriefHistory,
       title: name,
@@ -80,13 +92,48 @@ class SymptomsDB extends _$SymptomsDB {
       print('Already Exists in table');
     }
   }
- Future deleteallTask() => delete(symptoms).go();
- 
-  void addBriefHTTP(String name) async {
+
+  Future deleteallTask() => delete(symptoms).go();
+
+  //Inserting Data
+  void addVisit(String name, VisibilityPeriod period, int docId) async {
     Symptom object = Symptom(
-        doctorId: 2,
+      doctorId: docId,
+      clinicDoctorId: 1,
+      type: Type.VisitReason,
+      title: name,
+      visibilityPeriod: period,
+    );
+    var q = await watchAllTask(name);
+    if (q.length == 0) {
+      into(symptoms).insert(object);
+    } else {
+      print('Already Exists in table');
+    }
+  }
+
+  void addBriefHTTP(String name, int docID) async {
+    Symptom object = Symptom(
+        doctorId: docID,
         clinicDoctorId: 1,
         type: Type.BriefHistory,
+        title: name,
+        isOnline: true,
+        visibilityPeriod: VisibilityPeriod.Always);
+
+    var q = await watchAllTask(name);
+    if (q.length == 0) {
+      into(symptoms).insert(object);
+    } else {
+      print('Already Exists in table');
+    }
+  }
+
+  void addVisitHTTP(String name, int docId) async {
+    Symptom object = Symptom(
+        doctorId: docId,
+        clinicDoctorId: 1,
+        type: Type.VisitReason,
         title: name,
         isOnline: true,
         visibilityPeriod: VisibilityPeriod.Always);

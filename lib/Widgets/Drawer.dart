@@ -12,12 +12,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 class DrawerWidget extends StatelessWidget {
   final String name;
   final String clinicid;
-  const DrawerWidget({Key key, this.name, this.clinicid}) : super(key: key);
+  final int docId;
+  const DrawerWidget({Key key, this.name, this.clinicid, this.docId})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final database = Provider.of<TokenDB>(context);
     final symptomDatabase = Provider.of<SymptomsDB>(context);
+
     return Drawer(
       child: new Column(
         children: <Widget>[
@@ -67,6 +70,7 @@ class DrawerWidget extends StatelessWidget {
                     create: (context) => DoctorProvider(),
                     child: ListDocPatients(
                       databse: symptomDatabase,
+                      docId: docId,
                     ),
                   ));
             },
