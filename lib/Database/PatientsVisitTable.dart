@@ -60,8 +60,18 @@ class PatientsVisitDB extends _$PatientsVisitDB {
   //Updating Data
   Future updateBriefHistory(PatientsVisitData data, BriefHistorygenerated bh) {
     var query = update(patientsVisit)..where((t) => t.id.equals(data.id));
+    var list = data.briefHistory.data;
+    var res = list.where((element) => element.title == bh.data[0].title);
+    if (res.length == 0) {
+      list.add(bh.data[0]);
+      bh.data = list;
+    }else{
+      bh.data =list;
+    }
+
     return query.write(PatientsVisitCompanion(briefHistory: Value(bh)));
   }
+
   //Fetch Data
   Stream<List<PatientsVisitData>> getBriefHistory(String id) {
     dynamic query;

@@ -154,7 +154,11 @@ class _SymtomsState extends State<Symtoms> {
                             itemBuilder: (BuildContext context, int index) {
                               return ListTile(
                                   title: Text(snapshot
-                                      .data[0].briefHistory.data[index].title));
+                                      .data[0].briefHistory.data[index].title),
+                                    trailing: IconButton(icon: Icon(Icons.cancel), onPressed: (){
+                                      
+                                    }),
+                                      );
                             },
                           );
                           break;
