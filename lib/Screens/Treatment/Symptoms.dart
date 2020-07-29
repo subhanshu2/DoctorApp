@@ -112,7 +112,7 @@ class _SymtomsState extends State<Symtoms> {
   @override
   Widget build(BuildContext context) {
     final patient = Provider.of<PatientsVisitDB>(context);
-
+    print("token doctor id = " + widget.token.doctorid.toString());
     return SingleChildScrollView(
         child:
             // Consumer<DoctorProvider>(builder: (context, doctorprovider, child) {
@@ -200,7 +200,10 @@ class _SymtomsState extends State<Symtoms> {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
-                              return SearchBarVisit(pId: widget.token.guid);
+                              return SearchBarVisit(
+                                pId: widget.token.guid,
+                                docId: widget.token.doctorid,
+                              );
                             },
                           );
                         }),
@@ -242,6 +245,72 @@ class _SymtomsState extends State<Symtoms> {
                           }
                         },
                       ),
+                    ]),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Flexible(
+                child: ExpansionTile(
+                    title: Text("Allergies"),
+                    trailing: IconButton(
+                        icon: Icon(
+                          Icons.local_hospital,
+                          color: orange,
+                        ),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              // return SearchBarVisit(
+                              //   pId: widget.token.guid,
+                              //   docId: widget.token.doctorid,
+                              // );
+                            },
+                          );
+                        }),
+                    children: [
+                      // StreamBuilder(
+                      //   stream: patient.getVisitReason(widget.token.guid),
+                      //   builder: (BuildContext context,
+                      //       AsyncSnapshot<List<PatientsVisitData>> snapshot) {
+                      //     switch (snapshot.connectionState) {
+                      //       case ConnectionState.waiting:
+                      //         return CircularProgressIndicator();
+                      //         break;
+                      //       default:
+                      //         return ListView.builder(
+                      //           itemCount: snapshot.data[0].visitReason == null
+                      //               ? 0
+                      //               : snapshot.data[0].visitReason.data.length,
+                      //           shrinkWrap: true,
+                      //           itemBuilder: (BuildContext context, int index) {
+                      //             return ListTile(
+                      //               title: Text(snapshot
+                      //                   .data[0].visitReason.data[index].title),
+                      //               trailing: IconButton(
+                      //                   icon: Icon(Icons.cancel),
+                      //                   onPressed: () {
+                      //                     // patient.deleteBrief(
+                      //                     //     snapshot.data[0],
+                      //                     //     snapshot.data[0].briefHistory
+                      //                     //         .data[index].title);
+                      //                   }),
+                      //             );
+                      //           },
+                      //         );
+
+                      //         break;
+                      //       // default:
+                      //       //   return Text('NO Data');
+                      //       //   break;
+                      //     }
+                      //   },
+                      // ),
                     ]),
               ),
             ],
