@@ -60,7 +60,11 @@ class PatientsVisitDB extends _$PatientsVisitDB {
   //Updating Data
   Future updateBriefHistory(PatientsVisitData data, BriefHistorygenerated bh) {
     var query = update(patientsVisit)..where((t) => t.id.equals(data.id));
-    var list = data.briefHistory.data;
+    List<BriefHistoryData> list = [];
+    // list = data.briefHistory.data;
+    if(data.briefHistory!=null){
+    list = data.briefHistory.data;
+    }
     var res = list.where((element) => element.title == bh.data[0].title);
     if (res.length == 0) {
       list.add(bh.data[0]);

@@ -83,41 +83,41 @@ class _ListDocPatientsState extends State<ListDocPatients> {
                 scrollDirection: Axis.horizontal,
                 itemCount: tasks.length,
                 // shrinkWrap: true,
-                // onPageChanged: (int index) async {
-                //   final patient = Provider.of<PatientsVisitDB>(context,listen: false);
-                //   List<PatientsVisitData> result =
-                //       await patient.checkPatient(tasks[index].guid);
-                //   if (result.isEmpty) {
-                //     final p = PatientsVisitData(
-                //         mobileNo: tasks[index].mobileno,
-                //         patientName: tasks[index].name,
-                //         patientId: tasks[index].guid.toString(),
-                //         age: tasks[index].age,
-                //         clinicDoctorId: tasks[index].doctorid);
-                //     patient.insert(p);
-                //   } else {
-                //     print('preseent');
-                //     PatientsVisitData r = result[0];
-                //     final p = PatientsVisitData(
-                //         mobileNo: r.mobileNo,
-                //         patientName: r.patientName,
-                //         temperature: r.temperature,
-                //         pulse: r.pulse,
-                //         patientId: r.patientId,
-                //         visitReason: r.visitReason,
-                //         age: r.age,
-                //         briefHistory: r.briefHistory,
-                //         allergies: r.allergies,
-                //         clinicDoctorId: r.clinicDoctorId,
-                //         diagnosis: r.diagnosis,
-                //         examination: r.examination,
-                //         lifestyle: r.lifestyle,
-                //         medication: r.medication,
-                //         weight: r.weight);
-                //     patient.insert(p);
-                //     // print(tokenno);
-                //   }
-                // },
+                onPageChanged: (int index) async {
+                  final patient = Provider.of<PatientsVisitDB>(context,listen: false);
+                  List<PatientsVisitData> result =
+                      await patient.checkPatient(tasks[index].guid);
+                  if (result.isEmpty) {
+                    final p = PatientsVisitData(
+                        mobileNo: tasks[index].mobileno,
+                        patientName: tasks[index].name,
+                        patientId: tasks[index].guid.toString(),
+                        age: tasks[index].age,
+                        clinicDoctorId: tasks[index].doctorid);
+                    patient.insert(p);
+                  } else {
+                    print('preseent');
+                    PatientsVisitData r = result[0];
+                    final p = PatientsVisitData(
+                        mobileNo: r.mobileNo,
+                        patientName: r.patientName,
+                        temperature: r.temperature,
+                        pulse: r.pulse,
+                        patientId: r.patientId,
+                        visitReason: r.visitReason,
+                        age: r.age,
+                        briefHistory: r.briefHistory,
+                        allergies: r.allergies,
+                        clinicDoctorId: r.clinicDoctorId,
+                        diagnosis: r.diagnosis,
+                        examination: r.examination,
+                        lifestyle: r.lifestyle,
+                        medication: r.medication,
+                        weight: r.weight);
+                    patient.insert(p);
+                    // print(tokenno);
+                  }
+                },
                 itemBuilder: (context, index) {
                   return HomeConnector(token: tasks[index]);
                 },

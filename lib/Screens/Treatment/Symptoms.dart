@@ -123,152 +123,62 @@ class _SymtomsState extends State<Symtoms> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Flexible(
-                child: ExpansionTile(title: Text('Brief History'), 
-                trailing:  IconButton(
-                  icon: Icon(
-                    Icons.local_hospital,
-                    color: orange,
-                  ),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return SearchBar(pId: widget.token.guid);
-                      },
-                    );
-                  }),
-                children: [
-                  StreamBuilder(
-                    stream: patient.getBriefHistory(widget.token.guid),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<List<PatientsVisitData>> snapshot) {
-                      switch (snapshot.connectionState) {
-                        case ConnectionState.waiting:
-                          return CircularProgressIndicator();
-                          break;
-                        default :
-                          return ListView.builder(
-                            itemCount:
-                                snapshot.data[0].briefHistory.data.length,
-                            shrinkWrap: true,
-                            itemBuilder: (BuildContext context, int index) {
-                              return ListTile(
-                                  title: Text(snapshot
-                                      .data[0].briefHistory.data[index].title),
-                                    trailing: IconButton(icon: Icon(Icons.cancel), onPressed: (){
-                                      
-                                    }),
-                                      );
+                child: ExpansionTile(
+                    title: Text('Brief History'),
+                    trailing: IconButton(
+                        icon: Icon(
+                          Icons.local_hospital,
+                          color: orange,
+                        ),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return SearchBar(pId: widget.token.guid);
                             },
                           );
-                          break;
-                        // default:
-                        //   return Text('NO Data');
-                        //   break;
-                      }
-                    },
-                  ),
-                  // for (int i = 0; i < _briefhistory.length; i++)
-                  // Container(
-                  //   child: InkWell(
-                  // onTap: () {
-                  //   showDialog(
-                  //       context: context,
-                  //       builder: (context) {
-                  //         return SingleChildScrollView(
-                  //             child: AlertDialog(
-                  //           titlePadding: EdgeInsets.zero,
-                  //           title: Container(
-                  //             alignment: Alignment.center,
-                  //             color: orangep,
-                  //             child: Padding(
-                  //               padding: const EdgeInsets.only(
-                  //                   left: 8.0, right: 8),
-                  //               child: Row(
-                  //                 mainAxisAlignment:
-                  //                     MainAxisAlignment.spaceBetween,
-                  //                 children: <Widget>[
-                  //                   Text(
-                  //                     'Add Duration',
-                  //                     style: TextStyle(color: white),
-                  //                   ),
-                  //                   IconButton(
-                  //                       icon: Icon(Icons.cancel),
-                  //                       onPressed: () =>
-                  //                           Navigator.pop(context))
-                  //                 ],
-                  //               ),
-                  //             ),
-                  //           ),
-                  //           actions: <Widget>[
-                  //             Container(
-                  //               height:
-                  //                   MediaQuery.of(context).size.height *
-                  //                       0.7,
-                  //               width: MediaQuery.of(context).size.width *
-                  //                   0.8,
-                  //               child: Column(
-                  //                 children: <Widget>[
-                  //                   Row(
-                  //                       mainAxisAlignment:
-                  //                           MainAxisAlignment
-                  //                               .spaceBetween,
-                  //                       children: <Widget>[
-                  //                         Text('Days'),
-                  //                         DropdownButton<String>(
-                  //                           value: dropdownValue,
-                  //                           hint: Text('Slect days'),
-                  //                           // icon: Icon(Icons.arrow_downward),
-                  //                           iconSize: 24,
-                  //                           elevation: 16,
-                  //                           style:
-                  //                               TextStyle(color: black),
-                  //                           underline: Container(
-                  //                             height: 2,
-                  //                             color: grey,
-                  //                           ),
-                  //                           onChanged: (String newValue) {
-                  //                             setState(() {
-                  //                               dropdownValue = newValue;
-                  //                             });
-                  //                           },
-                  //                           items: <String>['1', '2'].map<
-                  //                                   DropdownMenuItem<
-                  //                                       String>>(
-                  //                               (String value) {
-                  //                             return DropdownMenuItem<
-                  //                                 String>(
-                  //                               value: value,
-                  //                               child: Text(value),
-                  //                             );
-                  //                           }).toList(),
-                  //                         ),
-                  //                       ]),
-                  //                   Container(
-                  //                     color: green,
-                  //                     height: 200.0,
-                  //                     width: 200.0,
-                  //                     child: Icon(Icons.add_a_photo),
-                  //                   ),
-                  //                   RaisedButton(
-                  //                       color: orangef,
-                  //                       child: Text('Add Image'),
-                  //                       onPressed: uploadImage)
-                  //                 ],
-                  //               ),
-                  //             )
-                  //           ],
-                  //         ));
-                  //       });
-                  // },
-                  //     child: ListTile(
-                  //       title: Text(_briefhistory[i].name),
-                  //     ),
-                  //   ),
-                  // ),
-                ]),
+                        }),
+                    children: [
+                      StreamBuilder(
+                        stream: patient.getBriefHistory(widget.token.guid),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<PatientsVisitData>> snapshot) {
+                          switch (snapshot.connectionState) {
+                            case ConnectionState.waiting:
+                              return CircularProgressIndicator();
+                              break;
+                            default:
+                              if (snapshot.data.length == 0) {
+                                return ListTile(
+                                  title: Text('data'),
+                                );
+                              } else {
+                                return ListView.builder(
+                                  itemCount:
+                                      snapshot.data[0].briefHistory.data.length,
+                                  shrinkWrap: true,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return ListTile(
+                                      title: Text(snapshot.data[0].briefHistory
+                                          .data[index].title),
+                                      trailing: IconButton(
+                                          icon: Icon(Icons.cancel),
+                                          onPressed: () {}),
+                                    );
+                                  },
+                                );
+                              }
+                              break;
+                            // default:
+                            //   return Text('NO Data');
+                            //   break;
+                          }
+                        },
+                      ),
+                      
+                    ]),
               ),
-             
             ],
           ),
         ),

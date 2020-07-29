@@ -133,6 +133,10 @@ StreamBuilder<List<Symptom>> _buildTaskList(BuildContext context, String query,
                 ];
                 BriefHistorygenerated bh = BriefHistorygenerated(data: bhd);
                 var p = await pv.checkPatient(pId);
+                // if(p == null ){
+                //   print('object');
+                // }
+                print(p.length.toString()+"length");
                 pv.updateBriefHistory(p[0], bh);
                 Navigator.pop(context);
               },
