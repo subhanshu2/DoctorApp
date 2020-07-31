@@ -88,7 +88,7 @@ class PatientsVisitDB extends _$PatientsVisitDB {
   Future deleteBrief(PatientsVisitData pvd, String title) {
     var query = update(patientsVisit)..where((t) => t.id.equals(pvd.id));
     List<BriefHistoryData> list = [];
-    pvd.briefHistory.data.removeWhere((element) => element.title==title);
+    pvd.briefHistory.data.removeWhere((element) => element.title == title);
     // if (pvd.briefHistory != null) {
     //   list = pvd.briefHistory.data;
     // }
@@ -100,6 +100,31 @@ class PatientsVisitDB extends _$PatientsVisitDB {
     //   bh.data = list;
     // }
 
-    return query.write(PatientsVisitCompanion(briefHistory: Value(pvd.briefHistory)));
+    return query
+        .write(PatientsVisitCompanion(briefHistory: Value(pvd.briefHistory)));
+  }
+
+  Future updateVisitReason(PatientsVisitData data, VisitReasongenerated vh) {
+    var query = update(patientsVisit)..where((t) => t.id.equals(data.id));
+    List<VisitReasonData> list = [];
+    // list = data.briefHistory.data;
+    if (data.visitReason != null) {
+      list = data.visitReason.data;
+    }
+    var res = list.where((element) => element.title == vh.data[0].title);
+    if (res.length == 0) {
+      list.add(vh.data[0]);
+      vh.data = list;
+    } else {
+      vh.data = list;
+    }
+
+    return query.write(PatientsVisitCompanion(visitReason: Value(vh)));
+  }
+
+  Stream<List<PatientsVisitData>> getVisitReason(String id) {
+    dynamic query;
+    query = select(patientsVisit)..where((tbl) => tbl.patientId.equals(id));
+    return query.watch();
   }
 }

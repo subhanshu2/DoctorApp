@@ -9,8 +9,9 @@ import 'package:provider/provider.dart';
 
 class ListDocPatients extends StatefulWidget {
   final SymptomsDB databse;
+  final int docId;
 
-  const ListDocPatients({Key key, this.databse}) : super(key: key);
+  const ListDocPatients({Key key, this.databse, this.docId}) : super(key: key);
 
   @override
   _ListDocPatientsState createState() => _ListDocPatientsState();
@@ -26,7 +27,7 @@ class _ListDocPatientsState extends State<ListDocPatients> {
   void getData() async {
     data = await getBriefHistories();
     for (String x in data) {
-      widget.databse.addBriefHTTP(x);
+      widget.databse.addBriefHTTP(x, widget.docId);
     }
   }
 
@@ -84,7 +85,8 @@ class _ListDocPatientsState extends State<ListDocPatients> {
                 itemCount: tasks.length,
                 // shrinkWrap: true,
                 onPageChanged: (int index) async {
-                  final patient = Provider.of<PatientsVisitDB>(context,listen: false);
+                  final patient =
+                      Provider.of<PatientsVisitDB>(context, listen: false);
                   List<PatientsVisitData> result =
                       await patient.checkPatient(tasks[index].guid);
                   if (result.isEmpty) {
