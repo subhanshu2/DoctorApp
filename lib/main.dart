@@ -15,14 +15,15 @@ void main() {
       create: (context) => TokenDB(),
       dispose: (context, db) => db.close(),
     ),
-      Provider<PatientsVisitDB>(
+    Provider<PatientsVisitDB>(
       create: (context) => PatientsVisitDB(),
       dispose: (context, db) => db.close(),
     ),
-     Provider<PatientsDB>(
+    Provider<PatientsDB>(
       create: (context) => PatientsDB(),
       dispose: (context, db) => db.close(),
-    ),Provider<SymptomsDB>(
+    ),
+    Provider<SymptomsDB>(
       create: (context) => SymptomsDB(),
       dispose: (context, db) => db.close(),
     ),
@@ -34,8 +35,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(accentColor: Colors.orange),
-      home: SafeArea(
-          child:SController()),
+      home: SafeArea(child: SController()),
       debugShowCheckedModeBanner: false,
     );
   }

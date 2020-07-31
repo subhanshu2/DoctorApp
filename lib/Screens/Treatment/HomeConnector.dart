@@ -38,7 +38,9 @@ class _HomeConnectorState extends State<HomeConnector>
   );
   List<Widget> tabsFun(BuildContext context) {
     final tabpages = <Widget>[
-      Symtoms(token: widget.token,),
+      Symtoms(
+        token: widget.token,
+      ),
       ex.Examination(),
       // Center(
       //     child: Icon(
@@ -235,7 +237,7 @@ class _HomeConnectorState extends State<HomeConnector>
                       IconButton(
                           icon: Icon(Icons.create),
                           onPressed: () async {
-                             await pt.deleteallTask();
+                            await pt.deleteallTask();
                             // for(var i in s){
                             //   print(i.title);
                             // }
@@ -317,4 +319,3 @@ class _HomeConnectorState extends State<HomeConnector>
     ));
   }
 }
-

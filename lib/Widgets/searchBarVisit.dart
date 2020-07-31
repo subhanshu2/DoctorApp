@@ -8,16 +8,16 @@ import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
 import 'package:getcure_doctor/Models/PatientsVisitTableModels.dart';
 import 'package:provider/provider.dart';
 
-class SearchBar extends StatefulWidget {
+class SearchBarVisit extends StatefulWidget {
   final String pId;
   final int docId;
-  SearchBar({Key key, this.pId, this.docId}) : super(key: key);
+  SearchBarVisit({Key key, this.pId, this.docId}) : super(key: key);
 
   @override
-  _SearchBarState createState() => _SearchBarState();
+  _SearchBarVisitState createState() => _SearchBarVisitState();
 }
 
-class _SearchBarState extends State<SearchBar> {
+class _SearchBarVisitState extends State<SearchBarVisit> {
   String query = '';
 
   @override
@@ -36,7 +36,7 @@ class _SearchBarState extends State<SearchBar> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Container(child: Text('Brief History')),
+            Container(child: Text('Today Visit Reason')),
             InkWell(
                 onTap: () => Navigator.pop(context), child: Icon(Icons.close))
           ],
@@ -109,7 +109,7 @@ class _SearchBarState extends State<SearchBar> {
 StreamBuilder<List<Symptom>> _buildTaskList(BuildContext context, String query,
     SymptomsDB database, PatientsVisitDB pv, String pId) {
   return StreamBuilder(
-    stream: database.watchAllTasks(query),
+    stream: database.watchAllVisitTasks(query),
     builder: (context, AsyncSnapshot<List<Symptom>> snapshot) {
       print(query);
       final tasks = snapshot.data ?? List();
@@ -127,16 +127,17 @@ StreamBuilder<List<Symptom>> _buildTaskList(BuildContext context, String query,
             final itemTask = tasks[index];
             return GestureDetector(
               onTap: () async {
-                List<BriefHistoryData> bhd = [
-                  BriefHistoryData(
+                List<VisitReasonData> vhd = [
+                  VisitReasonData(
                       date: DateTime.now().toString(),
                       title: itemTask.title,
                       visibleTill: itemTask.visibilityPeriod.toString())
                 ];
-                BriefHistorygenerated bh = BriefHistorygenerated(data: bhd);
+                VisitReasongenerated vh = VisitReasongenerated(data: vhd);
+
                 var p = await pv.checkPatient(pId);
 
-                pv.updateBriefHistory(p[0], bh);
+                pv.updateVisitReason(p[0], vh);
                 Navigator.pop(context);
               },
               child: ListTile(
@@ -249,7 +250,7 @@ class _AddSymptomsState extends State<AddSymptoms> {
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 10.0),
                 ),
-                Text('Visible in Brief History for'),
+                Text('Visible for'),
                 Row(
                   children: <Widget>[
                     Radio(
@@ -338,7 +339,7 @@ class _AddSymptomsState extends State<AddSymptoms> {
                       period = VisibilityPeriod.Always;
                     }
                   });
-                  database.addBrief(diseaseName, period, widget.docId);
+                  database.addVisit(diseaseName, period, widget.docId);
                   Navigator.pop(context);
                 }),
           ),

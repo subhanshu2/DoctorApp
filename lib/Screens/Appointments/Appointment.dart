@@ -100,8 +100,10 @@ class _AppointmentsState extends State<Appointments> {
     // new Timer.periodic(oneSec, (Timer t) => tokenfetch());
     // counting(widget.database);
     super.initState();
+    // docId = tokens.doctorid;
   }
 
+  int docId = 0;
   @override
   void dispose() {
     T.cancel();
@@ -144,7 +146,7 @@ class _AppointmentsState extends State<Appointments> {
       drawer: DrawerWidget(
           // name: dropdownvalue.doctorName,
           // clinicid: dropdownvalue.doctorId.toString(),
-          ),
+          docId: docId),
       appBar: AppBar(
         iconTheme: IconThemeData(
           color: orangep,
