@@ -5,6 +5,7 @@ import 'package:getcure_doctor/Database/TokenTable.dart';
 import 'package:getcure_doctor/Screens/Appointments/PatientInfo.dart';
 import 'package:getcure_doctor/Screens/Treatment/Examination.dart' as ex;
 import 'package:getcure_doctor/Screens/Treatment/Symptoms.dart';
+import 'package:getcure_doctor/Widgets/generalDetails.dart';
 import 'package:provider/provider.dart';
 import '../../Helpers/AppConfig/colors.dart';
 
@@ -276,15 +277,17 @@ class _HomeConnectorState extends State<HomeConnector>
                     ],
                   ),
                 ),
-                if (tabController.index == 0)
-                  upperDesign0
-                else if (tabController.index == 1)
-                  upperDesign1
-                else if (tabController.index == 3)
-                  upperDesign3
-                else
-                  upperDesign1,
+
+                // if (tabController.index == 0)
+                //   upperDesign0
+                // else if (tabController.index == 1)
+                //   upperDesign1
+                // else if (tabController.index == 3)
+                //   upperDesign3
+                // else
+                //   upperDesign1,
                 // getDesigns(),
+                GeneralDetails(),
                 DefaultTabController(
                     length: tabs.length,
                     // initialIndex: 0,
@@ -293,6 +296,7 @@ class _HomeConnectorState extends State<HomeConnector>
                       child: Column(
                         children: <Widget>[
                           TabBar(
+                            
                             onTap: (value) {
                               setState(() {
                                 getDesigns();

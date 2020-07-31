@@ -23,8 +23,8 @@ class PatientsVisitData extends DataClass
   final Examinationgenerated examination;
   final Dignosisgenerated diagnosis;
   final Medicationgenerated medication;
-  final String allergies;
-  final String lifestyle;
+  final Allergy allergies;
+  final LifeStyle lifestyle;
   final bool isOnline;
   PatientsVisitData(
       {@required this.id,
@@ -76,10 +76,10 @@ class PatientsVisitData extends DataClass
           .mapFromDatabaseResponse(data['${effectivePrefix}diagnosis'])),
       medication: $PatientsVisitTable.$converter4.mapToDart(stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}medication'])),
-      allergies: stringType
-          .mapFromDatabaseResponse(data['${effectivePrefix}allergies']),
-      lifestyle: stringType
-          .mapFromDatabaseResponse(data['${effectivePrefix}lifestyle']),
+      allergies: $PatientsVisitTable.$converter5.mapToDart(stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}allergies'])),
+      lifestyle: $PatientsVisitTable.$converter6.mapToDart(stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}lifestyle'])),
       isOnline:
           boolType.mapFromDatabaseResponse(data['${effectivePrefix}is_online']),
     );
@@ -135,10 +135,12 @@ class PatientsVisitData extends DataClass
       map['medication'] = Variable<String>(converter.mapToSql(medication));
     }
     if (!nullToAbsent || allergies != null) {
-      map['allergies'] = Variable<String>(allergies);
+      final converter = $PatientsVisitTable.$converter5;
+      map['allergies'] = Variable<String>(converter.mapToSql(allergies));
     }
     if (!nullToAbsent || lifestyle != null) {
-      map['lifestyle'] = Variable<String>(lifestyle);
+      final converter = $PatientsVisitTable.$converter6;
+      map['lifestyle'] = Variable<String>(converter.mapToSql(lifestyle));
     }
     if (!nullToAbsent || isOnline != null) {
       map['is_online'] = Variable<bool>(isOnline);
@@ -217,8 +219,8 @@ class PatientsVisitData extends DataClass
           serializer.fromJson<Examinationgenerated>(json['examination']),
       diagnosis: serializer.fromJson<Dignosisgenerated>(json['diagnosis']),
       medication: serializer.fromJson<Medicationgenerated>(json['medication']),
-      allergies: serializer.fromJson<String>(json['allergies']),
-      lifestyle: serializer.fromJson<String>(json['lifestyle']),
+      allergies: serializer.fromJson<Allergy>(json['allergies']),
+      lifestyle: serializer.fromJson<LifeStyle>(json['lifestyle']),
       isOnline: serializer.fromJson<bool>(json['isOnline']),
     );
   }
@@ -240,8 +242,8 @@ class PatientsVisitData extends DataClass
       'examination': serializer.toJson<Examinationgenerated>(examination),
       'diagnosis': serializer.toJson<Dignosisgenerated>(diagnosis),
       'medication': serializer.toJson<Medicationgenerated>(medication),
-      'allergies': serializer.toJson<String>(allergies),
-      'lifestyle': serializer.toJson<String>(lifestyle),
+      'allergies': serializer.toJson<Allergy>(allergies),
+      'lifestyle': serializer.toJson<LifeStyle>(lifestyle),
       'isOnline': serializer.toJson<bool>(isOnline),
     };
   }
@@ -261,8 +263,8 @@ class PatientsVisitData extends DataClass
           Examinationgenerated examination,
           Dignosisgenerated diagnosis,
           Medicationgenerated medication,
-          String allergies,
-          String lifestyle,
+          Allergy allergies,
+          LifeStyle lifestyle,
           bool isOnline}) =>
       PatientsVisitData(
         id: id ?? this.id,
@@ -382,8 +384,8 @@ class PatientsVisitCompanion extends UpdateCompanion<PatientsVisitData> {
   final Value<Examinationgenerated> examination;
   final Value<Dignosisgenerated> diagnosis;
   final Value<Medicationgenerated> medication;
-  final Value<String> allergies;
-  final Value<String> lifestyle;
+  final Value<Allergy> allergies;
+  final Value<LifeStyle> lifestyle;
   final Value<bool> isOnline;
   const PatientsVisitCompanion({
     this.id = const Value.absent(),
@@ -480,8 +482,8 @@ class PatientsVisitCompanion extends UpdateCompanion<PatientsVisitData> {
       Value<Examinationgenerated> examination,
       Value<Dignosisgenerated> diagnosis,
       Value<Medicationgenerated> medication,
-      Value<String> allergies,
-      Value<String> lifestyle,
+      Value<Allergy> allergies,
+      Value<LifeStyle> lifestyle,
       Value<bool> isOnline}) {
     return PatientsVisitCompanion(
       id: id ?? this.id,
@@ -559,10 +561,12 @@ class PatientsVisitCompanion extends UpdateCompanion<PatientsVisitData> {
           Variable<String>(converter.mapToSql(medication.value));
     }
     if (allergies.present) {
-      map['allergies'] = Variable<String>(allergies.value);
+      final converter = $PatientsVisitTable.$converter5;
+      map['allergies'] = Variable<String>(converter.mapToSql(allergies.value));
     }
     if (lifestyle.present) {
-      map['lifestyle'] = Variable<String>(lifestyle.value);
+      final converter = $PatientsVisitTable.$converter6;
+      map['lifestyle'] = Variable<String>(converter.mapToSql(lifestyle.value));
     }
     if (isOnline.present) {
       map['is_online'] = Variable<bool>(isOnline.value);
@@ -887,14 +891,8 @@ class $PatientsVisitTable extends PatientsVisit
     context.handle(_examinationMeta, const VerificationResult.success());
     context.handle(_diagnosisMeta, const VerificationResult.success());
     context.handle(_medicationMeta, const VerificationResult.success());
-    if (data.containsKey('allergies')) {
-      context.handle(_allergiesMeta,
-          allergies.isAcceptableOrUnknown(data['allergies'], _allergiesMeta));
-    }
-    if (data.containsKey('lifestyle')) {
-      context.handle(_lifestyleMeta,
-          lifestyle.isAcceptableOrUnknown(data['lifestyle'], _lifestyleMeta));
-    }
+    context.handle(_allergiesMeta, const VerificationResult.success());
+    context.handle(_lifestyleMeta, const VerificationResult.success());
     if (data.containsKey('is_online')) {
       context.handle(_isOnlineMeta,
           isOnline.isAcceptableOrUnknown(data['is_online'], _isOnlineMeta));
@@ -925,6 +923,9 @@ class $PatientsVisitTable extends PatientsVisit
       const DignosisConverter();
   static TypeConverter<Medicationgenerated, String> $converter4 =
       const MedicationConverter();
+  static TypeConverter<Allergy, String> $converter5 = const AllergyConverter();
+  static TypeConverter<LifeStyle, String> $converter6 =
+      const LifeStyleConverter();
 }
 
 abstract class _$PatientsVisitDB extends GeneratedDatabase {

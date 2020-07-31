@@ -66,6 +66,185 @@ class BriefHistoryConverter extends TypeConverter<BriefHistorygenerated, String>
   }
 }
 
+// ALLERGY
+class Allergy {
+  List<AllergyData> data;
+
+  Allergy({this.data});
+
+  Allergy.fromJson(Map<String, dynamic> json) {
+    if (json['data'] != null) {
+      data = new List<AllergyData>();
+      json['data'].forEach((v) {
+        data.add(new AllergyData.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.data != null) {
+      data['data'] = this.data.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class AllergyData {
+  int id;
+  int clinicDoctorId;
+  int doctorId;
+  String title;
+  String type;
+  String createdAt;
+  String updatedAt;
+  String deletedAt;
+
+  AllergyData(
+      {this.id,
+      this.clinicDoctorId,
+      this.doctorId,
+      this.title,
+      this.type,
+      this.createdAt,
+      this.updatedAt,
+      this.deletedAt});
+
+  AllergyData.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    clinicDoctorId = json['clinic_doctor_id'];
+    doctorId = json['doctor_id'];
+    title = json['title'];
+    type = json['type'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+    deletedAt = json['deletedAt'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['clinic_doctor_id'] = this.clinicDoctorId;
+    data['doctor_id'] = this.doctorId;
+    data['title'] = this.title;
+    data['type'] = this.type;
+    data['createdAt'] = this.createdAt;
+    data['updatedAt'] = this.updatedAt;
+    data['deletedAt'] = this.deletedAt;
+    return data;
+  }
+}
+class AllergyConverter extends TypeConverter<Allergy, String> {
+  const AllergyConverter();
+  @override
+  Allergy mapToDart(String fromDb) {
+    if (fromDb == null) {
+      return null;
+    }
+    return Allergy.fromJson(json.decode(fromDb) as Map<String, dynamic>);
+  }
+
+  @override
+  String mapToSql(Allergy value) {
+    if (value == null) {
+      return null;
+    }
+
+    return json.encode(value.toJson());
+  }
+}
+
+// LifeStyle
+
+class LifeStyle {
+  List<LifeStyleData> data;
+
+  LifeStyle({this.data});
+
+  LifeStyle.fromJson(Map<String, dynamic> json) {
+    if (json['data'] != null) {
+      data = new List<LifeStyleData>();
+      json['data'].forEach((v) {
+        data.add(new LifeStyleData.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.data != null) {
+      data['data'] = this.data.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class LifeStyleData {
+  int id;
+  int clinicDoctorId;
+  int doctorId;
+  String title;
+  String type;
+  String createdAt;
+  String updatedAt;
+  String deletedAt;
+
+  LifeStyleData(
+      {this.id,
+      this.clinicDoctorId,
+      this.doctorId,
+      this.title,
+      this.type,
+      this.createdAt,
+      this.updatedAt,
+      this.deletedAt});
+
+  LifeStyleData.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    clinicDoctorId = json['clinic_doctor_id'];
+    doctorId = json['doctor_id'];
+    title = json['title'];
+    type = json['type'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+    deletedAt = json['deletedAt'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['clinic_doctor_id'] = this.clinicDoctorId;
+    data['doctor_id'] = this.doctorId;
+    data['title'] = this.title;
+    data['type'] = this.type;
+    data['createdAt'] = this.createdAt;
+    data['updatedAt'] = this.updatedAt;
+    data['deletedAt'] = this.deletedAt;
+    return data;
+  }
+}
+
+class LifeStyleConverter extends TypeConverter<LifeStyle, String> {
+  const LifeStyleConverter();
+  @override
+  LifeStyle mapToDart(String fromDb) {
+    if (fromDb == null) {
+      return null;
+    }
+    return LifeStyle.fromJson(json.decode(fromDb) as Map<String, dynamic>);
+  }
+
+  @override
+  String mapToSql(LifeStyle value) {
+    if (value == null) {
+      return null;
+    }
+
+    return json.encode(value.toJson());
+  }
+}
+
+
 //Medication
 
 class Medicationgenerated {

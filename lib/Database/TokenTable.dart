@@ -68,8 +68,8 @@ class TokenDB extends _$TokenDB {
   Stream<List<Token>> watchAllbookedTasks() {
     dynamic query;
     query = select(tokens)
-      ..where((t) => t.booked.equals(true))
-      ..where((t) => t.tokentime.isBiggerOrEqualValue(DateTime.now()));
+      ..where((t) => t.booked.equals(true));
+      // ..where((t) => t.tokentime.isBiggerOrEqualValue(DateTime.now()));
 
     return query.watch();
   }
