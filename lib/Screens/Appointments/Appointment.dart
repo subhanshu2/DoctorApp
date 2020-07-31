@@ -51,10 +51,12 @@ class _AppointmentsState extends State<Appointments> {
         fees: 100,
         doctorid: doc[0].doctorId,
         date: datePicked,
-        starttime: timee(datePicked, 'startTime'),
-        startbreaktime: timee(datePicked, 'breakStart'),
-        endbreaktime: timee(datePicked, 'breakEnd'),
-        endtime: timee(datePicked, 'endTime'),
+        starttime: DateTime.parse("10:00:00"), //timee(datePicked, 'startTime'),
+        startbreaktime:
+            DateTime.parse("13:00:00"), // timee(datePicked, 'breakStart'),
+        endbreaktime:
+            DateTime.parse("14:00:00"), //timee(datePicked, 'breakEnd'),
+        endtime: DateTime.parse("20:00:00"), //timee(datePicked, 'endTime'),
         nfp: 15);
     token.generateToken(context, database);
   }
@@ -110,15 +112,15 @@ class _AppointmentsState extends State<Appointments> {
     super.dispose();
   }
 
-  tokenfetch() async {
-    // print(dropdownvalue.id);
-    dynamic li = await widget.database.getAllTasks(datePicked);
-    if (li.length != 0) {
-      getTokens(datePicked, widget.database);
-    } else {
-      generate(widget.database);
-    }
-  }
+  // tokenfetch() async {
+  //   // print(dropdownvalue.id);
+  //   dynamic li = await widget.database.getAllTasks(datePicked);
+  //   if (li.length != 0) {
+  //     getTokens(datePicked, widget.database);
+  //   } else {
+  //     generate(widget.database);
+  //   }
+  // }
 
   void counting(TokenDB x) async {
     countRows = await x.getcount();
