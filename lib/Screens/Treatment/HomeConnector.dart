@@ -202,7 +202,7 @@ class _HomeConnectorState extends State<HomeConnector>
     final patient = Provider.of<PatientsVisitDB>(context);
     final pt = Provider.of<SymptomsDB>(context);
 
-    getDesigns();
+    // getDesigns();
     return Scaffold(
         body: PageView(
       controller: controller,
