@@ -73,8 +73,9 @@ class LoginPageState extends State<LoginPage> {
     if (_formKey.currentState.validate()) {
       print(pass);
       _formKey.currentState.save();
-      String loginContents = await loginDoctor(emailOrMob, pass);
-      if (loginContents == null) {
+      bool isLoggedIn = await loginDoctor(emailOrMob, pass);
+      if (!isLoggedIn) {
+        print('hello');
         errorController.add(ErrorAnimationType.shake);
         setState(() {
           hasError = true;
@@ -84,16 +85,18 @@ class LoginPageState extends State<LoginPage> {
         SharedPreferences pref = await SharedPreferences.getInstance();
         String doctors = pref.getString('dresponse');
         DoctorLogin docUser = DoctorLogin.fromJson(json.decode(doctors));
-
-        if (!docUser.data.isVerified) {
+        print(docUser.data.isActive);
+        if (docUser.data.isActive) {
           _btnController.success();
           Timer(Duration(seconds: 1),
               () => changeScreenRepacement(context, Appointments()));
         } else {
+          print('not');
           _btnController.reset();
         }
       }
     } else {
+      print('not2');
       _btnController.reset();
     }
   }

@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:getcure_doctor/Database/SymptomsTable.dart';
 import 'package:getcure_doctor/Models/PatientsVisitTableModels.dart';
 import 'package:moor/moor.dart';
 import 'package:moor_ffi/moor_ffi.dart';

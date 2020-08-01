@@ -7,10 +7,11 @@ import 'package:getcure_doctor/Database/PatientsTable.dart';
 import 'package:getcure_doctor/Helpers/Network/Requesthttp.dart';
 import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
 import 'package:getcure_doctor/Logic/GenerateTokens.dart';
-import 'package:getcure_doctor/Models/ClinicDoctorModel.dart' as cdm;
+import 'package:getcure_doctor/Models/DoctorLogin.dart';
+// import 'package:getcure_doctor/Models/ClinicDoctorModel.dart' as cdm;
 import 'package:getcure_doctor/Widgets/Drawer.dart';
 import 'package:getcure_doctor/Widgets/dataTable.dart';
-import 'package:getcure_doctor/Widgets/slots.dart';
+// import 'package:getcure_doctor/Widgets/slots.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,22 +26,22 @@ class Appointments extends StatefulWidget {
 }
 
 class _AppointmentsState extends State<Appointments> {
-  List<cdm.Data> doc = [];
-  cdm.ClinicDoctorModel docUser;
+  // List<cdm.Data> doc = [];
+  DoctorLogin docUser;
   Token tokens;
   String query = '';
 
   Timer T;
   getdoctors() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    String doctors = pref.getString('clinicresponse');
-    docUser = cdm.ClinicDoctorModel.fromJson(json.decode(doctors));
+    String doctors = pref.getString('dresponse');
+    docUser = DoctorLogin.fromJson(json.decode(doctors));
     // dropdownvalue = frontDeskUser.data.clinicDoctors[0];
-    for (int i = 0; i < docUser.data.length; i++) {
-      setState(() {
-        doc.add(docUser.data[i]);
-      });
-    }
+    // for (int i = 0; i < docUser.data.length; i++) {
+    //   setState(() {
+    //     doc.add(docUser.data[i]);
+    //   });
+    // }
   }
 
   GenerateTokens token = GenerateTokens();
@@ -49,7 +50,7 @@ class _AppointmentsState extends State<Appointments> {
     BuildContext context;
     token.tokens = GeneratedTokens(
         fees: 100,
-        doctorid: doc[0].doctorId,
+        doctorid: docUser.data.id,
         date: datePicked,
         starttime: timee(datePicked, 'startTime'),
         startbreaktime: timee(datePicked, 'breakStart'),
@@ -63,22 +64,22 @@ class _AppointmentsState extends State<Appointments> {
     dynamic s = DateFormat('EEEE').format(selecteddate);
     DateTime p;
     s = s.toString().toUpperCase();
-    for (var i in doc[0].doctorTimings) {
+    for (var i in docUser.data.clinicDoctor[0].doctorTimings) {
       var o;
       if (s.toString().compareTo(i.day.toUpperCase()) == 0) {
-        switch (t) {
-          case "startTime":
-            o = i.startTime;
-            break;
-          case "endTime":
-            o = i.endTime;
-            break;
-          case "breakStart":
-            o = i.breakStart;
-            break;
-          default:
-            o = i.breakEnd;
-        }
+        // switch (t) {
+        //   case "startTime":
+        //     o = i.startTime;
+        //     break;
+        //   case "endTime":
+        //     o = i.endTime;
+        //     break;
+        //   case "breakStart":
+        //     o = i.breakStart;
+        //     break;
+        //   default:
+        //     o = i.breakEnd;
+        // }
         String e = DateFormat("yyyy-MM-dd").format(selecteddate) + " " + o;
         p = DateTime.parse(e);
       }
@@ -95,7 +96,7 @@ class _AppointmentsState extends State<Appointments> {
   @override
   void initState() {
     clinicDoctors();
-    getdoctors();
+    // getdoctors();
     // const oneSec = const Duration(seconds: 5);
     // new Timer.periodic(oneSec, (Timer t) => tokenfetch());
     // counting(widget.database);
@@ -375,13 +376,13 @@ class _AppointmentsState extends State<Appointments> {
                     icon: Icon(Icons.file_download),
                     onPressed: () async {
                       print(datePicked);
-                      dynamic li =
-                          await widget.database.getAllTasks(datePicked);
-                      if (li.length == 0) {
+                      // dynamic li =
+                      //     await widget.database.getAllTasks(datePicked);
+                      // if (li.length == 0) {
                         generate(widget.database);
-                      } else {
-                        getTokens(datePicked, widget.database);
-                      }
+                      // } else {
+                      //   getTokens(datePicked, widget.database);
+                      // }
                     }),
                 IconButton(
                     icon: Icon(Icons.delete),
@@ -445,12 +446,12 @@ StreamBuilder<List<Token>> _buildTaskList(BuildContext context,
         itemCount: tasks.length,
         itemBuilder: (_, index) {
           final itemTask = tasks[index];
-          return Slots(
-            itemTask: itemTask,
-            database: database,
-            count: counting,
-            patientDatabase: patientDatabase,
-          );
+          // return Slots(
+          //   itemTask: itemTask,
+          //   database: database,
+          //   count: counting,
+          //   patientDatabase: patientDatabase,
+          // );
         },
       );
     },
