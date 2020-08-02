@@ -9,19 +9,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'Apis.dart';
 import 'package:intl/intl.dart';
 
-Future<String> loginDoctor(mobNo, pass) async {
+Future<bool> loginDoctor(mobNo, pass) async {
   var response = await http
       .post(LOGINDOCTOR, body: {"emailOrPhone": mobNo, "password": pass});
-  print(response.statusCode);
+  // print(response.body);
   if (response.statusCode == 200) {
     DoctorLogin doctor = DoctorLogin.fromJson(json.decode(response.body));
     SharedPreferences pref = await SharedPreferences.getInstance();
-    print(doctor.token.toString());
+    // print(doctor.token.toString());
     pref.setString('docToken', doctor.token);
     pref.setString('dresponse', json.encode(doctor));
     pref.setString('docId', doctor.data.id.toString());
+    return true;
   }
-  return response.body;
+  return false;
 }
 
 Future<String> clinicDoctors() async {

@@ -5,6 +5,7 @@ import 'package:getcure_doctor/Database/TokenTable.dart';
 import 'package:getcure_doctor/Helpers/Navigation.dart';
 import 'package:getcure_doctor/Screens/Appointments/ListDocPatients.dart';
 import 'package:getcure_doctor/Screens/login.dart';
+import 'package:getcure_doctor/Widgets/SlotTiming.dart';
 import 'package:getcure_doctor/provider/UserProvider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -39,6 +40,7 @@ class DrawerWidget extends StatelessWidget {
               )),
           ListTile(
             title: Text('Profile Page'),
+            trailing: Icon(Icons.account_box),
             onTap: () {
               Navigator.of(context).pop();
               //changeScreen(context, ProfilePage());
@@ -46,6 +48,8 @@ class DrawerWidget extends StatelessWidget {
           ),
           ListTile(
             title: Text('Doctor Invoice'),
+
+            trailing: Icon(Icons.inbox),
             onTap: () {
               Navigator.of(context).pop();
               //changeScreen(context, DrInvoice());
@@ -53,6 +57,7 @@ class DrawerWidget extends StatelessWidget {
           ),
           ListTile(
             title: Text('Hospital Invoice'),
+            trailing: Icon(Icons.local_hospital),
             onTap: () {
               Navigator.of(context).pop();
               // changeScreen(context,HospitalInvoice(
@@ -61,7 +66,16 @@ class DrawerWidget extends StatelessWidget {
             },
           ),
           ListTile(
+            title: Text('Slot timing'),
+            trailing: Icon(Icons.timer),
+            onTap: () {
+              Navigator.of(context).pop();
+              changeScreen(context,SlotTimings());
+            },
+          ),
+          ListTile(
             title: Text('Doctor Section'),
+            trailing: Icon(Icons.art_track),
             onTap: () {
               Navigator.of(context).pop();
               changeScreen(
