@@ -31,11 +31,11 @@ class DoctorData {
   String language;
   String experience;
   String designation;
-  Null imageUrl;
+  dynamic imageUrl;
   List<String> specialities;
   bool isActive;
   String getCureCode;
-  Null identityVerificationUrl;
+  dynamic identityVerificationUrl;
   List<String> holidays;
   String createdAt;
   String updatedAt;
@@ -130,6 +130,8 @@ class ClinicDoctor {
   int freeVisitCharge;
   int onCallPaidVisitCharge;
   int onCallFreeVisitCharge;
+  Null followUpAppointments;
+  Null followUpDays;
   int slotTime;
   List<DoctorTimings> doctorTimings;
   String createdAt;
@@ -148,6 +150,8 @@ class ClinicDoctor {
       this.freeVisitCharge,
       this.onCallPaidVisitCharge,
       this.onCallFreeVisitCharge,
+      this.followUpAppointments,
+      this.followUpDays,
       this.slotTime,
       this.doctorTimings,
       this.createdAt,
@@ -166,6 +170,8 @@ class ClinicDoctor {
     freeVisitCharge = json['free_visit_charge'];
     onCallPaidVisitCharge = json['on_call_paid_visit_charge'];
     onCallFreeVisitCharge = json['on_call_free_visit_charge'];
+    followUpAppointments = json['follow_up_appointments'];
+    followUpDays = json['follow_up_days'];
     slotTime = json['slot_time'];
     if (json['doctor_timings'] != null) {
       doctorTimings = new List<DoctorTimings>();
@@ -192,6 +198,8 @@ class ClinicDoctor {
     data['free_visit_charge'] = this.freeVisitCharge;
     data['on_call_paid_visit_charge'] = this.onCallPaidVisitCharge;
     data['on_call_free_visit_charge'] = this.onCallFreeVisitCharge;
+    data['follow_up_appointments'] = this.followUpAppointments;
+    data['follow_up_days'] = this.followUpDays;
     data['slot_time'] = this.slotTime;
     if (this.doctorTimings != null) {
       data['doctor_timings'] =
