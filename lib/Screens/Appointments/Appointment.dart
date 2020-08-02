@@ -32,13 +32,13 @@ class _AppointmentsState extends State<Appointments> {
   String query = '';
 
   Timer T;
-  List<String> dropdown = ['Select Doctor'];
+  List<String> dropdown = ['Select Clinic'];
   getdoctors() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     String doctors = pref.getString('dresponse');
     docUser = DoctorLogin.fromJson(json.decode(doctors));
     for(int i=0;i<docUser.data.clinicDoctor.length;i++)
-    dropdown.add(docUser.data.clinicDoctor[i].doctorName);
+    dropdown.add(docUser.data.clinicDoctor[i].clinic.name);
     print(dropdown);
     // dropdownvalue = frontDeskUser.data.clinicDoctors[0];
     // for (int i = 0; i < docUser.data.length; i++) {
@@ -142,7 +142,7 @@ class _AppointmentsState extends State<Appointments> {
       countPresent = countPresent;
     });
   }
-  String _selecteddoc = 'Select Doctor';
+  String _selecteddoc = 'Select Clinic';
   //ClinicDoctor dropdownvalue = ClinicDoctor(doctorName: '');
   var datePicked = DateTime.now();
   @override
