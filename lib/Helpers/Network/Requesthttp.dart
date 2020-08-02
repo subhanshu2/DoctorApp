@@ -19,6 +19,7 @@ Future<bool> loginDoctor(mobNo, pass) async {
     // print(doctor.token.toString());
     pref.setString('docToken', doctor.token);
     pref.setString('dresponse', json.encode(doctor));
+    pref.setString('docId', doctor.data.id.toString());
     return true;
   }
   return false;
@@ -219,9 +220,10 @@ Future<String> bookToken(name, age, mobileno, address, vtype, atype, tno, ttime,
 Future<void> getTokens(date, TokenDB db) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String token = prefs.getString('token');
+  String docId = prefs.getString('docId');
   var response = await http.get(
     GETTOKENSBYDATE +
-        '2' +
+        docId +
         "?${DateFormat('yyyy-MM-dd').format(date).toString()}",
     headers: {"Authorization": token},
   );

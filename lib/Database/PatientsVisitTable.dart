@@ -28,7 +28,8 @@ class PatientsVisit extends Table {
   TextColumn get medication =>
       text().map(const MedicationConverter()).nullable()();
   TextColumn get allergies => text().map(const AllergyConverter()).nullable()();
-  TextColumn get lifestyle =>  text().map(const LifeStyleConverter()).nullable()();
+  TextColumn get lifestyle =>
+      text().map(const LifeStyleConverter()).nullable()();
   BoolColumn get isOnline => boolean().withDefault(Constant(false))();
 }
 
