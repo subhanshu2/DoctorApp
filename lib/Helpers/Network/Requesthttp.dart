@@ -12,7 +12,8 @@ import 'package:intl/intl.dart';
 Future<bool> loginDoctor(mobNo, pass) async {
   var response = await http
       .post(LOGINDOCTOR, body: {"emailOrPhone": mobNo, "password": pass});
-  // print(response.body);
+  print(response.body);
+  print(response.statusCode);
   if (response.statusCode == 200) {
     DoctorLogin doctor = DoctorLogin.fromJson(json.decode(response.body));
     SharedPreferences pref = await SharedPreferences.getInstance();

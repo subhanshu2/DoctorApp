@@ -13,8 +13,9 @@ class PatientsVisit extends Table {
   IntColumn get age => integer().nullable()();
   TextColumn get patientName => text()();
   IntColumn get temperature => integer().withDefault(Constant(98))();
+  IntColumn get bp => integer().withDefault(Constant(72))();
   IntColumn get pulse => integer().withDefault(Constant(60))();
-  IntColumn get weight => integer().nullable()();
+  IntColumn get weight => integer().withDefault(Constant(50))();
   TextColumn get patientId => text()();
   IntColumn get clinicDoctorId => integer().nullable()();
   TextColumn get briefHistory =>
@@ -126,5 +127,98 @@ class PatientsVisitDB extends _$PatientsVisitDB {
     dynamic query;
     query = select(patientsVisit)..where((tbl) => tbl.patientId.equals(id));
     return query.watch();
+  }
+
+  Future deleteVisit(PatientsVisitData pvd, String title) {
+    var query = update(patientsVisit)..where((t) => t.id.equals(pvd.id));
+    List<VisitReasonData> list = [];
+    pvd.visitReason.data.removeWhere((element) => element.title == title);
+
+    return query
+        .write(PatientsVisitCompanion(visitReason: Value(pvd.visitReason)));
+  }
+
+  Stream<List<PatientsVisitData>> getAllergies(String id) {
+    dynamic query;
+    query = select(patientsVisit)..where((tbl) => tbl.patientId.equals(id));
+    return query.watch();
+  }
+
+  Future updateAllergy(PatientsVisitData data, Allergy bh) {
+    var query = update(patientsVisit)..where((t) => t.id.equals(data.id));
+    List<AllergyData> list = [];
+    // list = data.briefHistory.data;
+    if (data.allergies != null) {
+      list = data.allergies.data;
+    }
+    var res = list.where((element) => element.title == bh.data[0].title);
+    if (res.length == 0) {
+      list.add(bh.data[0]);
+      bh.data = list;
+    } else {
+      bh.data = list;
+    }
+
+    return query.write(PatientsVisitCompanion(allergies: Value(bh)));
+  }
+
+  Future deleteallergy(PatientsVisitData pvd, String title) {
+    var query = update(patientsVisit)..where((t) => t.id.equals(pvd.id));
+    List<AllergyData> list = [];
+    pvd.allergies.data.removeWhere((element) => element.title == title);
+
+    return query.write(PatientsVisitCompanion(allergies: Value(pvd.allergies)));
+  }
+
+  Stream<List<PatientsVisitData>> getLifeStyle(String id) {
+    dynamic query;
+    query = select(patientsVisit)..where((tbl) => tbl.patientId.equals(id));
+    return query.watch();
+  }
+
+  Future updateLifeStyle(PatientsVisitData data, LifeStyle bh) {
+    var query = update(patientsVisit)..where((t) => t.id.equals(data.id));
+    List<LifeStyleData> list = [];
+    // list = data.briefHistory.data;
+    if (data.lifestyle != null) {
+      list = data.lifestyle.data;
+    }
+    var res = list.where((element) => element.title == bh.data[0].title);
+    if (res.length == 0) {
+      list.add(bh.data[0]);
+      bh.data = list;
+    } else {
+      bh.data = list;
+    }
+
+    return query.write(PatientsVisitCompanion(lifestyle: Value(bh)));
+  }
+
+  Future deleteLifeStyle(PatientsVisitData pvd, String title) {
+    var query = update(patientsVisit)..where((t) => t.id.equals(pvd.id));
+    List<LifeStyleData> list = [];
+    pvd.lifestyle.data.removeWhere((element) => element.title == title);
+
+    return query.write(PatientsVisitCompanion(lifestyle: Value(pvd.lifestyle)));
+  }
+
+  Future updateTemp(PatientsVisitData pvd, String temp) {
+    var query = update(patientsVisit)..where((t) => t.id.equals(pvd.id));
+    query.write(PatientsVisitCompanion(temperature: Value(int.parse(temp))));
+  }
+
+  Future updateBP(PatientsVisitData pvd, String bp) {
+    var query = update(patientsVisit)..where((t) => t.id.equals(pvd.id));
+    query.write(PatientsVisitCompanion(bp: Value(int.parse(bp))));
+  }
+
+  Future updatePulse(PatientsVisitData pvd, String pulse) {
+    var query = update(patientsVisit)..where((t) => t.id.equals(pvd.id));
+    query.write(PatientsVisitCompanion(pulse: Value(int.parse(pulse))));
+  }
+
+  Future updateWeight(PatientsVisitData pvd, String weight) {
+    var query = update(patientsVisit)..where((t) => t.id.equals(pvd.id));
+    query.write(PatientsVisitCompanion(weight: Value(int.parse(weight))));
   }
 }

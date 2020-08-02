@@ -14,6 +14,7 @@ class PatientsVisitData extends DataClass
   final int age;
   final String patientName;
   final int temperature;
+  final int bp;
   final int pulse;
   final int weight;
   final String patientId;
@@ -32,8 +33,9 @@ class PatientsVisitData extends DataClass
       this.age,
       @required this.patientName,
       @required this.temperature,
+      @required this.bp,
       @required this.pulse,
-      this.weight,
+      @required this.weight,
       @required this.patientId,
       this.clinicDoctorId,
       this.briefHistory,
@@ -60,6 +62,7 @@ class PatientsVisitData extends DataClass
           .mapFromDatabaseResponse(data['${effectivePrefix}patient_name']),
       temperature: intType
           .mapFromDatabaseResponse(data['${effectivePrefix}temperature']),
+      bp: intType.mapFromDatabaseResponse(data['${effectivePrefix}bp']),
       pulse: intType.mapFromDatabaseResponse(data['${effectivePrefix}pulse']),
       weight: intType.mapFromDatabaseResponse(data['${effectivePrefix}weight']),
       patientId: stringType
@@ -101,6 +104,9 @@ class PatientsVisitData extends DataClass
     }
     if (!nullToAbsent || temperature != null) {
       map['temperature'] = Variable<int>(temperature);
+    }
+    if (!nullToAbsent || bp != null) {
+      map['bp'] = Variable<int>(bp);
     }
     if (!nullToAbsent || pulse != null) {
       map['pulse'] = Variable<int>(pulse);
@@ -161,6 +167,7 @@ class PatientsVisitData extends DataClass
       temperature: temperature == null && nullToAbsent
           ? const Value.absent()
           : Value(temperature),
+      bp: bp == null && nullToAbsent ? const Value.absent() : Value(bp),
       pulse:
           pulse == null && nullToAbsent ? const Value.absent() : Value(pulse),
       weight:
@@ -207,6 +214,7 @@ class PatientsVisitData extends DataClass
       age: serializer.fromJson<int>(json['age']),
       patientName: serializer.fromJson<String>(json['patientName']),
       temperature: serializer.fromJson<int>(json['temperature']),
+      bp: serializer.fromJson<int>(json['bp']),
       pulse: serializer.fromJson<int>(json['pulse']),
       weight: serializer.fromJson<int>(json['weight']),
       patientId: serializer.fromJson<String>(json['patientId']),
@@ -233,6 +241,7 @@ class PatientsVisitData extends DataClass
       'age': serializer.toJson<int>(age),
       'patientName': serializer.toJson<String>(patientName),
       'temperature': serializer.toJson<int>(temperature),
+      'bp': serializer.toJson<int>(bp),
       'pulse': serializer.toJson<int>(pulse),
       'weight': serializer.toJson<int>(weight),
       'patientId': serializer.toJson<String>(patientId),
@@ -254,6 +263,7 @@ class PatientsVisitData extends DataClass
           int age,
           String patientName,
           int temperature,
+          int bp,
           int pulse,
           int weight,
           String patientId,
@@ -272,6 +282,7 @@ class PatientsVisitData extends DataClass
         age: age ?? this.age,
         patientName: patientName ?? this.patientName,
         temperature: temperature ?? this.temperature,
+        bp: bp ?? this.bp,
         pulse: pulse ?? this.pulse,
         weight: weight ?? this.weight,
         patientId: patientId ?? this.patientId,
@@ -293,6 +304,7 @@ class PatientsVisitData extends DataClass
           ..write('age: $age, ')
           ..write('patientName: $patientName, ')
           ..write('temperature: $temperature, ')
+          ..write('bp: $bp, ')
           ..write('pulse: $pulse, ')
           ..write('weight: $weight, ')
           ..write('patientId: $patientId, ')
@@ -321,31 +333,34 @@ class PatientsVisitData extends DataClass
                   $mrjc(
                       temperature.hashCode,
                       $mrjc(
-                          pulse.hashCode,
+                          bp.hashCode,
                           $mrjc(
-                              weight.hashCode,
+                              pulse.hashCode,
                               $mrjc(
-                                  patientId.hashCode,
+                                  weight.hashCode,
                                   $mrjc(
-                                      clinicDoctorId.hashCode,
+                                      patientId.hashCode,
                                       $mrjc(
-                                          briefHistory.hashCode,
+                                          clinicDoctorId.hashCode,
                                           $mrjc(
-                                              visitReason.hashCode,
+                                              briefHistory.hashCode,
                                               $mrjc(
-                                                  examination.hashCode,
+                                                  visitReason.hashCode,
                                                   $mrjc(
-                                                      diagnosis.hashCode,
+                                                      examination.hashCode,
                                                       $mrjc(
-                                                          medication.hashCode,
+                                                          diagnosis.hashCode,
                                                           $mrjc(
-                                                              allergies
+                                                              medication
                                                                   .hashCode,
                                                               $mrjc(
-                                                                  lifestyle
+                                                                  allergies
                                                                       .hashCode,
-                                                                  isOnline
-                                                                      .hashCode)))))))))))))))));
+                                                                  $mrjc(
+                                                                      lifestyle
+                                                                          .hashCode,
+                                                                      isOnline
+                                                                          .hashCode))))))))))))))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -355,6 +370,7 @@ class PatientsVisitData extends DataClass
           other.age == this.age &&
           other.patientName == this.patientName &&
           other.temperature == this.temperature &&
+          other.bp == this.bp &&
           other.pulse == this.pulse &&
           other.weight == this.weight &&
           other.patientId == this.patientId &&
@@ -375,6 +391,7 @@ class PatientsVisitCompanion extends UpdateCompanion<PatientsVisitData> {
   final Value<int> age;
   final Value<String> patientName;
   final Value<int> temperature;
+  final Value<int> bp;
   final Value<int> pulse;
   final Value<int> weight;
   final Value<String> patientId;
@@ -393,6 +410,7 @@ class PatientsVisitCompanion extends UpdateCompanion<PatientsVisitData> {
     this.age = const Value.absent(),
     this.patientName = const Value.absent(),
     this.temperature = const Value.absent(),
+    this.bp = const Value.absent(),
     this.pulse = const Value.absent(),
     this.weight = const Value.absent(),
     this.patientId = const Value.absent(),
@@ -412,6 +430,7 @@ class PatientsVisitCompanion extends UpdateCompanion<PatientsVisitData> {
     this.age = const Value.absent(),
     @required String patientName,
     this.temperature = const Value.absent(),
+    this.bp = const Value.absent(),
     this.pulse = const Value.absent(),
     this.weight = const Value.absent(),
     @required String patientId,
@@ -433,6 +452,7 @@ class PatientsVisitCompanion extends UpdateCompanion<PatientsVisitData> {
     Expression<int> age,
     Expression<String> patientName,
     Expression<int> temperature,
+    Expression<int> bp,
     Expression<int> pulse,
     Expression<int> weight,
     Expression<String> patientId,
@@ -452,6 +472,7 @@ class PatientsVisitCompanion extends UpdateCompanion<PatientsVisitData> {
       if (age != null) 'age': age,
       if (patientName != null) 'patient_name': patientName,
       if (temperature != null) 'temperature': temperature,
+      if (bp != null) 'bp': bp,
       if (pulse != null) 'pulse': pulse,
       if (weight != null) 'weight': weight,
       if (patientId != null) 'patient_id': patientId,
@@ -473,6 +494,7 @@ class PatientsVisitCompanion extends UpdateCompanion<PatientsVisitData> {
       Value<int> age,
       Value<String> patientName,
       Value<int> temperature,
+      Value<int> bp,
       Value<int> pulse,
       Value<int> weight,
       Value<String> patientId,
@@ -491,6 +513,7 @@ class PatientsVisitCompanion extends UpdateCompanion<PatientsVisitData> {
       age: age ?? this.age,
       patientName: patientName ?? this.patientName,
       temperature: temperature ?? this.temperature,
+      bp: bp ?? this.bp,
       pulse: pulse ?? this.pulse,
       weight: weight ?? this.weight,
       patientId: patientId ?? this.patientId,
@@ -523,6 +546,9 @@ class PatientsVisitCompanion extends UpdateCompanion<PatientsVisitData> {
     }
     if (temperature.present) {
       map['temperature'] = Variable<int>(temperature.value);
+    }
+    if (bp.present) {
+      map['bp'] = Variable<int>(bp.value);
     }
     if (pulse.present) {
       map['pulse'] = Variable<int>(pulse.value);
@@ -582,6 +608,7 @@ class PatientsVisitCompanion extends UpdateCompanion<PatientsVisitData> {
           ..write('age: $age, ')
           ..write('patientName: $patientName, ')
           ..write('temperature: $temperature, ')
+          ..write('bp: $bp, ')
           ..write('pulse: $pulse, ')
           ..write('weight: $weight, ')
           ..write('patientId: $patientId, ')
@@ -662,6 +689,15 @@ class $PatientsVisitTable extends PatientsVisit
         defaultValue: Constant(98));
   }
 
+  final VerificationMeta _bpMeta = const VerificationMeta('bp');
+  GeneratedIntColumn _bp;
+  @override
+  GeneratedIntColumn get bp => _bp ??= _constructBp();
+  GeneratedIntColumn _constructBp() {
+    return GeneratedIntColumn('bp', $tableName, false,
+        defaultValue: Constant(72));
+  }
+
   final VerificationMeta _pulseMeta = const VerificationMeta('pulse');
   GeneratedIntColumn _pulse;
   @override
@@ -676,11 +712,8 @@ class $PatientsVisitTable extends PatientsVisit
   @override
   GeneratedIntColumn get weight => _weight ??= _constructWeight();
   GeneratedIntColumn _constructWeight() {
-    return GeneratedIntColumn(
-      'weight',
-      $tableName,
-      true,
-    );
+    return GeneratedIntColumn('weight', $tableName, false,
+        defaultValue: Constant(50));
   }
 
   final VerificationMeta _patientIdMeta = const VerificationMeta('patientId');
@@ -815,6 +848,7 @@ class $PatientsVisitTable extends PatientsVisit
         age,
         patientName,
         temperature,
+        bp,
         pulse,
         weight,
         patientId,
@@ -865,6 +899,9 @@ class $PatientsVisitTable extends PatientsVisit
           _temperatureMeta,
           temperature.isAcceptableOrUnknown(
               data['temperature'], _temperatureMeta));
+    }
+    if (data.containsKey('bp')) {
+      context.handle(_bpMeta, bp.isAcceptableOrUnknown(data['bp'], _bpMeta));
     }
     if (data.containsKey('pulse')) {
       context.handle(

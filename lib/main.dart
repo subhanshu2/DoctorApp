@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:getcure_doctor/Database/HabitsTable.dart';
 import 'package:getcure_doctor/Database/PatientsTable.dart';
 import 'package:getcure_doctor/Database/PatientsVisitTable.dart';
 import 'package:getcure_doctor/Database/SymptomsTable.dart';
 import 'package:getcure_doctor/Database/TokenTable.dart';
 import 'package:getcure_doctor/Screens/Appointments/Appointment.dart';
 import 'package:getcure_doctor/Screens/login.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -27,6 +29,10 @@ void main() {
       create: (context) => SymptomsDB(),
       dispose: (context, db) => db.close(),
     ),
+    Provider<HabitDB>(
+      create: (context) => HabitDB(),
+      dispose: (context, db) => db.close(),
+    )
   ], child: MyApp()));
 }
 

@@ -2,11 +2,12 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_syntax_view/flutter_syntax_view.dart';
-import 'package:flutter_tagging/flutter_tagging.dart';
 import 'package:getcure_doctor/Database/PatientsVisitTable.dart';
 import 'package:getcure_doctor/Database/TokenTable.dart';
 import 'package:getcure_doctor/Models/addItemmodel.dart';
+import 'package:getcure_doctor/Widgets/SearchAllergy.dart';
 import 'package:getcure_doctor/Widgets/SearchBar.dart';
+import 'package:getcure_doctor/Widgets/SearchLifeStyle.dart';
 import 'package:getcure_doctor/Widgets/searchBarVisit.dart';
 // import 'package:getcure_doctor/Provider/UserProvider.dart';
 import 'package:image_picker/image_picker.dart';
@@ -112,7 +113,6 @@ class _SymtomsState extends State<Symtoms> {
   @override
   Widget build(BuildContext context) {
     final patient = Provider.of<PatientsVisitDB>(context);
-    print("token doctor id = " + widget.token.doctorid.toString());
     return SingleChildScrollView(
         child:
             // Consumer<DoctorProvider>(builder: (context, doctorprovider, child) {
@@ -229,10 +229,10 @@ class _SymtomsState extends State<Symtoms> {
                                     trailing: IconButton(
                                         icon: Icon(Icons.cancel),
                                         onPressed: () {
-                                          // patient.deleteBrief(
-                                          //     snapshot.data[0],
-                                          //     snapshot.data[0].briefHistory
-                                          //         .data[index].title);
+                                          patient.deleteVisit(
+                                              snapshot.data[0],
+                                              snapshot.data[0].visitReason
+                                                  .data[index].title);
                                         }),
                                   );
                                 },
@@ -266,51 +266,114 @@ class _SymtomsState extends State<Symtoms> {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
-                              // return SearchBarVisit(
-                              //   pId: widget.token.guid,
-                              //   docId: widget.token.doctorid,
-                              // );
+                              return SearchAllergy(
+                                pId: widget.token.guid,
+                                docId: widget.token.doctorid,
+                              );
                             },
                           );
                         }),
                     children: [
-                      // StreamBuilder(
-                      //   stream: patient.getVisitReason(widget.token.guid),
-                      //   builder: (BuildContext context,
-                      //       AsyncSnapshot<List<PatientsVisitData>> snapshot) {
-                      //     switch (snapshot.connectionState) {
-                      //       case ConnectionState.waiting:
-                      //         return CircularProgressIndicator();
-                      //         break;
-                      //       default:
-                      //         return ListView.builder(
-                      //           itemCount: snapshot.data[0].visitReason == null
-                      //               ? 0
-                      //               : snapshot.data[0].visitReason.data.length,
-                      //           shrinkWrap: true,
-                      //           itemBuilder: (BuildContext context, int index) {
-                      //             return ListTile(
-                      //               title: Text(snapshot
-                      //                   .data[0].visitReason.data[index].title),
-                      //               trailing: IconButton(
-                      //                   icon: Icon(Icons.cancel),
-                      //                   onPressed: () {
-                      //                     // patient.deleteBrief(
-                      //                     //     snapshot.data[0],
-                      //                     //     snapshot.data[0].briefHistory
-                      //                     //         .data[index].title);
-                      //                   }),
-                      //             );
-                      //           },
-                      //         );
+                      StreamBuilder(
+                        stream: patient.getAllergies(widget.token.guid),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<PatientsVisitData>> snapshot) {
+                          switch (snapshot.connectionState) {
+                            case ConnectionState.waiting:
+                              return CircularProgressIndicator();
+                              break;
+                            default:
+                              return ListView.builder(
+                                itemCount: snapshot.data[0].allergies == null
+                                    ? 0
+                                    : snapshot.data[0].allergies.data.length,
+                                shrinkWrap: true,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return ListTile(
+                                    title: Text(snapshot
+                                        .data[0].allergies.data[index].title),
+                                    trailing: IconButton(
+                                        icon: Icon(Icons.cancel),
+                                        onPressed: () {
+                                          patient.deleteallergy(
+                                              snapshot.data[0],
+                                              snapshot.data[0].allergies
+                                                  .data[index].title);
+                                        }),
+                                  );
+                                },
+                              );
 
-                      //         break;
-                      //       // default:
-                      //       //   return Text('NO Data');
-                      //       //   break;
-                      //     }
-                      //   },
-                      // ),
+                              break;
+                          }
+                        },
+                      ),
+                    ]),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Flexible(
+                child: ExpansionTile(
+                    title: Text("LifeStyle"),
+                    trailing: IconButton(
+                        icon: Icon(
+                          Icons.local_hospital,
+                          color: orange,
+                        ),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return SearchLifeStyle(
+                                pId: widget.token.guid,
+                                docId: widget.token.doctorid,
+                              );
+                            },
+                          );
+                        }),
+                    children: [
+                      StreamBuilder(
+                        stream: patient.getLifeStyle(widget.token.guid),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<PatientsVisitData>> snapshot) {
+                          switch (snapshot.connectionState) {
+                            case ConnectionState.waiting:
+                              return CircularProgressIndicator();
+                              break;
+                            default:
+                              return ListView.builder(
+                                itemCount: snapshot.data[0].lifestyle == null
+                                    ? 0
+                                    : snapshot.data[0].lifestyle.data.length,
+                                shrinkWrap: true,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return ListTile(
+                                    title: Text(snapshot
+                                        .data[0].lifestyle.data[index].title),
+                                    trailing: IconButton(
+                                        icon: Icon(Icons.cancel),
+                                        onPressed: () {
+                                          patient.deleteLifeStyle(
+                                              snapshot.data[0],
+                                              snapshot.data[0].lifestyle
+                                                  .data[index].title);
+                                        }),
+                                  );
+                                },
+                              );
+
+                              break;
+                            // default:
+                            //   return Text('NO Data');
+                            //   break;
+                          }
+                        },
+                      ),
                     ]),
               ),
             ],

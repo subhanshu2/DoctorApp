@@ -204,7 +204,6 @@ class _HomeConnectorState extends State<HomeConnector>
   Widget build(BuildContext context) {
     final patient = Provider.of<PatientsVisitDB>(context);
     final pt = Provider.of<SymptomsDB>(context);
-
     // getDesigns();
     return Scaffold(
         body: PageView(
@@ -287,7 +286,10 @@ class _HomeConnectorState extends State<HomeConnector>
                 // else
                 //   upperDesign1,
                 // getDesigns(),
-                GeneralDetails(),
+                GeneralDetails(
+                  token: widget.token,
+                  patientVisit: patient,
+                ),
                 DefaultTabController(
                     length: tabs.length,
                     // initialIndex: 0,
@@ -296,7 +298,6 @@ class _HomeConnectorState extends State<HomeConnector>
                       child: Column(
                         children: <Widget>[
                           TabBar(
-                            
                             onTap: (value) {
                               setState(() {
                                 getDesigns();
