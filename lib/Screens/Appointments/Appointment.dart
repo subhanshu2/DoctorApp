@@ -26,16 +26,20 @@ class Appointments extends StatefulWidget {
 }
 
 class _AppointmentsState extends State<Appointments> {
-  // List<cdm.Data> doc = [];
+  List<ClinicDoctor> doc = [];
   DoctorLogin docUser;
   Token tokens;
   String query = '';
 
   Timer T;
+  List<String> dropdown = ['Select Clinic'];
   getdoctors() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     String doctors = pref.getString('dresponse');
     docUser = DoctorLogin.fromJson(json.decode(doctors));
+    for(int i=0;i<docUser.data.clinicDoctor.length;i++)
+    dropdown.add(docUser.data.clinicDoctor[i].clinic.name);
+    print(dropdown);
     // dropdownvalue = frontDeskUser.data.clinicDoctors[0];
     // for (int i = 0; i < docUser.data.length; i++) {
     //   setState(() {
@@ -52,10 +56,12 @@ class _AppointmentsState extends State<Appointments> {
         fees: 100,
         doctorid: docUser.data.id,
         date: datePicked,
-        starttime: timee(datePicked, 'startTime'),
-        startbreaktime: timee(datePicked, 'breakStart'),
-        endbreaktime: timee(datePicked, 'breakEnd'),
-        endtime: timee(datePicked, 'endTime'),
+        starttime: DateTime.parse("10:00:00"), //timee(datePicked, 'startTime'),
+        startbreaktime:
+            DateTime.parse("13:00:00"), // timee(datePicked, 'breakStart'),
+        endbreaktime:
+            DateTime.parse("14:00:00"), //timee(datePicked, 'breakEnd'),
+        endtime: DateTime.parse("20:00:00"), //timee(datePicked, 'endTime'),
         nfp: 15);
     token.generateToken(context, database);
   }
@@ -96,7 +102,7 @@ class _AppointmentsState extends State<Appointments> {
   @override
   void initState() {
     clinicDoctors();
-    // getdoctors();
+    getdoctors();
     // const oneSec = const Duration(seconds: 5);
     // new Timer.periodic(oneSec, (Timer t) => tokenfetch());
     // counting(widget.database);
@@ -111,15 +117,15 @@ class _AppointmentsState extends State<Appointments> {
     super.dispose();
   }
 
-  tokenfetch() async {
-    // print(dropdownvalue.id);
-    dynamic li = await widget.database.getAllTasks(datePicked);
-    if (li.length != 0) {
-      getTokens(datePicked, widget.database);
-    } else {
-      generate(widget.database);
-    }
-  }
+  // tokenfetch() async {
+  //   // print(dropdownvalue.id);
+  //   dynamic li = await widget.database.getAllTasks(datePicked);
+  //   if (li.length != 0) {
+  //     getTokens(datePicked, widget.database);
+  //   } else {
+  //     generate(widget.database);
+  //   }
+  // }
 
   void counting(TokenDB x) async {
     countRows = await x.getcount();
@@ -138,14 +144,14 @@ class _AppointmentsState extends State<Appointments> {
       countPresent = countPresent;
     });
   }
-
-  // ClinicDoctors dropdownvalue = ClinicDoctors(doctorName: '');
+  String _selecteddoc = 'Select Clinic';
+  //ClinicDoctor dropdownvalue = ClinicDoctor(doctorName: '');
   var datePicked = DateTime.now();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: DrawerWidget(
-          // name: dropdownvalue.doctorName,
+           //name: dropdownvalue.doctorName,
           // clinicid: dropdownvalue.doctorId.toString(),
           docId: docId),
       appBar: AppBar(
@@ -153,31 +159,39 @@ class _AppointmentsState extends State<Appointments> {
           color: orangep,
         ),
         backgroundColor: white,
-        // title: Center(
-        //   child: DropdownButton<ClinicDoctors>(
-        //    value: dropdownvalue == null ? null : dropdownvalue,
-        //     hint: Text('Select Doctor'),
-        //     iconSize: 24,
-        //     elevation: 16,
-        //     style: TextStyle(color: black),
-        //     underline: Container(
-        //       height: 2,
-        //       color: grey,
-        //     ),
-        //     onChanged: (ClinicDoctors newValue) {
-        //       setState(() {
-        //         dropdownvalue = newValue;
-        //       });
-        //     },
-        //     items:
-        //         doc.map<DropdownMenuItem<ClinicDoctors>>((ClinicDoctors value) {
-        //       return DropdownMenuItem<ClinicDoctors>(
-        //         value: value,
-        //         child: Text(value.doctorName),
-        //       );
-        //     }).toList(),
-        //   ),
-        // ),
+        title: Center(
+          child: DropdownButton(
+        //   value: dropdownvalue == null ? null : dropdownvalue.doctorName,
+          value: _selecteddoc,
+            hint: Text('Select Doctor'),
+            iconSize: 24,
+            elevation: 16,
+            style: TextStyle(color: black),
+            underline: Container(
+              height: 2,
+              color: grey,
+            ),
+            onChanged: (String newValue) {
+              setState(() {
+                _selecteddoc = newValue;
+              });
+            },
+            items:
+            //     doc.map<DropdownMenuItem<String>>((ClinicDoctor value) {
+            //   return DropdownMenuItem<String>(
+            //     value: value.doctorName,
+            //     child: Text(value.doctorName),
+            //   );
+            // }
+            dropdown.map((String val){
+              return DropdownMenuItem(
+                child: Text(val),
+                value: val,
+              );
+            }
+            ).toList(),
+          ),
+        ),
         actions: <Widget>[
           IconButton(
             icon: Icon(
