@@ -6,13 +6,13 @@ import 'package:getcure_doctor/Widgets/SlotBookingDialog.dart';
 
 import 'package:intl/intl.dart';
 
-class Slots extends StatelessWidget {
+class SlotsWidget extends StatelessWidget {
   final Token itemTask;
   final TokenDB database;
   final Function count;
   final Function colorChange;
   final PatientsDB patientDatabase;
-  const Slots(
+  const SlotsWidget(
       {Key key,
       this.itemTask,
       this.database,

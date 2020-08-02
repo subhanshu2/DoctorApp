@@ -25,19 +25,19 @@ Future<bool> loginDoctor(mobNo, pass) async {
   return false;
 }
 
-Future<String> clinicDoctors() async {
-  SharedPreferences pref = await SharedPreferences.getInstance();
-  String token = pref.getString('docToken');
-  var response =
-      await http.get(MYCLINICS + '/1', headers: {'Authorization': token});
-  print("Clinic doctor = " + response.statusCode.toString());
-  if (response.statusCode == 200) {
-    ClinicDoctorModel docmodel =
-        ClinicDoctorModel.fromJson(json.decode(response.body));
-    pref.setString('clinicresponse', json.encode(docmodel));
-    return response.body;
-  }
-}
+// Future<String> clinicDoctors() async {
+//   SharedPreferences pref = await SharedPreferences.getInstance();
+//   String token = pref.getString('docToken');
+//   var response =
+//       await http.get(MYCLINICS + '/1', headers: {'Authorization': token});
+//   print("Clinic doctor = " + response.statusCode.toString());
+//   if (response.statusCode == 200) {
+//     ClinicDoctorModel docmodel =
+//         ClinicDoctorModel.fromJson(json.decode(response.body));
+//     pref.setString('clinicresponse', json.encode(docmodel));
+//     return response.body;
+//   }
+// }
 
 Future<List<String>> getBriefHistories() async {
   SharedPreferences pref = await SharedPreferences.getInstance();

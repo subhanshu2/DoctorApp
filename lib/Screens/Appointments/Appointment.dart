@@ -7,10 +7,12 @@ import 'package:getcure_doctor/Database/PatientsTable.dart';
 import 'package:getcure_doctor/Helpers/Network/Requesthttp.dart';
 import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
 import 'package:getcure_doctor/Logic/GenerateTokens.dart';
+// import 'package:getcure_doctor/Models/ClinicDoctorModel.dart';
 import 'package:getcure_doctor/Models/DoctorLogin.dart';
 // import 'package:getcure_doctor/Models/ClinicDoctorModel.dart' as cdm;
 import 'package:getcure_doctor/Widgets/Drawer.dart';
 import 'package:getcure_doctor/Widgets/dataTable.dart';
+import 'package:getcure_doctor/Widgets/slots.dart';
 // import 'package:getcure_doctor/Widgets/slots.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -26,19 +28,22 @@ class Appointments extends StatefulWidget {
 }
 
 class _AppointmentsState extends State<Appointments> {
-  List<ClinicDoctor> doc = [];
+  List<ClinicDoctor> doc = [ClinicDoctor(clinic: Clinic(name: ""))];
   DoctorLogin docUser;
   Token tokens;
   String query = '';
 
   Timer T;
-  List<String> dropdown = ['Select Clinic'];
+  List<ClinicDoctor> dropdown = [];
   getdoctors() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     String doctors = pref.getString('dresponse');
     docUser = DoctorLogin.fromJson(json.decode(doctors));
-    for(int i=0;i<docUser.data.clinicDoctor.length;i++)
-    dropdown.add(docUser.data.clinicDoctor[i].clinic.name);
+    for (var i in docUser.data.clinicDoctor) {
+      setState(() {
+        dropdown.add(i);
+      });
+    }
     print(dropdown);
     // dropdownvalue = frontDeskUser.data.clinicDoctors[0];
     // for (int i = 0; i < docUser.data.length; i++) {
@@ -56,41 +61,52 @@ class _AppointmentsState extends State<Appointments> {
         fees: 100,
         doctorid: docUser.data.id,
         date: datePicked,
-        starttime: DateTime.parse("10:00:00"), //timee(datePicked, 'startTime'),
-        startbreaktime:
-            DateTime.parse("13:00:00"), // timee(datePicked, 'breakStart'),
-        endbreaktime:
-            DateTime.parse("14:00:00"), //timee(datePicked, 'breakEnd'),
-        endtime: DateTime.parse("20:00:00"), //timee(datePicked, 'endTime'),
+        // starttime: DateTime.parse("10:00:00"), //timee(datePicked, 'startTime'),
+        // startbreaktime:
+        //     DateTime.parse("13:00:00"), // timee(datePicked, 'breakStart'),
+        // endbreaktime:
+        //     DateTime.parse("14:00:00"), //timee(datePicked, 'breakEnd'),
+        // endtime: DateTime.parse("20:00:00"), //timee(datePicked, 'endTime'),
+        slots: timee(datePicked).slots,
         nfp: 15);
     token.generateToken(context, database);
   }
 
-  DateTime timee(DateTime selecteddate, t) {
+  DoctorTimings timee(DateTime selecteddate) {
     dynamic s = DateFormat('EEEE').format(selecteddate);
     DateTime p;
     s = s.toString().toUpperCase();
-    for (var i in docUser.data.clinicDoctor[0].doctorTimings) {
-      var o;
-      if (s.toString().compareTo(i.day.toUpperCase()) == 0) {
-        // switch (t) {
-        //   case "startTime":
-        //     o = i.startTime;
-        //     break;
-        //   case "endTime":
-        //     o = i.endTime;
-        //     break;
-        //   case "breakStart":
-        //     o = i.breakStart;
-        //     break;
-        //   default:
-        //     o = i.breakEnd;
-        // }
-        String e = DateFormat("yyyy-MM-dd").format(selecteddate) + " " + o;
-        p = DateTime.parse(e);
+    // return _selecteddoc.doctorTimings.where((element) => element.day.toUpperCase().compareTo(s)==0);
+    for(var i in _selecteddoc.doctorTimings){
+      // print(i.day);
+      if(i.day.toUpperCase().compareTo(s) == 0){
+        // print(i.day+"hello how are you");
+        return i;
       }
+      
     }
-    return p;
+    // return _selecteddoc.doctorTimings[0];
+      // for (var i in _selecteddoc.doctorTimings) {
+    //   var o;
+    //   if (s.toString().compareTo(i.day.toUpperCase()) == 0) {
+    //     switch (t) {
+    //       case "startTime":
+    //         o = i.startTime;
+    //         break;
+    //       case "endTime":
+    //         o = i.endTime;
+    //         break;
+    //       case "breakStart":
+    //         o = i.breakStart;
+    //         break;
+    //       default:
+    //         o = i.breakEnd;
+    //     }
+    //     String e = DateFormat("yyyy-MM-dd").format(selecteddate) + " " + o;
+    //     p = DateTime.parse(e);
+    //   }
+    // }
+    // return p;
   }
 
   var countRows;
@@ -101,7 +117,7 @@ class _AppointmentsState extends State<Appointments> {
 
   @override
   void initState() {
-    clinicDoctors();
+    // clinicDoctors();
     getdoctors();
     // const oneSec = const Duration(seconds: 5);
     // new Timer.periodic(oneSec, (Timer t) => tokenfetch());
@@ -144,15 +160,16 @@ class _AppointmentsState extends State<Appointments> {
       countPresent = countPresent;
     });
   }
-  String _selecteddoc = 'Select Clinic';
+
+  ClinicDoctor _selecteddoc ;
   //ClinicDoctor dropdownvalue = ClinicDoctor(doctorName: '');
   var datePicked = DateTime.now();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: DrawerWidget(
-           //name: dropdownvalue.doctorName,
-          // clinicid: dropdownvalue.doctorId.toString(),
+          name: " dsjn",
+          // clinicid: _selecteddoc.doctorId.toString(),
           docId: docId),
       appBar: AppBar(
         iconTheme: IconThemeData(
@@ -161,35 +178,34 @@ class _AppointmentsState extends State<Appointments> {
         backgroundColor: white,
         title: Center(
           child: DropdownButton(
-        //   value: dropdownvalue == null ? null : dropdownvalue.doctorName,
-          value: _selecteddoc,
-            hint: Text('Select Doctor'),
-            iconSize: 24,
+            //   value: dropdownvalue == null ? null : dropdownvalue.doctorName,
+            value: _selecteddoc,
+            hint: Text('Select Clinic'),
+            // iconSize: 24,
             elevation: 16,
             style: TextStyle(color: black),
-            underline: Container(
-              height: 2,
-              color: grey,
-            ),
-            onChanged: (String newValue) {
+            // underline: Container(
+            //   height: 2,
+            //   color: grey,
+            // ),
+            onChanged: (newValue) {
               setState(() {
                 _selecteddoc = newValue;
               });
             },
             items:
-            //     doc.map<DropdownMenuItem<String>>((ClinicDoctor value) {
-            //   return DropdownMenuItem<String>(
-            //     value: value.doctorName,
-            //     child: Text(value.doctorName),
-            //   );
-            // }
-            dropdown.map((String val){
+                //     doc.map<DropdownMenuItem<String>>((ClinicDoctor value) {
+                //   return DropdownMenuItem<String>(
+                //     value: value.doctorName,
+                //     child: Text(value.doctorName),
+                //   );
+                // }
+                dropdown.map((ClinicDoctor val) {
               return DropdownMenuItem(
-                child: Text(val),
+                child: Text(val.clinic.name),
                 value: val,
               );
-            }
-            ).toList(),
+            }).toList(),
           ),
         ),
         actions: <Widget>[
@@ -228,11 +244,11 @@ class _AppointmentsState extends State<Appointments> {
                         child: Padding(
                           padding: const EdgeInsets.only(left: 5.0, right: 5),
                           child: Center(
-                              //     child: Text(
-                              //   'Dr.', dropdownvalue.doctorName
-                              //   style: TextStyle(color: black, fontSize: 18),
-                              //   overflow: TextOverflow.ellipsis,
-                              // )
+                                  child: Text(
+                                'Dr.'+  (_selecteddoc == null?" ": _selecteddoc.doctorName) ,
+                                style: TextStyle(color: black, fontSize: 18),
+                                overflow: TextOverflow.ellipsis,
+                              )
                               ),
                         ),
                       ),
@@ -297,7 +313,7 @@ class _AppointmentsState extends State<Appointments> {
                               if (widget.database != null) {
                                 widget.database.updateData(
                                     tokens.copyWith(shift: false), " ");
-                                generate(widget.database);
+                                // generate(widget.database);
                               }
                             },
                             child: Container(
@@ -390,13 +406,14 @@ class _AppointmentsState extends State<Appointments> {
                     icon: Icon(Icons.file_download),
                     onPressed: () async {
                       print(datePicked);
-                      // dynamic li =
-                      //     await widget.database.getAllTasks(datePicked);
-                      // if (li.length == 0) {
-                        generate(widget.database);
-                      // } else {
-                      //   getTokens(datePicked, widget.database);
-                      // }
+                      dynamic li =
+                          await widget.database.getAllTasks(datePicked);
+                      if (li.length == 0) {
+                        print("no token generated");
+                      generate(widget.database);
+                      } else {
+                        // getTokens(datePicked, widget.database);
+                      }
                     }),
                 IconButton(
                     icon: Icon(Icons.delete),
@@ -460,12 +477,12 @@ StreamBuilder<List<Token>> _buildTaskList(BuildContext context,
         itemCount: tasks.length,
         itemBuilder: (_, index) {
           final itemTask = tasks[index];
-          // return Slots(
-          //   itemTask: itemTask,
-          //   database: database,
-          //   count: counting,
-          //   patientDatabase: patientDatabase,
-          // );
+          return SlotsWidget(
+            itemTask: itemTask,
+            database: database,
+            count: counting,
+            patientDatabase: patientDatabase,
+          );
         },
       );
     },
