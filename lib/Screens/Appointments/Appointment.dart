@@ -77,16 +77,15 @@ class _AppointmentsState extends State<Appointments> {
     DateTime p;
     s = s.toString().toUpperCase();
     // return _selecteddoc.doctorTimings.where((element) => element.day.toUpperCase().compareTo(s)==0);
-    for(var i in _selecteddoc.doctorTimings){
+    for (var i in _selecteddoc.doctorTimings) {
       // print(i.day);
-      if(i.day.toUpperCase().compareTo(s) == 0){
+      if (i.day.toUpperCase().compareTo(s) == 0) {
         // print(i.day+"hello how are you");
         return i;
       }
-      
     }
     // return _selecteddoc.doctorTimings[0];
-      // for (var i in _selecteddoc.doctorTimings) {
+    // for (var i in _selecteddoc.doctorTimings) {
     //   var o;
     //   if (s.toString().compareTo(i.day.toUpperCase()) == 0) {
     //     switch (t) {
@@ -161,7 +160,7 @@ class _AppointmentsState extends State<Appointments> {
     });
   }
 
-  ClinicDoctor _selecteddoc ;
+  ClinicDoctor _selecteddoc;
   //ClinicDoctor dropdownvalue = ClinicDoctor(doctorName: '');
   var datePicked = DateTime.now();
   @override
@@ -244,12 +243,14 @@ class _AppointmentsState extends State<Appointments> {
                         child: Padding(
                           padding: const EdgeInsets.only(left: 5.0, right: 5),
                           child: Center(
-                                  child: Text(
-                                'Dr.'+  (_selecteddoc == null?" ": _selecteddoc.doctorName) ,
-                                style: TextStyle(color: black, fontSize: 18),
-                                overflow: TextOverflow.ellipsis,
-                              )
-                              ),
+                              child: Text(
+                            'Dr.' +
+                                (_selecteddoc == null
+                                    ? " "
+                                    : _selecteddoc.doctorName),
+                            style: TextStyle(color: black, fontSize: 18),
+                            overflow: TextOverflow.ellipsis,
+                          )),
                         ),
                       ),
                     ),
@@ -410,9 +411,9 @@ class _AppointmentsState extends State<Appointments> {
                           await widget.database.getAllTasks(datePicked);
                       if (li.length == 0) {
                         print("no token generated");
-                      generate(widget.database);
+                        generate(widget.database);
                       } else {
-                        // getTokens(datePicked, widget.database);
+                        getTokens(datePicked, widget.database);
                       }
                     }),
                 IconButton(

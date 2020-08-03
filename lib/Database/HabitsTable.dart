@@ -33,4 +33,32 @@ class HabitDB extends _$HabitDB {
 
   @override
   int get schemaVersion => 1;
+
+  Stream<List<Habit>> watchAllTasks(String q) {
+    dynamic query;
+    if (q.length != 0) {
+      query = select(habits)..where((t) => t.title.contains(q));
+    } else {
+      query = select(habits);
+    }
+    return query.watch();
+  }
+
+  Future insertAllergy(String allergyName, int docId) {
+    Habit habit = Habit(
+      doctorId: docId,
+      title: allergyName,
+      type: Type.Allergy,
+    );
+    into(habits).insert(habit);
+  }
+
+  Future insertLifeStyle(String lifeName, int docId) {
+    Habit habit = Habit(
+      doctorId: docId,
+      title: lifeName,
+      type: Type.LifeStyle,
+    );
+    into(habits).insert(habit);
+  }
 }
