@@ -7,7 +7,6 @@ import 'package:getcure_doctor/Screens/Signup.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../Helpers/Navigation.dart';
 import '../Helpers/Network/Requesthttp.dart';
 import 'Appointments/Appointment.dart';

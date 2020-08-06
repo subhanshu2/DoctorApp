@@ -409,7 +409,7 @@ class _AppointmentsState extends State<Appointments> {
                       print(datePicked);
                       dynamic li =
                           await widget.database.getAllTasks(datePicked);
-                      if (li.length == 0) {
+                      if (li.length == 0 ) {
                         print("no token generated");
                         generate(widget.database);
                       } else {
