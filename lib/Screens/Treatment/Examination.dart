@@ -4,7 +4,7 @@ import 'package:flutter_tagging/flutter_tagging.dart';
 
 import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
 import 'package:getcure_doctor/Models/addItemmodel.dart';
-
+import 'package:getcure_doctor/Widgets/LabTest.dart';
 
 class Examination extends StatefulWidget {
   Examination({Key key}) : super(key: key);
@@ -200,13 +200,9 @@ class _ExaminationState extends State<Examination> {
                                                   context: context,
                                                   builder:
                                                       (BuildContext context) {
-                                                    // return SingleChildScrollView(
-                                                    //     child:
-                                                    //         ChangeNotifierProvider(
-                                                    //   create: (context) =>
-                                                    //       TestProvider(),
-                                                    //   child: LabTest(),
-                                                    // ));
+                                                    return SingleChildScrollView(
+                                                      child: LabTest(),
+                                                    );
                                                   },
                                                 )),
                                       )
