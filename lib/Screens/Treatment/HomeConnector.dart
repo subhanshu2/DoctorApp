@@ -34,6 +34,19 @@ class _HomeConnectorState extends State<HomeConnector>
     });
   }
 
+  getData(var pat) async {
+    print("General Details");
+    List<PatientsVisitData> pd =
+        await pat.checkPatient(widget.token.guid);
+    print(pd);
+    // setState(() {
+    //   temp = pd[0].temperature.toString();
+    //   bp = pd[0].bp.toString();
+    //   pulse = pd[0].pulse.toString();
+    //   weight = pd[0].weight.toString();
+    // });
+  }
+
   final controller = PageController(
     initialPage: 0,
   );
@@ -204,6 +217,7 @@ class _HomeConnectorState extends State<HomeConnector>
   Widget build(BuildContext context) {
     final patient = Provider.of<PatientsVisitDB>(context);
     final pt = Provider.of<SymptomsDB>(context);
+    final generaldata =getData(patient);
     // getDesigns();
     return Scaffold(
         body: PageView(
@@ -289,6 +303,7 @@ class _HomeConnectorState extends State<HomeConnector>
                 GeneralDetails(
                   token: widget.token,
                   patientVisit: patient,
+                  temp :"109"
                 ),
                 DefaultTabController(
                     length: tabs.length,

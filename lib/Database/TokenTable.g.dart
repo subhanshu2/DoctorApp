@@ -11,6 +11,7 @@ class Token extends DataClass implements Insertable<Token> {
   final int id;
   final int tokenno;
   final int doctorid;
+  final int clinicid;
   final DateTime tokentime;
   final String name;
   final int age;
@@ -31,6 +32,7 @@ class Token extends DataClass implements Insertable<Token> {
       {@required this.id,
       @required this.tokenno,
       @required this.doctorid,
+      @required this.clinicid,
       @required this.tokentime,
       this.name,
       this.age,
@@ -60,6 +62,8 @@ class Token extends DataClass implements Insertable<Token> {
           intType.mapFromDatabaseResponse(data['${effectivePrefix}tokenno']),
       doctorid:
           intType.mapFromDatabaseResponse(data['${effectivePrefix}doctorid']),
+      clinicid:
+          intType.mapFromDatabaseResponse(data['${effectivePrefix}clinicid']),
       tokentime: dateTimeType
           .mapFromDatabaseResponse(data['${effectivePrefix}tokentime']),
       name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
@@ -100,6 +104,9 @@ class Token extends DataClass implements Insertable<Token> {
     }
     if (!nullToAbsent || doctorid != null) {
       map['doctorid'] = Variable<int>(doctorid);
+    }
+    if (!nullToAbsent || clinicid != null) {
+      map['clinicid'] = Variable<int>(clinicid);
     }
     if (!nullToAbsent || tokentime != null) {
       map['tokentime'] = Variable<DateTime>(tokentime);
@@ -161,6 +168,9 @@ class Token extends DataClass implements Insertable<Token> {
       doctorid: doctorid == null && nullToAbsent
           ? const Value.absent()
           : Value(doctorid),
+      clinicid: clinicid == null && nullToAbsent
+          ? const Value.absent()
+          : Value(clinicid),
       tokentime: tokentime == null && nullToAbsent
           ? const Value.absent()
           : Value(tokentime),
@@ -208,6 +218,7 @@ class Token extends DataClass implements Insertable<Token> {
       id: serializer.fromJson<int>(json['id']),
       tokenno: serializer.fromJson<int>(json['tokenno']),
       doctorid: serializer.fromJson<int>(json['doctorid']),
+      clinicid: serializer.fromJson<int>(json['clinicid']),
       tokentime: serializer.fromJson<DateTime>(json['tokentime']),
       name: serializer.fromJson<String>(json['name']),
       age: serializer.fromJson<int>(json['age']),
@@ -233,6 +244,7 @@ class Token extends DataClass implements Insertable<Token> {
       'id': serializer.toJson<int>(id),
       'tokenno': serializer.toJson<int>(tokenno),
       'doctorid': serializer.toJson<int>(doctorid),
+      'clinicid': serializer.toJson<int>(clinicid),
       'tokentime': serializer.toJson<DateTime>(tokentime),
       'name': serializer.toJson<String>(name),
       'age': serializer.toJson<int>(age),
@@ -256,6 +268,7 @@ class Token extends DataClass implements Insertable<Token> {
           {int id,
           int tokenno,
           int doctorid,
+          int clinicid,
           DateTime tokentime,
           String name,
           int age,
@@ -276,6 +289,7 @@ class Token extends DataClass implements Insertable<Token> {
         id: id ?? this.id,
         tokenno: tokenno ?? this.tokenno,
         doctorid: doctorid ?? this.doctorid,
+        clinicid: clinicid ?? this.clinicid,
         tokentime: tokentime ?? this.tokentime,
         name: name ?? this.name,
         age: age ?? this.age,
@@ -299,6 +313,7 @@ class Token extends DataClass implements Insertable<Token> {
           ..write('id: $id, ')
           ..write('tokenno: $tokenno, ')
           ..write('doctorid: $doctorid, ')
+          ..write('clinicid: $clinicid, ')
           ..write('tokentime: $tokentime, ')
           ..write('name: $name, ')
           ..write('age: $age, ')
@@ -327,41 +342,41 @@ class Token extends DataClass implements Insertable<Token> {
           $mrjc(
               doctorid.hashCode,
               $mrjc(
-                  tokentime.hashCode,
+                  clinicid.hashCode,
                   $mrjc(
-                      name.hashCode,
+                      tokentime.hashCode,
                       $mrjc(
-                          age.hashCode,
+                          name.hashCode,
                           $mrjc(
-                              address.hashCode,
+                              age.hashCode,
                               $mrjc(
-                                  mobileno.hashCode,
+                                  address.hashCode,
                                   $mrjc(
-                                      appointmenttype.hashCode,
+                                      mobileno.hashCode,
                                       $mrjc(
-                                          visittype.hashCode,
+                                          appointmenttype.hashCode,
                                           $mrjc(
-                                              bookedtype.hashCode,
+                                              visittype.hashCode,
                                               $mrjc(
-                                                  fees.hashCode,
+                                                  bookedtype.hashCode,
                                                   $mrjc(
-                                                      cancelled.hashCode,
+                                                      fees.hashCode,
                                                       $mrjc(
-                                                          booked.hashCode,
+                                                          cancelled.hashCode,
                                                           $mrjc(
-                                                              updatedAt
-                                                                  .hashCode,
+                                                              booked.hashCode,
                                                               $mrjc(
-                                                                  isOnline
+                                                                  updatedAt
                                                                       .hashCode,
                                                                   $mrjc(
-                                                                      guid
+                                                                      isOnline
                                                                           .hashCode,
                                                                       $mrjc(
-                                                                          gender
+                                                                          guid
                                                                               .hashCode,
-                                                                          shift
-                                                                              .hashCode)))))))))))))))))));
+                                                                          $mrjc(
+                                                                              gender.hashCode,
+                                                                              shift.hashCode))))))))))))))))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -369,6 +384,7 @@ class Token extends DataClass implements Insertable<Token> {
           other.id == this.id &&
           other.tokenno == this.tokenno &&
           other.doctorid == this.doctorid &&
+          other.clinicid == this.clinicid &&
           other.tokentime == this.tokentime &&
           other.name == this.name &&
           other.age == this.age &&
@@ -391,6 +407,7 @@ class TokensCompanion extends UpdateCompanion<Token> {
   final Value<int> id;
   final Value<int> tokenno;
   final Value<int> doctorid;
+  final Value<int> clinicid;
   final Value<DateTime> tokentime;
   final Value<String> name;
   final Value<int> age;
@@ -411,6 +428,7 @@ class TokensCompanion extends UpdateCompanion<Token> {
     this.id = const Value.absent(),
     this.tokenno = const Value.absent(),
     this.doctorid = const Value.absent(),
+    this.clinicid = const Value.absent(),
     this.tokentime = const Value.absent(),
     this.name = const Value.absent(),
     this.age = const Value.absent(),
@@ -432,6 +450,7 @@ class TokensCompanion extends UpdateCompanion<Token> {
     this.id = const Value.absent(),
     @required int tokenno,
     @required int doctorid,
+    @required int clinicid,
     @required DateTime tokentime,
     this.name = const Value.absent(),
     this.age = const Value.absent(),
@@ -450,12 +469,14 @@ class TokensCompanion extends UpdateCompanion<Token> {
     this.shift = const Value.absent(),
   })  : tokenno = Value(tokenno),
         doctorid = Value(doctorid),
+        clinicid = Value(clinicid),
         tokentime = Value(tokentime),
         fees = Value(fees);
   static Insertable<Token> custom({
     Expression<int> id,
     Expression<int> tokenno,
     Expression<int> doctorid,
+    Expression<int> clinicid,
     Expression<DateTime> tokentime,
     Expression<String> name,
     Expression<int> age,
@@ -477,6 +498,7 @@ class TokensCompanion extends UpdateCompanion<Token> {
       if (id != null) 'id': id,
       if (tokenno != null) 'tokenno': tokenno,
       if (doctorid != null) 'doctorid': doctorid,
+      if (clinicid != null) 'clinicid': clinicid,
       if (tokentime != null) 'tokentime': tokentime,
       if (name != null) 'name': name,
       if (age != null) 'age': age,
@@ -500,6 +522,7 @@ class TokensCompanion extends UpdateCompanion<Token> {
       {Value<int> id,
       Value<int> tokenno,
       Value<int> doctorid,
+      Value<int> clinicid,
       Value<DateTime> tokentime,
       Value<String> name,
       Value<int> age,
@@ -520,6 +543,7 @@ class TokensCompanion extends UpdateCompanion<Token> {
       id: id ?? this.id,
       tokenno: tokenno ?? this.tokenno,
       doctorid: doctorid ?? this.doctorid,
+      clinicid: clinicid ?? this.clinicid,
       tokentime: tokentime ?? this.tokentime,
       name: name ?? this.name,
       age: age ?? this.age,
@@ -550,6 +574,9 @@ class TokensCompanion extends UpdateCompanion<Token> {
     }
     if (doctorid.present) {
       map['doctorid'] = Variable<int>(doctorid.value);
+    }
+    if (clinicid.present) {
+      map['clinicid'] = Variable<int>(clinicid.value);
     }
     if (tokentime.present) {
       map['tokentime'] = Variable<DateTime>(tokentime.value);
@@ -608,6 +635,7 @@ class TokensCompanion extends UpdateCompanion<Token> {
           ..write('id: $id, ')
           ..write('tokenno: $tokenno, ')
           ..write('doctorid: $doctorid, ')
+          ..write('clinicid: $clinicid, ')
           ..write('tokentime: $tokentime, ')
           ..write('name: $name, ')
           ..write('age: $age, ')
@@ -661,6 +689,18 @@ class $TokensTable extends Tokens with TableInfo<$TokensTable, Token> {
   GeneratedIntColumn _constructDoctorid() {
     return GeneratedIntColumn(
       'doctorid',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _clinicidMeta = const VerificationMeta('clinicid');
+  GeneratedIntColumn _clinicid;
+  @override
+  GeneratedIntColumn get clinicid => _clinicid ??= _constructClinicid();
+  GeneratedIntColumn _constructClinicid() {
+    return GeneratedIntColumn(
+      'clinicid',
       $tableName,
       false,
     );
@@ -853,6 +893,7 @@ class $TokensTable extends Tokens with TableInfo<$TokensTable, Token> {
         id,
         tokenno,
         doctorid,
+        clinicid,
         tokentime,
         name,
         age,
@@ -895,6 +936,12 @@ class $TokensTable extends Tokens with TableInfo<$TokensTable, Token> {
           doctorid.isAcceptableOrUnknown(data['doctorid'], _doctoridMeta));
     } else if (isInserting) {
       context.missing(_doctoridMeta);
+    }
+    if (data.containsKey('clinicid')) {
+      context.handle(_clinicidMeta,
+          clinicid.isAcceptableOrUnknown(data['clinicid'], _clinicidMeta));
+    } else if (isInserting) {
+      context.missing(_clinicidMeta);
     }
     if (data.containsKey('tokentime')) {
       context.handle(_tokentimeMeta,

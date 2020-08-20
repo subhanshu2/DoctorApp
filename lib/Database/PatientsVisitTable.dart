@@ -47,11 +47,15 @@ class PatientsVisitDB extends _$PatientsVisitDB {
   PatientsVisitDB() : super(_openConnection());
   @override
   int get schemaVersion => 2;
+
+
   Future insert(PatientsVisitData p) => into(patientsVisit).insert(p);
+
+
   Future<List<PatientsVisitData>> checkPatient(String patientId) {
     try {
       var query = select(patientsVisit)
-        ..where((pat) => pat.patientId.equals(patientId));
+        ..where((pat) => pat.patientId.equals(patientId))..limit(1);
       return query.get();
     } catch (e) {
       print("Error" + e);
@@ -74,7 +78,6 @@ class PatientsVisitDB extends _$PatientsVisitDB {
     } else {
       bh.data = list;
     }
-
     return query.write(PatientsVisitCompanion(briefHistory: Value(bh)));
   }
 
@@ -105,6 +108,8 @@ class PatientsVisitDB extends _$PatientsVisitDB {
         .write(PatientsVisitCompanion(briefHistory: Value(pvd.briefHistory)));
   }
 
+
+
   Future updateVisitReason(PatientsVisitData data, VisitReasongenerated vh) {
     var query = update(patientsVisit)..where((t) => t.id.equals(data.id));
     List<VisitReasonData> list = [];
@@ -123,11 +128,15 @@ class PatientsVisitDB extends _$PatientsVisitDB {
     return query.write(PatientsVisitCompanion(visitReason: Value(vh)));
   }
 
+
+
   Stream<List<PatientsVisitData>> getVisitReason(String id) {
     dynamic query;
     query = select(patientsVisit)..where((tbl) => tbl.patientId.equals(id));
     return query.watch();
   }
+
+
 
   Future deleteVisit(PatientsVisitData pvd, String title) {
     var query = update(patientsVisit)..where((t) => t.id.equals(pvd.id));
@@ -202,22 +211,22 @@ class PatientsVisitDB extends _$PatientsVisitDB {
     return query.write(PatientsVisitCompanion(lifestyle: Value(pvd.lifestyle)));
   }
 
-  Future updateTemp(PatientsVisitData pvd, String temp) {
+  void updateTemp(PatientsVisitData pvd, String temp) {
     var query = update(patientsVisit)..where((t) => t.id.equals(pvd.id));
     query.write(PatientsVisitCompanion(temperature: Value(int.parse(temp))));
   }
 
-  Future updateBP(PatientsVisitData pvd, String bp) {
+  void updateBP(PatientsVisitData pvd, String bp) {
     var query = update(patientsVisit)..where((t) => t.id.equals(pvd.id));
     query.write(PatientsVisitCompanion(bp: Value(int.parse(bp))));
   }
 
-  Future updatePulse(PatientsVisitData pvd, String pulse) {
+  void updatePulse(PatientsVisitData pvd, String pulse) {
     var query = update(patientsVisit)..where((t) => t.id.equals(pvd.id));
     query.write(PatientsVisitCompanion(pulse: Value(int.parse(pulse))));
   }
 
-  Future updateWeight(PatientsVisitData pvd, String weight) {
+  void updateWeight(PatientsVisitData pvd, String weight) {
     var query = update(patientsVisit)..where((t) => t.id.equals(pvd.id));
     query.write(PatientsVisitCompanion(weight: Value(int.parse(weight))));
   }
