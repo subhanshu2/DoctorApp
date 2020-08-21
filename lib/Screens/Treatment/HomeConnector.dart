@@ -217,7 +217,7 @@ class _HomeConnectorState extends State<HomeConnector>
   Widget build(BuildContext context) {
     final patient = Provider.of<PatientsVisitDB>(context);
     final pt = Provider.of<SymptomsDB>(context);
-    final generaldata =getData(patient);
+    // final generaldata =getData(patient);
     // getDesigns();
     return Scaffold(
         body: PageView(

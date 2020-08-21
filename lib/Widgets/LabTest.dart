@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:getcure_doctor/Database/ExaminationTable.dart';
 import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
+import 'package:getcure_doctor/provider/ExaminationProvider.dart';
 import 'package:provider/provider.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
@@ -14,24 +16,6 @@ class LabTest extends StatefulWidget {
 class _LabTestState extends State<LabTest> with SingleTickerProviderStateMixin {
   final RoundedLoadingButtonController _btnController =
       new RoundedLoadingButtonController();
-      
-  List<Widget> tabsFun(BuildContext context) {
-    final tabpages = <Widget>[
-      NumericParameter(
-        paraName: 'Parameter Name',
-        val1: 'Low Biological Ref Interval',
-        val2: 'High Biological Ref Interval',
-        val3: 'Unit',
-      ),
-      NumericParameter(
-        paraName: 'RParameter Name',
-        val1: 'Result Type I',
-        val2: 'Result Type II',
-        val3: 'Biological Reference Interval',
-      ),
-    ];
-    return tabpages;
-  }
 
   TabController controller;
   @override
@@ -46,70 +30,44 @@ class _LabTestState extends State<LabTest> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
-  final tabs = <Tab>[
-    Tab(
-      text: 'Numeric Parameter',
-    ),
-    Tab(
-      text: 'Radio Parameter',
-    )
-  ];
+  TextEditingController _title = new TextEditingController();
+  TextEditingController _sample = new TextEditingController();
+  TextEditingController _method = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      titlePadding: EdgeInsets.zero,
-      title: Container(
-        alignment: Alignment.center,
-        color: orangep,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 8.0, right: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                'Add Lab Test',
-                style: TextStyle(color: white),
+    return Consumer<ExaminationProvider>(
+      builder: (context, test, child) {
+        return AlertDialog(
+          titlePadding: EdgeInsets.zero,
+          title: Container(
+            alignment: Alignment.center,
+            color: orangep,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8.0, right: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    'Add Lab Test',
+                    style: TextStyle(color: white),
+                  ),
+                  IconButton(
+                      icon: Icon(Icons.cancel),
+                      onPressed: () => Navigator.pop(context))
+                ],
               ),
-              IconButton(
-                  icon: Icon(Icons.cancel),
-                  onPressed: () => Navigator.pop(context))
-            ],
+            ),
           ),
-        ),
-      ),
-      actions: <Widget>[
-        Container(
-            height: MediaQuery.of(context).size.height * 0.7,
-            width: MediaQuery.of(context).size.width * 0.8,
-            child: Column(
-              children: <Widget>[
-                Container(
-                  height: 45.0,
-                  child: TextField(
-                    decoration: new InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.orange),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: orange),
-                        ),
-                        hintText: 'Sample Test',
-                        labelText: 'Enter Sample Test Name',
-                        labelStyle: TextStyle(color: orange)),
-                    onSubmitted: (value) {},
-                  ),
-                ),
-                SizedBox(
-                  height: 20.0,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+          actions: <Widget>[
+            Container(
+                height: MediaQuery.of(context).size.height * 0.7,
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: Column(
                   children: <Widget>[
                     Container(
-                      width: 100.0,
-                      height: 55.0,
-                      child: TextField(
+                      height: 45.0,
+                      child: TextFormField(
                         decoration: new InputDecoration(
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.orange),
@@ -117,55 +75,92 @@ class _LabTestState extends State<LabTest> with SingleTickerProviderStateMixin {
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: orange),
                             ),
-                            hintText: 'Sample',
-                            labelText: 'Sample',
+                            hintText: 'Sample Test',
+                            labelText: 'Enter Sample Test Name',
                             labelStyle: TextStyle(color: orange)),
-                        onSubmitted: (value) {},
+                        controller: _title,
                       ),
                     ),
-                    Container(
-                      width: 100.0,
-                      height: 55.0,
-                      child: TextField(
-                        decoration: new InputDecoration(
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.orange),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: orange),
-                            ),
-                            hintText: 'Method',
-                            labelText: 'Method',
-                            labelStyle: TextStyle(color: orange)),
-                        onSubmitted: (value) {},
-                      ),
+                    SizedBox(
+                      height: 20.0,
                     ),
-                  ],
-                ),
-                // Text("Hello"),
-                // ListView.builder(
-                //   shrinkWrap: true,
-                //   itemBuilder:(context, index){
-                //     return Text('');
-                //   },
-                // ),
-                TabBar(
-                  controller: controller,
-                  tabs: tabs,
-                  labelColor: black,
-                  isScrollable: true,
-                ),
-                Expanded(
-                  child: Container(
-                    child: TabBarView(
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        Container(
+                          width: 100.0,
+                          height: 55.0,
+                          child: TextField(
+                            decoration: new InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.orange),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: orange),
+                                ),
+                                hintText: 'Sample',
+                                labelText: 'Sample',
+                                labelStyle: TextStyle(color: orange)),
+                            controller: _sample,
+                          ),
+                        ),
+                        Container(
+                          width: 100.0,
+                          height: 55.0,
+                          child: TextField(
+                            decoration: new InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.orange),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: orange),
+                                ),
+                                hintText: 'Method',
+                                labelText: 'Method',
+                                labelStyle: TextStyle(color: orange)),
+                            controller: _method,
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    TabBar(
                       controller: controller,
-                      children: tabsFun(context),
+                      tabs: <Tab>[
+                        Tab(
+                          text: 'Numeric Parameter',
+                        ),
+                        Tab(
+                          text: 'Radio Parameter',
+                        )
+                      ],
+                      labelColor: black,
+                      isScrollable: true,
                     ),
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
+                    Expanded(
+                      child: Container(
+                        child: TabBarView(
+                          controller: controller,
+                          children: <Widget>[
+                            NumericParameter(
+                              paraName: 'Parameter Name',
+                              val1: 'Low Biological Ref Interval',
+                              val2: 'High Biological Ref Interval',
+                              val3: 'Unit',
+                            ),
+                            NumericParameter(
+                              paraName: 'RParameter Name',
+                              val1: 'Result Type I',
+                              val2: 'Result Type II',
+                              val3: 'Biological Reference Interval',
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    //   children: <Widget>[
                     RoundedLoadingButton(
                       width: 80.0,
                       height: 40.0,
@@ -176,6 +171,8 @@ class _LabTestState extends State<LabTest> with SingleTickerProviderStateMixin {
                       ),
                       color: blue,
                       onPressed: () {
+                        print(test.parametersList.length);
+                        _btnController.reset();
                         // if (testProvider.obj.numParaName != null) {
                         //   _btnController.success();
                         //   setState(() {
@@ -191,19 +188,21 @@ class _LabTestState extends State<LabTest> with SingleTickerProviderStateMixin {
                         // }
                       },
                     ),
-                    RaisedButton(
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(width: 100.0),
-                          borderRadius: BorderRadius.circular(18.0),
-                        ),
-                        color: purple,
-                        child: Text('Add More'),
-                        onPressed: () {})
+                    //     RaisedButton(
+                    //         shape: RoundedRectangleBorder(
+                    //           side: BorderSide(width: 100.0),
+                    //           borderRadius: BorderRadius.circular(18.0),
+                    //         ),
+                    //         color: purple,
+                    //         child: Text('Add More'),
+                    //         onPressed: () {})
+                    //   ],
+                    // )
                   ],
-                )
-              ],
-            ))
-      ],
+                ))
+          ],
+        );
+      },
     );
   }
 }
@@ -250,108 +249,177 @@ class NumericParameter extends StatefulWidget {
 }
 
 class _NumericParameterState extends State<NumericParameter> {
+  TextEditingController _pname = new TextEditingController();
+  TextEditingController _lbr = new TextEditingController();
+  TextEditingController _hbr = new TextEditingController();
+  TextEditingController _unit = new TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    return Form(
-        child: Container(
-            padding: EdgeInsets.all(10.0),
-            child: Column(
-              children: <Widget>[
-                Container(
-                  height: 45.0,
-                  child: TextFormField(
-                    decoration: new InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: blue),
-                        // borderRadius: BorderRadius.all(Radius.circular(40.0))
+    return Consumer<ExaminationProvider>(builder: (context, test, child) {
+      return Form(
+          key: _formKey,
+          child: Container(
+              padding: EdgeInsets.all(10.0),
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    height: 45.0,
+                    child: TextFormField(
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        return null;
+                      },
+                      decoration: new InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: blue),
+                          // borderRadius: BorderRadius.all(Radius.circular(40.0))
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: blue),
+                          // borderRadius: BorderRadius.all(Radius.circular(40.0))
+                        ),
+                        hintText: widget.paraName,
+                        // labelText: widget.paraName,
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: blue),
-                        // borderRadius: BorderRadius.all(Radius.circular(40.0))
-                      ),
-                      hintText: widget.paraName,
-                      labelText: widget.paraName,
+                      controller: _pname,
                     ),
-                    onChanged: (value) {
-                      setState(() {});
-                    },
-                    onSaved: (value) {
-                      setState(() {});
-                    },
                   ),
-                ),
-                SizedBox(
-                  height: 20.0,
-                ),
-                Container(
-                  height: 45.0,
-                  child: TextFormField(
-                    decoration: new InputDecoration(
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  Container(
+                    height: 45.0,
+                    child: TextFormField(
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        return null;
+                      },
+                      decoration: new InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: blue),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: blue),
+                          ),
+                          hintText: widget.val1,
+                          // labelText: widget.val1
+                          ),
+                      controller: _lbr,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  Container(
+                    height: 45.0,
+                    child: TextFormField(
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        return null;
+                      },
+                      decoration: new InputDecoration(
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: blue),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: blue),
                         ),
-                        hintText: widget.val1,
-                        labelText: widget.val1),
-                    onChanged: (value) {
-                      setState(() {});
-                    },
-                    onSaved: (value) {
-                      setState(() {});
-                    },
-                  ),
-                ),
-                SizedBox(
-                  height: 20.0,
-                ),
-                Container(
-                  height: 45.0,
-                  child: TextFormField(
-                    decoration: new InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: blue),
+                        hintText: widget.val2,
+                        // labelText: widget.val2,
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: blue),
-                      ),
-                      hintText: widget.val2,
-                      labelText: widget.val2,
+                      controller: _hbr,
                     ),
-                    onChanged: (value) {
-                      setState(() {});
-                    },
-                    onSaved: (value) {
-                      setState(() {});
-                    },
                   ),
-                ),
-                SizedBox(
-                  height: 20.0,
-                ),
-                Container(
-                  height: 45.0,
-                  child: TextFormField(
-                    decoration: new InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: blue),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  Container(
+                    height: 45.0,
+                    child: TextFormField(
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        return null;
+                      },
+                      decoration: new InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: blue),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: blue),
+                        ),
+                        hintText: widget.val3,
+                        // labelText: widget.val3,
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: blue),
-                      ),
-                      hintText: widget.val3,
-                      labelText: widget.val3,
+                      controller: _unit,
                     ),
-                    onChanged: (value) {
-                      setState(() {});
-                    },
-                    onSaved: (value) {
-                      setState(() {});
-                    },
                   ),
-                ),
-              ],
-            )));
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  //   children: <Widget>[
+                  // RoundedLoadingButton(
+                  //   width: 80.0,
+                  //   height: 40.0,
+                  //   controller: _btnController,
+                  //   child: Text(
+                  //     'Submit',
+                  //     style: TextStyle(color: white),
+                  //   ),
+                  //   color: blue,
+                  //   onPressed: () {
+                  //     // if (testProvider.obj.numParaName != null) {
+                  //     //   _btnController.success();
+                  //     //   setState(() {
+                  //     //     // testProvider.addTest();
+                  //     //   });
+                  //     //   print(obj.sampleTestName);
+                  //     //   print(obj.numParaName);
+                  //     //   print(obj.radioParaName);
+
+                  //     //   // changeScreen(context, PatientInfo());
+                  //     // } else {
+                  //     //   _btnController.reset();
+                  //     // }
+                  //   },
+                  // ),
+                  RaisedButton(
+                      shape: RoundedRectangleBorder(
+                        side: BorderSide(width: 50.0),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      color: purple,
+                      child: Text('Add More'),
+                      onPressed: () {
+                        // _formKey.currentState.save();
+                        if (_formKey.currentState.validate()) {
+                          test.addParameter(new ParameterData(
+                            title: _pname.text,
+                            references: [
+                              int.parse(_lbr.text),
+                              int.parse(_hbr.text)
+                            ],
+                            unit: _unit.text,
+                          ));
+
+                          print(_pname.text);
+                          _lbr.clear();
+                          _pname.clear();
+                          _hbr.clear();
+                          _unit.clear();
+                        }
+                      })
+                  //   ],
+                  // )
+                ],
+              )));
+    });
   }
 }
