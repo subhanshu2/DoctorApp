@@ -114,10 +114,8 @@ class _SymtomsState extends State<Symtoms> {
   Widget build(BuildContext context) {
     final patient = Provider.of<PatientsVisitDB>(context);
     return SingleChildScrollView(
-        child:
-            // Consumer<DoctorProvider>(builder: (context, doctorprovider, child) {
-            Center(
-                child: Column(
+        child: Center(
+            child: Column(
       children: <Widget>[
         Container(
           child: Row(
@@ -237,11 +235,7 @@ class _SymtomsState extends State<Symtoms> {
                                   );
                                 },
                               );
-
                               break;
-                            // default:
-                            //   return Text('NO Data');
-                            //   break;
                           }
                         },
                       ),

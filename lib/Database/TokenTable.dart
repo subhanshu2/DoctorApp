@@ -57,7 +57,7 @@ class TokenDB extends _$TokenDB {
         ..where((t) => t.name.contains(q) | t.address.contains(q))
         ..where((t) => (t.booked.equals(true) |
             t.cancelled.equals(true) &
-                t.tokentime.isBiggerOrEqualValue(DateTime.now())));
+                t.tokentime.day.isBiggerOrEqualValue(DateTime.now().day)));
     } else {
       query = select(tokens)
         ..where((t) => t.booked.equals(true) | t.cancelled.equals(true));
@@ -67,9 +67,8 @@ class TokenDB extends _$TokenDB {
 
   Stream<List<Token>> watchAllbookedTasks() {
     dynamic query;
-    query = select(tokens)
-      ..where((t) => t.booked.equals(true));
-      // ..where((t) => t.tokentime.isBiggerOrEqualValue(DateTime.now()));
+    query = select(tokens)..where((t) => t.booked.equals(true));
+    // ..where((t) => t.tokentime.isBiggerOrEqualValue(DateTime.now()));
 
     return query.watch();
   }

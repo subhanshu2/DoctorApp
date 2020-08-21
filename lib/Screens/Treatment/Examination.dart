@@ -129,7 +129,6 @@ class _ExaminationState extends State<Examination> {
                                             );
                                           },
                                           onAdded: (addItemsDoctor) {
-                                            // api calls here, triggered when add to tag button is pressed
                                             return AddItemsDoctor();
                                           },
                                           configureSuggestion: (lang) {
@@ -196,15 +195,18 @@ class _ExaminationState extends State<Examination> {
                                             elevation: 10.0,
                                             child: Icon(Icons.add,
                                                 size: 40.0, color: white),
-                                            onPressed: () => showDialog(
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) {
-                                                    return SingleChildScrollView(
-                                                      child: LabTest(),
-                                                    );
-                                                  },
-                                                )),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                              showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return SingleChildScrollView(
+                                                    child: LabTest(),
+                                                  );
+                                                },
+                                              );
+                                            }),
                                       )
                                     ],
                                   ),

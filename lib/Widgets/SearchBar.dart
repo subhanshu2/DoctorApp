@@ -1,10 +1,10 @@
-import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:getcure_doctor/Database/PatientsVisitTable.dart';
 import 'package:getcure_doctor/Database/SymptomsTable.dart';
 import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
 import 'package:getcure_doctor/Models/PatientsVisitTableModels.dart';
+import 'package:getcure_doctor/Widgets/GetBriefTimings.dart';
 import 'package:provider/provider.dart';
 
 class SearchBar extends StatefulWidget {
@@ -134,9 +134,14 @@ StreamBuilder<List<Symptom>> _buildTaskList(BuildContext context, String query,
                 ];
                 BriefHistorygenerated bh = BriefHistorygenerated(data: bhd);
                 var p = await pv.checkPatient(pId);
-
                 pv.updateBriefHistory(p[0], bh);
                 Navigator.pop(context);
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return GetTimings();
+                  },
+                );
               },
               child: ListTile(
                 contentPadding: EdgeInsets.zero,

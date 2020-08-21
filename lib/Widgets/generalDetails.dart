@@ -72,6 +72,8 @@ class _GeneralDetailsState extends State<GeneralDetails> {
                           ),
                           child: Center(
                             child: TextField(
+                              autofocus: false,
+                              focusNode: FocusNode(canRequestFocus: false),
                               style: TextStyle(fontSize: 12.0),
                               enabled: true,
                               textAlign: TextAlign.center,
@@ -143,6 +145,8 @@ class _GeneralDetailsState extends State<GeneralDetails> {
                           ),
                           child: Center(
                             child: TextField(
+                              autofocus: false,
+                              focusNode: FocusNode(canRequestFocus: false),
                               style: TextStyle(fontSize: 12.0),
                               enabled: true,
                               textAlign: TextAlign.center,
@@ -211,6 +215,8 @@ class _GeneralDetailsState extends State<GeneralDetails> {
                           ),
                           child: Center(
                             child: TextField(
+                              autofocus: false,
+                              focusNode: FocusNode(canRequestFocus: false),
                               style: TextStyle(fontSize: 12.0),
                               enabled: true,
                               textAlign: TextAlign.center,
@@ -279,6 +285,8 @@ class _GeneralDetailsState extends State<GeneralDetails> {
                           ),
                           child: Center(
                             child: TextField(
+                              focusNode: FocusNode(canRequestFocus: false),
+                              autofocus: false,
                               style: TextStyle(fontSize: 12.0),
                               enabled: true,
                               textAlign: TextAlign.center,
