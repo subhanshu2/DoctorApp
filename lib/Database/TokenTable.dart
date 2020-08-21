@@ -10,6 +10,7 @@ class Tokens extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get tokenno => integer()();
   IntColumn get doctorid => integer()();
+  IntColumn get clinicid => integer()();
   DateTimeColumn get tokentime => dateTime()();
   TextColumn get name => text().nullable()();
   IntColumn get age => integer().nullable()();
@@ -25,7 +26,9 @@ class Tokens extends Table {
   BoolColumn get isOnline => boolean().withDefault(Constant(false))();
   TextColumn get guid => text().nullable()();
   TextColumn get gender => text().nullable()();
+
   BoolColumn get shift => boolean().withDefault(Constant(true))();
+
 }
 
 LazyDatabase _openConnection() {
@@ -42,9 +45,10 @@ class TokenDB extends _$TokenDB {
   @override
   int get schemaVersion => 1;
 
-  Future<List<Token>> getAllTasks(DateTime time) {
+  Future<List<Token>> getAllTasks(DateTime time,int clinicId) {
     final query = select(tokens)
       ..where((t) => t.tokentime.day.equals(time.day))
+      ..where((tbl) => tbl.clinicid.equals(clinicId))
       ..where((t) => t._booked.equals(false));
     return query.get();
   }
@@ -86,10 +90,11 @@ class TokenDB extends _$TokenDB {
     return query.watch().length;
   }
 
-  Stream<List<Token>> watchondate(DateTime time) {
+  Stream<List<Token>> watchondate(DateTime time,int clinicId) {
     final query = select(tokens)
       ..where((t) => t.tokentime.day.equals(time.day))
       ..where((t) => t.booked.equals(false))
+      ..where((tbl) => tbl.clinicid.equals(clinicId))
       ..where((t) => t.cancelled.equals(false));
     return query.watch();
   }

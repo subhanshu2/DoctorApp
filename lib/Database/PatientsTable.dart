@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
+import 'package:getcure_doctor/Models/TokenMode.dart';
 import 'package:moor/moor.dart';
 import 'package:moor_ffi/moor_ffi.dart';
 import 'package:path_provider/path_provider.dart';
@@ -44,7 +46,7 @@ class PatientsDB extends _$PatientsDB {
 
   Future<List<Patient>> showFamilyPatient(int mobileNo) async {
     String mob = mobileNo.toString();
-    dynamic ans = select(patients)..where((u) => u.patientId.contains(mob));
+    dynamic ans = select(patients)..where((u) => u.patientId.like("%$mob"));
     return ans.get();
   }
 
@@ -74,29 +76,27 @@ class PatientsDB extends _$PatientsDB {
   Future<List<Patient>> checkPatient(String patientId) {
     try {
       var query = select(patients)
-      ..where((pat) => pat.patientId.contains(patientId));
+        ..where((pat) => pat.patientId.contains(patientId));
       return query.get();
     } catch (e) {
-      print("Error"+e);
+      print("Error" + e);
       return null;
     }
-    
   }
 
   Future createPatient2(Patient patient) async {
     String uniqueId = "A" + patient.mobileNo.toString();
-    // var family = await this.showFamilyPatient(patient.mobileNo);
+    List<Patient> family = await this.showFamilyPatient(patient.mobileNo);
     // var unique_ids = await this.showFamily(family);
     // List<String> names = await family.map((e) => e.name);
     // if (names.indexOf(patient.name) != -1) {
     //   print("If inside");
     //   return family[names.indexOf(patient.name)];
     // }
-
     // int len = unique_ids.length;
-    int char = uniqueId[0].codeUnits.first;
+    String ch = uniqueId[0];
     uniqueId = uniqueId.replaceAll(
-        String.fromCharCode(char), String.fromCharCode(char + 10));
+        ch, String.fromCharCode(ch.codeUnitAt(0) + family.length));
     Patient pat = Patient(
         mobileNo: patient.mobileNo,
         name: patient.name,
@@ -104,9 +104,9 @@ class PatientsDB extends _$PatientsDB {
         patientId: uniqueId,
         address: patient.address,
         age: patient.age);
-     List<Patient> part = await checkPatient(pat.patientId);
-  //  if (pat.patientId.toString() != part.patientId) {
-      into(patients).insert(pat);
+    List<Patient> part = await checkPatient(pat.patientId);
+    //  if (pat.patientId.toString() != part.patientId) {
+    into(patients).insert(pat);
     // }
     return uniqueId;
   }

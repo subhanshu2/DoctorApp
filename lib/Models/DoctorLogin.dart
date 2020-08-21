@@ -130,13 +130,13 @@ class ClinicDoctor {
   int freeVisitCharge;
   int onCallPaidVisitCharge;
   int onCallFreeVisitCharge;
-  Null followUpAppointments;
-  Null followUpDays;
+  dynamic followUpAppointments;
+  dynamic followUpDays;
   int slotTime;
   List<DoctorTimings> doctorTimings;
   String createdAt;
   String updatedAt;
-  Null doctor;
+  dynamic doctor;
   Clinic clinic;
 
   ClinicDoctor(

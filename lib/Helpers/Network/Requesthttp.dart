@@ -77,15 +77,15 @@ Future<List<String>> getVisitReason() async {
   //   return data;
   // // }
 }
-// Future<String> generateOtp(mobno) async {
-//   var response = await http.post(OTP, body: {"mobile_no": mobno});
-//   print(response.body);
-//   print(response.statusCode);
-//   if (response.statusCode == 200) {
-//     return response.body;
-//   }
-//   return null;
-// }
+Future<String> generateOtp(mobno) async {
+  var response = await http.post(OTP, body: {"mobile_no": mobno});
+  print(response.body);
+  print(response.statusCode);
+  if (response.statusCode == 200) {
+    return response.body;
+  }
+  return null;
+}
 
 // Future<bool> signupDoctor(mobno, otp, password) async {
 //   var response = await http.post(SIGNUP,

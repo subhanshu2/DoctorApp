@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_holo_date_picker/flutter_holo_date_picker.dart';
+// import 'package:flutter_holo_date_picker/flutter_holo_date_picker.dart';
 import 'package:getcure_doctor/Database/PatientsTable.dart';
 // import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:getcure_doctor/Helpers/Network/Requesthttp.dart';
@@ -61,6 +62,7 @@ class _AppointmentsState extends State<Appointments> {
         fees: 100,
         doctorid: docUser.data.id,
         date: datePicked,
+        clinicId: _selecteddoc.clinicId,
         // starttime: DateTime.parse("10:00:00"), //timee(datePicked, 'startTime'),
         // startbreaktime:
         //     DateTime.parse("13:00:00"), // timee(datePicked, 'breakStart'),
@@ -408,7 +410,7 @@ class _AppointmentsState extends State<Appointments> {
                     onPressed: () async {
                       print(datePicked);
                       dynamic li =
-                          await widget.database.getAllTasks(datePicked);
+                          await widget.database.getAllTasks(datePicked,_selecteddoc.clinicId);
                       if (li.length == 0) {
                         print("no token generated");
                         generate(widget.database);
@@ -427,7 +429,7 @@ class _AppointmentsState extends State<Appointments> {
                   height: 80,
                   color: orangep,
                   child: _buildTaskList(
-                      context, datePicked, counting, widget.patientDatabase)),
+                      context, datePicked, counting, widget.patientDatabase,_selecteddoc.clinicId)),
             ),
             SizedBox(
               height: 20,
@@ -467,10 +469,10 @@ class _AppointmentsState extends State<Appointments> {
 }
 
 StreamBuilder<List<Token>> _buildTaskList(BuildContext context,
-    DateTime datePicked, Function counting, PatientsDB patientDatabase) {
+    DateTime datePicked, Function counting, PatientsDB patientDatabase,int clinicId) {
   final database = Provider.of<TokenDB>(context);
   return StreamBuilder(
-    stream: database.watchondate(datePicked),
+    stream: database.watchondate(datePicked,clinicId),
     builder: (context, AsyncSnapshot<List<Token>> snapshot) {
       final tasks = snapshot.data ?? List();
       return ListView.builder(

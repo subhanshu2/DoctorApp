@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 
 class GeneratedTokens {
   final int doctorid;
+  final int clinicId;
   final DateTime date;
   final DateTime starttime;
   final DateTime endtime;
@@ -17,6 +18,7 @@ class GeneratedTokens {
   GeneratedTokens(
       {this.fees,
       this.doctorid,
+      this.clinicId,
       this.date,
       this.slots,
       this.starttime,
@@ -60,6 +62,7 @@ class GenerateTokens {
       for (int j = 0; j < i.noOfPatients; j++) {
         final token = Token(
           fees: tokens.fees,
+          clinicid: tokens.clinicId,
           tokenno: tno,
           doctorid: tokens.doctorid,
           tokentime: st.add(Duration(minutes: interval)),

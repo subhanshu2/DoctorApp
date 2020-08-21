@@ -6,6 +6,7 @@ import 'package:getcure_doctor/Database/SymptomsTable.dart';
 import 'package:getcure_doctor/Database/TokenTable.dart';
 import 'package:getcure_doctor/Screens/Appointments/Appointment.dart';
 import 'package:getcure_doctor/Screens/login.dart';
+import 'package:getcure_doctor/provider/ExaminationProvider.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,6 +18,7 @@ void main() {
       create: (context) => TokenDB(),
       dispose: (context, db) => db.close(),
     ),
+    ChangeNotifierProvider.value(value: ExaminationProvider()),
     Provider<PatientsVisitDB>(
       create: (context) => PatientsVisitDB(),
       dispose: (context, db) => db.close(),

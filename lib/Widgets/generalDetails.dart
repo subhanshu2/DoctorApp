@@ -5,8 +5,9 @@ import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
 
 class GeneralDetails extends StatefulWidget {
   final Token token;
+  final String temp ;
   final PatientsVisitDB patientVisit;
-  GeneralDetails({Key key, this.token, this.patientVisit}) : super(key: key);
+  GeneralDetails({Key key,this.temp, this.token, this.patientVisit}) : super(key: key);
 
   @override
   _GeneralDetailsState createState() => _GeneralDetailsState();
@@ -17,6 +18,26 @@ class _GeneralDetailsState extends State<GeneralDetails> {
   String bp;
   String pulse;
   String weight;
+
+  getData() async {
+    print("General Details");
+    List<PatientsVisitData> pd =
+        await widget.patientVisit.checkPatient(widget.token.guid);
+        print(pd);
+    setState(() {
+      temp = pd[0].temperature.toString();
+      bp = pd[0].bp.toString();
+      pulse = pd[0].pulse.toString();
+      weight = pd[0].weight.toString();
+    });
+  }
+  
+  @override
+  void initState() {
+    getData();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return FittedBox(
@@ -71,12 +92,11 @@ class _GeneralDetailsState extends State<GeneralDetails> {
                             color: orangef,
                           ),
                           child: Center(
-                            child: TextField(
-                              autofocus: false,
-                              focusNode: FocusNode(canRequestFocus: false),
-                              style: TextStyle(fontSize: 12.0),
+                            child: TextFormField(
+                              style: TextStyle(fontSize: 12.0, color: white),
                               enabled: true,
                               textAlign: TextAlign.center,
+                              initialValue: widget.temp,
                               onChanged: (val) async {
                                 setState(() {
                                   temp = val;
