@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:getcure_doctor/Database/MedicinesTable.dart';
 import 'package:moor/moor.dart';
 import 'package:moor_ffi/moor_ffi.dart';
 import 'package:path_provider/path_provider.dart';
@@ -29,17 +30,25 @@ class Parameters {
 class ParameterData {
   String title;
   String type;
-  List<int> references;
+  String sample;
+  String method;
+  List<String> references;
   String unit;
   List<String> bioReference;
 
   ParameterData(
-      {this.title, this.type, this.references, this.unit, this.bioReference});
+      {this.title,
+      this.type,
+      this.sample,
+      this.method,
+      this.references,
+      this.unit,
+      this.bioReference});
 
   ParameterData.fromJson(Map<String, dynamic> json) {
     title = json['title'];
     type = json['type'];
-    references = json['references'].cast<int>();
+    references = json['references'].cast<String>();
     unit = json['unit'];
     bioReference = json['bio_reference'].cast<String>();
   }
@@ -99,4 +108,17 @@ class ExaminationsDB extends _$ExaminationsDB {
   ExaminationsDB() : super(_openConnection());
   @override
   int get schemaVersion => 1;
+
+  Future insertTask(Examination examination) => into(examinations).insert(examination);
+  Stream<List<Examination>> watchAllTasks(String q) {
+    dynamic query;
+    // if (q.length != 0) {
+    //   query = select(examinations)..where((t) => t.title.contains(q));
+    // } else {
+      query = select(examinations);
+    // }
+    
+    return query.watch();
+  }
+
 }

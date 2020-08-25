@@ -3,6 +3,7 @@ import 'package:getcure_doctor/Database/PatientsVisitTable.dart';
 import 'package:getcure_doctor/Database/SymptomsTable.dart';
 import 'package:getcure_doctor/Database/TokenTable.dart';
 import 'package:getcure_doctor/Screens/Appointments/PatientInfo.dart';
+import 'package:getcure_doctor/Screens/Treatment/Diagnosis.dart';
 import 'package:getcure_doctor/Screens/Treatment/Examination.dart' as ex;
 import 'package:getcure_doctor/Screens/Treatment/Symptoms.dart';
 import 'package:getcure_doctor/Widgets/generalDetails.dart';
@@ -36,8 +37,7 @@ class _HomeConnectorState extends State<HomeConnector>
 
   getData(var pat) async {
     print("General Details");
-    List<PatientsVisitData> pd =
-        await pat.checkPatient(widget.token.guid);
+    List<PatientsVisitData> pd = await pat.checkPatient(widget.token.guid);
     print(pd);
     // setState(() {
     //   temp = pd[0].temperature.toString();
@@ -56,24 +56,8 @@ class _HomeConnectorState extends State<HomeConnector>
         token: widget.token,
       ),
       ex.Examination(),
-      // Center(
-      //     child: Icon(
-      //   Icons.gavel,
-      //   size: 64,
-      //   color: orange,
-      // )),
-      // Center(
-      //     child: Icon(
-      //   Icons.gavel,
-      //   size: 64,
-      //   color: orange,
-      // )),
-      Center(
-          child: Icon(
-        Icons.gavel,
-        size: 64,
-        color: orange,
-      )),
+      Diagnosis(),
+
       Center(
           child: Icon(
         Icons.gavel,
@@ -217,7 +201,7 @@ class _HomeConnectorState extends State<HomeConnector>
   Widget build(BuildContext context) {
     final patient = Provider.of<PatientsVisitDB>(context);
     final pt = Provider.of<SymptomsDB>(context);
-    final generaldata =getData(patient);
+    // final generaldata =getData(patient);
     // getDesigns();
     return Scaffold(
         body: PageView(
@@ -301,10 +285,7 @@ class _HomeConnectorState extends State<HomeConnector>
                 //   upperDesign1,
                 // getDesigns(),
                 GeneralDetails(
-                  token: widget.token,
-                  patientVisit: patient,
-                  temp :"109"
-                ),
+                    token: widget.token, patientVisit: patient, temp: "109"),
                 DefaultTabController(
                     length: tabs.length,
                     // initialIndex: 0,
