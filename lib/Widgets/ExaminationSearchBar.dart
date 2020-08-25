@@ -62,11 +62,6 @@ class _ExaminationSearchBarState extends State<ExaminationSearchBar> {
                             query = val;
                           });
                         },
-                        // onSubmitted: (val) {
-                        //   setState(() {
-                        //     query = val;
-                        //   });
-                        // },
                       ),
                     ),
                     _buildTaskList(
@@ -109,7 +104,6 @@ class _ExaminationSearchBarState extends State<ExaminationSearchBar> {
     return StreamBuilder(
       stream: database.watchAllTasks(query),
       builder: (context, AsyncSnapshot<List<Examination>> snapshot) {
-        
         final tasks = snapshot.data ?? List();
         print(tasks.length);
         return Container(
@@ -126,17 +120,7 @@ class _ExaminationSearchBarState extends State<ExaminationSearchBar> {
               final itemTask = tasks[index];
               return GestureDetector(
                 onTap: () async {
-                  // List<BriefHistoryData> bhd = [
-                  //   BriefHistoryData(
-                  //       date: DateTime.now().toString(),
-                  //       title: itemTask.title,
-                  //       visibleTill: itemTask.visibilityPeriod.toString())
-                  // ];
-                  // BriefHistorygenerated bh = BriefHistorygenerated(data: bhd);
-                  // var p = await pv.checkPatient(pId);
-
-                  // pv.updateBriefHistory(p[0], bh);
-                  // Navigator.pop(context);
+                  
                 },
                 child: ListTile(
                   contentPadding: EdgeInsets.zero,
