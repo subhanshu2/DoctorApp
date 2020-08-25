@@ -409,8 +409,8 @@ class _AppointmentsState extends State<Appointments> {
                     icon: Icon(Icons.file_download),
                     onPressed: () async {
                       print(datePicked);
-                      dynamic li =
-                          await widget.database.getAllTasks(datePicked,_selecteddoc.clinicId);
+                      dynamic li = await widget.database
+                          .getAllTasks(datePicked, _selecteddoc.clinicId);
                       if (li.length == 0) {
                         print("no token generated");
                         generate(widget.database);
@@ -429,7 +429,13 @@ class _AppointmentsState extends State<Appointments> {
                   height: 80,
                   color: orangep,
                   child: _buildTaskList(
-                      context, datePicked, counting, widget.patientDatabase,_selecteddoc.clinicId)),
+                      context,
+                      datePicked,
+                      counting,
+                      widget.patientDatabase,
+                      _selecteddoc == null
+                          ? 0
+                          : _selecteddoc.clinicId)),
             ),
             SizedBox(
               height: 20,
@@ -468,11 +474,15 @@ class _AppointmentsState extends State<Appointments> {
   }
 }
 
-StreamBuilder<List<Token>> _buildTaskList(BuildContext context,
-    DateTime datePicked, Function counting, PatientsDB patientDatabase,int clinicId) {
+StreamBuilder<List<Token>> _buildTaskList(
+    BuildContext context,
+    DateTime datePicked,
+    Function counting,
+    PatientsDB patientDatabase,
+    int clinicId) {
   final database = Provider.of<TokenDB>(context);
   return StreamBuilder(
-    stream: database.watchondate(datePicked,clinicId),
+    stream: database.watchondate(datePicked, clinicId),
     builder: (context, AsyncSnapshot<List<Token>> snapshot) {
       final tasks = snapshot.data ?? List();
       return ListView.builder(
