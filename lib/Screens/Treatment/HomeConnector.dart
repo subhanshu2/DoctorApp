@@ -56,7 +56,7 @@ class _HomeConnectorState extends State<HomeConnector>
         token: widget.token,
       ),
       ex.Examination(),
-      Diagnosis(),
+      Diagnosis(token: widget.token,),
 
       Center(
           child: Icon(

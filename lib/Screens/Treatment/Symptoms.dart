@@ -27,9 +27,6 @@ class Symtoms extends StatefulWidget {
 }
 
 class _SymtomsState extends State<Symtoms> {
-  List<AddItemsDoctor> _briefhistory;
-  List<AddItemsDoctor> _todayVisit;
-  String dropdownValue = '1';
   var imageUrl;
   bool isloading = false;
   bool showResponse = false;
@@ -71,20 +68,6 @@ class _SymtomsState extends State<Symtoms> {
         print(e);
       }
     }
-  }
-
-  @override
-  void initState() {
-    _briefhistory = [];
-    _todayVisit = [];
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _briefhistory.clear();
-    _todayVisit.clear();
-    super.dispose();
   }
 
   // Future<SymptomsModel> fetchBriefHistoryList() async {
@@ -143,7 +126,7 @@ class _SymtomsState extends State<Symtoms> {
                         }),
                     children: [
                       StreamBuilder(
-                        stream: patient.getBriefHistory(widget.token.guid),
+                        stream: patient.getBriefHistory(widget.token.guid), 
                         builder: (BuildContext context,
                             AsyncSnapshot<List<PatientsVisitData>> snapshot) {
                           switch (snapshot.connectionState) {

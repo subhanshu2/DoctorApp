@@ -112,11 +112,11 @@ class ExaminationsDB extends _$ExaminationsDB {
   Future insertTask(Examination examination) => into(examinations).insert(examination);
   Stream<List<Examination>> watchAllTasks(String q) {
     dynamic query;
-    // if (q.length != 0) {
-    //   query = select(examinations)..where((t) => t.title.contains(q));
-    // } else {
+    if (q.length != 0) {
+      query = select(examinations)..where((t) => t.title.contains(q));
+    } else {
       query = select(examinations);
-    // }
+    }
     
     return query.watch();
   }
