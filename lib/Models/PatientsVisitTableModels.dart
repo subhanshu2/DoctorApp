@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:moor/moor.dart';
 
 //Brief History
-class BriefHistorygenerated  {
+class BriefHistorygenerated {
   List<BriefHistoryData> data;
 
   BriefHistorygenerated({this.data});
@@ -46,14 +46,17 @@ class BriefHistoryData {
     return data;
   }
 }
-class BriefHistoryConverter extends TypeConverter<BriefHistorygenerated, String> {
+
+class BriefHistoryConverter
+    extends TypeConverter<BriefHistorygenerated, String> {
   const BriefHistoryConverter();
   @override
   BriefHistorygenerated mapToDart(String fromDb) {
     if (fromDb == null) {
       return null;
     }
-    return BriefHistorygenerated.fromJson(json.decode(fromDb) as Map<String, dynamic>);
+    return BriefHistorygenerated.fromJson(
+        json.decode(fromDb) as Map<String, dynamic>);
   }
 
   @override
@@ -134,6 +137,7 @@ class AllergyData {
     return data;
   }
 }
+
 class AllergyConverter extends TypeConverter<Allergy, String> {
   const AllergyConverter();
   @override
@@ -244,7 +248,6 @@ class LifeStyleConverter extends TypeConverter<LifeStyle, String> {
   }
 }
 
-
 //Medication
 
 class Medicationgenerated {
@@ -273,7 +276,7 @@ class Medicationgenerated {
 class MedicationData {
   String disease;
   int symptomId;
-  List<Medicines> medicines;
+  List<PrescribedMedicines> medicines;
 
   MedicationData({this.disease, this.symptomId, this.medicines});
 
@@ -281,9 +284,9 @@ class MedicationData {
     disease = json['disease'];
     symptomId = json['symptom_id'];
     if (json['medicines'] != null) {
-      medicines = new List<Medicines>();
+      medicines = new List<PrescribedMedicines>();
       json['medicines'].forEach((v) {
-        medicines.add(new Medicines.fromJson(v));
+        medicines.add(new PrescribedMedicines.fromJson(v));
       });
     }
   }
@@ -299,30 +302,48 @@ class MedicationData {
   }
 }
 
-class Medicines {
+class PrescribedMedicines {
   int medicineId;
   String title;
-  String timing;
-  int days;
-  String type;
+  String dose;
+  String unit;
+  String route;
+  String direction;
+  String frequency;
+  String duration;
 
-  Medicines({this.medicineId, this.title, this.timing, this.days, this.type});
+  PrescribedMedicines(
+      {this.medicineId,
+      this.title,
+      this.direction,
+      this.dose,
+      this.duration,
+      this.frequency,
+      this.route,
+      this.unit});
 
-  Medicines.fromJson(Map<String, dynamic> json) {
+  PrescribedMedicines.fromJson(Map<String, dynamic> json) {
     medicineId = json['medicine_id'];
     title = json['title'];
-    timing = json['timing'];
-    days = json['days'];
-    type = json['type'];
+    dose = json['dose'];
+    direction = json['direction'];
+    duration = json['duration'];
+    frequency = json['frequency'];
+    route = json['route'];
+    unit = json['unit'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['medicine_id'] = this.medicineId;
     data['title'] = this.title;
-    data['timing'] = this.timing;
-    data['days'] = this.days;
-    data['type'] = this.type;
+    data['dose'] = this.dose;
+    data['direction'] = this.direction;
+    data['duration'] = this.duration;
+    data['route'] = this.route;
+    data['unit'] = this.unit;
+    data['frequency'] = this.frequency;
+
     return data;
   }
 }
@@ -334,7 +355,8 @@ class MedicationConverter extends TypeConverter<Medicationgenerated, String> {
     if (fromDb == null) {
       return null;
     }
-    return Medicationgenerated.fromJson(json.decode(fromDb) as Map<String, dynamic>);
+    return Medicationgenerated.fromJson(
+        json.decode(fromDb) as Map<String, dynamic>);
   }
 
   @override
@@ -378,7 +400,8 @@ class ExaminationData {
   List<Parameters> parameters;
   String status;
 
-  ExaminationData({this.examinationId, this.title, this.parameters, this.status});
+  ExaminationData(
+      {this.examinationId, this.title, this.parameters, this.status});
 
   ExaminationData.fromJson(Map<String, dynamic> json) {
     examinationId = json['examination_id'];
@@ -440,6 +463,7 @@ class Parameters {
     return data;
   }
 }
+
 class ExaminationConverter extends TypeConverter<Examinationgenerated, String> {
   const ExaminationConverter();
   @override
@@ -447,7 +471,8 @@ class ExaminationConverter extends TypeConverter<Examinationgenerated, String> {
     if (fromDb == null) {
       return null;
     }
-    return Examinationgenerated.fromJson(json.decode(fromDb) as Map<String, dynamic>);
+    return Examinationgenerated.fromJson(
+        json.decode(fromDb) as Map<String, dynamic>);
   }
 
   @override
@@ -504,6 +529,7 @@ class VisitReasonData {
     return data;
   }
 }
+
 class VisitReasonConverter extends TypeConverter<VisitReasongenerated, String> {
   const VisitReasonConverter();
   @override
@@ -511,7 +537,8 @@ class VisitReasonConverter extends TypeConverter<VisitReasongenerated, String> {
     if (fromDb == null) {
       return null;
     }
-    return VisitReasongenerated.fromJson(json.decode(fromDb) as Map<String, dynamic>);
+    return VisitReasongenerated.fromJson(
+        json.decode(fromDb) as Map<String, dynamic>);
   }
 
   @override
@@ -569,6 +596,7 @@ class DignosisData {
     return data;
   }
 }
+
 class DignosisConverter extends TypeConverter<Dignosisgenerated, String> {
   const DignosisConverter();
   @override
@@ -576,7 +604,8 @@ class DignosisConverter extends TypeConverter<Dignosisgenerated, String> {
     if (fromDb == null) {
       return null;
     }
-    return Dignosisgenerated.fromJson(json.decode(fromDb) as Map<String, dynamic>);
+    return Dignosisgenerated.fromJson(
+        json.decode(fromDb) as Map<String, dynamic>);
   }
 
   @override

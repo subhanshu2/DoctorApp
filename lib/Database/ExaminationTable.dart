@@ -28,13 +28,13 @@ class Parameters {
 }
 
 class ParameterData {
-  String title;
-  String type;
-  String sample;
-  String method;
-  List<String> references;
-  String unit;
-  List<String> bioReference;
+  dynamic title;
+  dynamic type;
+  dynamic sample;
+  dynamic method;
+  List<dynamic> references;
+  dynamic unit;
+  List<dynamic> bioReference;
 
   ParameterData(
       {this.title,
@@ -110,7 +110,8 @@ class ExaminationsDB extends _$ExaminationsDB {
   int get schemaVersion => 1;
 
   Future insertTask(Examination examination) => into(examinations).insert(examination);
-  Stream<List<Examination>> watchAllTasks(String q) {
+  Stream<List<Examination>> watchAllTasks(String q)
+  {
     dynamic query;
     if (q.length != 0) {
       query = select(examinations)..where((t) => t.title.contains(q));
@@ -120,5 +121,4 @@ class ExaminationsDB extends _$ExaminationsDB {
     
     return query.watch();
   }
-
 }

@@ -36,7 +36,10 @@ class _ExaminationSearchBarState extends State<ExaminationSearchBar> {
           children: <Widget>[
             Container(child: Text('Examination')),
             InkWell(
-                onTap: () => Navigator.pop(context), child: Icon(Icons.close))
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Icon(Icons.close))
           ],
         ),
         actions: <Widget>[
@@ -119,9 +122,7 @@ class _ExaminationSearchBarState extends State<ExaminationSearchBar> {
             itemBuilder: (_, index) {
               final itemTask = tasks[index];
               return GestureDetector(
-                onTap: () async {
-                  
-                },
+                onTap: () async {},
                 child: ListTile(
                   contentPadding: EdgeInsets.zero,
                   dense: true,

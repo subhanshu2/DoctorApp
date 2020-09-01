@@ -100,6 +100,7 @@ class _ListDocPatientsState extends State<ListDocPatients> {
                   } else {
                     print('preseent');
                     PatientsVisitData r = result[0];
+                    print(r.visitReason.data[0].title);
                     final p = PatientsVisitData(
                         mobileNo: r.mobileNo,
                         patientName: r.patientName,

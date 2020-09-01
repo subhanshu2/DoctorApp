@@ -446,6 +446,7 @@ class _NumericParameterState extends State<NumericParameter> {
                                   sample: _sample.text,
                                   method: _method.text,
                                   references: [_lbr.text, _hbr.text],
+                                  bioReference: [],
                                   unit: _unit.text,
                                   type: widget.paraName))
                               : test.addParameter(new ParameterData(

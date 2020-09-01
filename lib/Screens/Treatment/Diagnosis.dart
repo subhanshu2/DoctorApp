@@ -47,7 +47,7 @@ class _DiagnosisState extends State<Diagnosis> {
                           }),
                       children: [
                         StreamBuilder(
-                          stream: patient.getDiagnosis(widget.token.guid),
+                          stream: patient.getBriefHistory(widget.token.guid),
                           builder: (BuildContext context,
                               AsyncSnapshot<List<PatientsVisitData>> snapshot) {
                             switch (snapshot.connectionState) {

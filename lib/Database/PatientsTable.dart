@@ -44,9 +44,9 @@ class PatientsDB extends _$PatientsDB {
     return names;
   }
 
-  Future<List<Patient>> showFamilyPatient(int mobileNo) async {
+  Future<List<Patient>> showFamilyPatient(int mobileNo,String name) async {
     String mob = mobileNo.toString();
-    dynamic ans = select(patients)..where((u) => u.patientId.like("%$mob"));
+    dynamic ans = select(patients)..where((u) => u.patientId.like("%$mob") & u.name.equals(name));
     return ans.get();
   }
 
@@ -86,7 +86,7 @@ class PatientsDB extends _$PatientsDB {
 
   Future createPatient2(Patient patient) async {
     String uniqueId = "A" + patient.mobileNo.toString();
-    List<Patient> family = await this.showFamilyPatient(patient.mobileNo);
+    List<Patient> family = await this.showFamilyPatient(patient.mobileNo,patient.name);
     // var unique_ids = await this.showFamily(family);
     // List<String> names = await family.map((e) => e.name);
     // if (names.indexOf(patient.name) != -1) {

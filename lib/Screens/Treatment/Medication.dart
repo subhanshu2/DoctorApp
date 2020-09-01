@@ -1,138 +1,94 @@
 import 'package:flutter/material.dart';
-import 'package:getcure_doctor/Models/addItemmodel.dart';
+import 'package:getcure_doctor/Database/PatientsVisitTable.dart';
+import 'package:getcure_doctor/Database/TokenTable.dart';
 import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
+import 'package:getcure_doctor/Widgets/MedicineSearch.dart';
+import 'package:provider/provider.dart';
+
 class Medication extends StatefulWidget {
-  Medication({Key key}) : super(key: key);
+  final Token token;
+  Medication({Key key, this.token}) : super(key: key);
 
   @override
   _MedicationState createState() => _MedicationState();
 }
 
 class _MedicationState extends State<Medication> {
-  String _selectedValuesJson = 'Nothing to show';
-  List<AddItemsDoctor> _selectedAddItemsDoctors;
-  @override
-  void initState() {
-    _selectedAddItemsDoctors = [];
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _selectedAddItemsDoctors.clear();
-    super.dispose();
-  }
-
-  List<Widget> tabsFun(BuildContext context) {
-    final tabpages = <Widget>[
-      Center(
-          child: Icon(
-        Icons.gavel,
-        size: 64,
-        color: orange,
-      )),
-      Center(
-          child: Icon(
-        Icons.edit,
-        size: 64,
-        color: orange,
-      )),
-    ];
-    return tabpages;
-  }
-
-  final tabs = <Tab>[
-    Tab(
-      text: 'Medication',
-    )
-  ];
-
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          SingleChildScrollView(
-                      child: Container(
-              padding: EdgeInsets.all(8),
-              height: 160,
-              width: double.maxFinite,
-              child: Card(
-                elevation: 4,
-                child: Padding(
-                  padding: EdgeInsets.all(8),
-                  child: Stack(
-                    children: <Widget>[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Center(child: Text('Asthama (2 mobths)')),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text('Tab xyz 500mg'),
-                              Text('1+!+!'),
-                              Text('after food'),
-                              Text('7 days')
-                            ],
-                          ),
-                          Row(
-                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text('Cap abc 600mg'),
-                              Text('1+!'),
-                              Text('before food'),
-                              Text('17 days')
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 20),
-                            child: Row(
-                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Row(
-                                  children:<Widget>[
-                                    Icon(Icons.person),
-                                    Text('234')
-                                ]),
-                                Row(
-                                  children:<Widget>[
-                                    Icon(Icons.timer),
-                                    Text('234')
-                                ]),
-                                Row(
-                                  children:<Widget>[
-                                    Icon(Icons.view_list),
-                                    Text('234')
-                                ]),
-                                Row(
-                                  children:<Widget>[
-                                    Icon(Icons.lock_outline),
-                                    Text('234')
-                                ]),
-                                Row(
-                                  children:<Widget>[
-                                    IconButton(
-                                      icon: Icon(Icons.add_box),
-                                      onPressed: ()
-                                      {
+    final patient = Provider.of<PatientsVisitDB>(context);
 
-                                      },
-                                    ),
-                                ])
-                              ],
+    return FutureBuilder(
+      future: patient.getDiagnosis(widget.token.guid),
+      builder:
+          (BuildContext context, AsyncSnapshot<List<PatientsVisitData>> list) {
+        switch (list.connectionState) {
+          case ConnectionState.waiting:
+            return CircularProgressIndicator();
+            break;
+          case ConnectionState.done:
+            return ListView.separated(
+                itemCount: list.data[0].diagnosis==null?0:list.data[0].diagnosis.data.length,physics: ScrollPhysics(),
+                separatorBuilder: (BuildContext context, int index) {
+                  return SizedBox(
+                    height: 5,
+                  );
+                },
+                itemBuilder: (BuildContext context, int index) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      // height: 120,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                          color: white,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              color: orangef,
+                              offset: new Offset(0.0, 0.0),
+                              blurRadius: 5.0,
                             ),
+                          ]),
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                      child: Column(
+                        // crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            list.data[0].diagnosis.data[index].title,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Icon(Icons.people),
+                              Icon(Icons.timelapse),
+                              Icon(Icons.check_circle),
+                              Icon(Icons.error_outline),
+                              IconButton(icon: Icon(Icons.local_hospital), onPressed: (){
+                                 showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return MedicineSearch(
+                                pId: widget.token.guid,
+                                docId: widget.token.doctorid,
+                              );
+                            },
+                          );
+                              })
+                            ],
                           )
                         ],
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          )
-        ],
-      ),
+                      ),
+                    ),
+                  );
+                });
+            break;
+          default:
+            return Text("No Data");
+        }
+      },
     );
   }
 }

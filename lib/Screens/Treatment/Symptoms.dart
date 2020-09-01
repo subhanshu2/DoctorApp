@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:getcure_doctor/Database/PatientsVisitTable.dart';
 import 'package:getcure_doctor/Database/TokenTable.dart';
 import 'package:getcure_doctor/Models/addItemmodel.dart';
+import 'package:getcure_doctor/Widgets/FeedBackScreen.dart';
 import 'package:getcure_doctor/Widgets/SearchAllergy.dart';
 import 'package:getcure_doctor/Widgets/SearchBar.dart';
 import 'package:getcure_doctor/Widgets/SearchLifeStyle.dart';
@@ -108,7 +109,7 @@ class _SymtomsState extends State<Symtoms> {
             children: <Widget>[
               Flexible(
                 child: ExpansionTile(
-                    title: Text('Brief History'),
+                    leading: Text('Brief History'),
                     trailing: IconButton(
                         icon: Icon(
                           Icons.local_hospital,
@@ -126,7 +127,7 @@ class _SymtomsState extends State<Symtoms> {
                         }),
                     children: [
                       StreamBuilder(
-                        stream: patient.getBriefHistory(widget.token.guid), 
+                        stream: patient.getBriefHistory(widget.token.guid),
                         builder: (BuildContext context,
                             AsyncSnapshot<List<PatientsVisitData>> snapshot) {
                           switch (snapshot.connectionState) {
@@ -139,6 +140,7 @@ class _SymtomsState extends State<Symtoms> {
                                     ? 0
                                     : snapshot.data[0].briefHistory.data.length,
                                 shrinkWrap: true,
+                                physics: ScrollPhysics(),
                                 itemBuilder: (BuildContext context, int index) {
                                   return ListTile(
                                     title: Text(snapshot.data[0].briefHistory
@@ -173,7 +175,7 @@ class _SymtomsState extends State<Symtoms> {
             children: <Widget>[
               Flexible(
                 child: ExpansionTile(
-                    title: Text("Today's Visit Reasons"),
+                    leading: Text("Today's Visit Reasons"),
                     trailing: IconButton(
                         icon: Icon(
                           Icons.local_hospital,
@@ -205,8 +207,11 @@ class _SymtomsState extends State<Symtoms> {
                                     ? 0
                                     : snapshot.data[0].visitReason.data.length,
                                 shrinkWrap: true,
+                                physics: ScrollPhysics(),
                                 itemBuilder: (BuildContext context, int index) {
                                   return ListTile(
+                                    contentPadding:
+                                        EdgeInsets.symmetric(horizontal: 20),
                                     title: Text(snapshot
                                         .data[0].visitReason.data[index].title),
                                     trailing: IconButton(
@@ -217,6 +222,14 @@ class _SymtomsState extends State<Symtoms> {
                                               snapshot.data[0].visitReason
                                                   .data[index].title);
                                         }),
+                                    onTap: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return FeedBackScreen(token: widget.token,);
+                                        },
+                                      );
+                                    },
                                   );
                                 },
                               );
@@ -239,7 +252,7 @@ class _SymtomsState extends State<Symtoms> {
             children: <Widget>[
               Flexible(
                 child: ExpansionTile(
-                    title: Text("Allergies"),
+                    leading: Text("Allergies"),
                     trailing: IconButton(
                         icon: Icon(
                           Icons.local_hospital,
@@ -271,6 +284,7 @@ class _SymtomsState extends State<Symtoms> {
                                     ? 0
                                     : snapshot.data[0].allergies.data.length,
                                 shrinkWrap: true,
+                                physics: ScrollPhysics(),
                                 itemBuilder: (BuildContext context, int index) {
                                   return ListTile(
                                     title: Text(snapshot
@@ -302,7 +316,7 @@ class _SymtomsState extends State<Symtoms> {
             children: <Widget>[
               Flexible(
                 child: ExpansionTile(
-                    title: Text("LifeStyle"),
+                    leading: Text("LifeStyle"),
                     trailing: IconButton(
                         icon: Icon(
                           Icons.local_hospital,
@@ -334,6 +348,7 @@ class _SymtomsState extends State<Symtoms> {
                                     ? 0
                                     : snapshot.data[0].lifestyle.data.length,
                                 shrinkWrap: true,
+                                physics: ScrollPhysics(),
                                 itemBuilder: (BuildContext context, int index) {
                                   return ListTile(
                                     title: Text(snapshot
