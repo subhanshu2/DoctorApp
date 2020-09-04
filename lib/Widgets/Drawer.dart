@@ -65,14 +65,14 @@ class DrawerWidget extends StatelessWidget {
               //     ));
             },
           ),
-          ListTile(
-            title: Text('Slot timing'),
-            trailing: Icon(Icons.timer),
-            onTap: () {
-              Navigator.of(context).pop();
-              changeScreen(context,SlotTimings());
-            },
-          ),
+          // ListTile(
+          //   title: Text('Slot timing'),
+          //   trailing: Icon(Icons.timer),
+          //   onTap: () {
+          //     Navigator.of(context).pop();
+          //     changeScreen(context,SlotTimings());
+          //   },
+          // ),
           ListTile(
             title: Text('Doctor Section'),
             trailing: Icon(Icons.art_track),

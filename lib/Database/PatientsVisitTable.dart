@@ -107,6 +107,23 @@ class PatientsVisitDB extends _$PatientsVisitDB {
     return query.write(PatientsVisitCompanion(diagnosis: Value(bh)));
   }
 
+  Future updateExamination(PatientsVisitData data, Examinationgenerated ex) {
+    var query = update(patientsVisit)..where((t) => t.id.equals(data.id));
+    List<ExaminationData> list = [];
+    // list = data.briefHistory.data;
+    if (data.examination != null) {
+      list = data.examination.data;
+    }
+    var res = list.where((element) => element.title == ex.data[0].title);
+    if (res.length == 0) {
+      list.add(ex.data[0]);
+      ex.data = list;
+    } else {
+      ex.data = list;
+    }
+    return query.write(PatientsVisitCompanion(examination: Value(ex)));
+  }
+
   //Fetch Data
   Stream<List<PatientsVisitData>> getBriefHistory(String id) {
     dynamic query;
@@ -124,34 +141,21 @@ class PatientsVisitDB extends _$PatientsVisitDB {
   Future deleteBrief(PatientsVisitData pvd, String title) {
     var query = update(patientsVisit)..where((t) => t.id.equals(pvd.id));
     pvd.briefHistory.data.removeWhere((element) => element.title == title);
-    // if (pvd.briefHistory != null) {
-    //   list = pvd.briefHistory.data;
-    // }
-    // var res = list.where((element) => element.title == title);
-    // if (res.length == 0) {
-    //   list.add(bh.data[0]);
-    //   bh.data = list;
-    // } else {
-    //   bh.data = list;
-    // }
 
     return query
         .write(PatientsVisitCompanion(briefHistory: Value(pvd.briefHistory)));
   }
 
+  Future deleteExam(PatientsVisitData pvd, String title) {
+    var query = update(patientsVisit)..where((t) => t.id.equals(pvd.id));
+    pvd.examination.data.removeWhere((element) => element.title == title);
+    return query
+        .write(PatientsVisitCompanion(examination: Value(pvd.examination)));
+  }
+
   Future deleteDiagnosis(PatientsVisitData pvd, String title) {
     var query = update(patientsVisit)..where((t) => t.id.equals(pvd.id));
     pvd.diagnosis.data.removeWhere((element) => element.title == title);
-    // if (pvd.briefHistory != null) {
-    //   list = pvd.briefHistory.data;
-    // }
-    // var res = list.where((element) => element.title == title);
-    // if (res.length == 0) {
-    //   list.add(bh.data[0]);
-    //   bh.data = list;
-    // } else {
-    //   bh.data = list;
-    // }
 
     return query.write(PatientsVisitCompanion(diagnosis: Value(pvd.diagnosis)));
   }

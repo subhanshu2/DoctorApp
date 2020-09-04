@@ -299,7 +299,8 @@ class _NumericParameterState extends State<NumericParameter> {
                                   return 'Please enter some text';
                                 }
                                 return null;
-                              },
+                              },                              keyboardType:TextInputType.number,
+
                               decoration: new InputDecoration(
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: blue),
@@ -327,6 +328,7 @@ class _NumericParameterState extends State<NumericParameter> {
                                 }
                                 return null;
                               },
+                              keyboardType:TextInputType.number,
                               decoration: new InputDecoration(
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: blue),

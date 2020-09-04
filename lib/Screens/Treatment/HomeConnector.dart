@@ -56,7 +56,7 @@ class _HomeConnectorState extends State<HomeConnector>
       Symtoms(
         token: widget.token,
       ),
-      Examination(),
+      Examination(token: widget.token,),
       Diagnosis(
         token: widget.token,
       ),

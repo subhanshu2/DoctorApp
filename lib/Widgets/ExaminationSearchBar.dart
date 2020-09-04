@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:getcure_doctor/Database/ExaminationTable.dart';
+import 'package:getcure_doctor/Database/ExaminationTable.dart' as exam;
 import 'package:getcure_doctor/Database/PatientsVisitTable.dart';
 import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
+import 'package:getcure_doctor/Models/PatientsVisitTableModels.dart';
 import 'package:provider/provider.dart';
 
 import 'LabTest.dart';
@@ -26,7 +27,7 @@ class _ExaminationSearchBarState extends State<ExaminationSearchBar> {
 
   @override
   Widget build(BuildContext context) {
-    final database = Provider.of<ExaminationsDB>(context);
+    final database = Provider.of<exam.ExaminationsDB>(context);
     final patientsVisit = Provider.of<PatientsVisitDB>(context);
 
     return SingleChildScrollView(
@@ -102,11 +103,11 @@ class _ExaminationSearchBarState extends State<ExaminationSearchBar> {
     );
   }
 
-  StreamBuilder<List<Examination>> _buildTaskList(BuildContext context,
-      String query, ExaminationsDB database, PatientsVisitDB pv, String pId) {
+  StreamBuilder<List<exam.Examination>> _buildTaskList(BuildContext context,
+      String query,exam.ExaminationsDB database, PatientsVisitDB pv, String pId) {
     return StreamBuilder(
       stream: database.watchAllTasks(query),
-      builder: (context, AsyncSnapshot<List<Examination>> snapshot) {
+      builder: (context, AsyncSnapshot<List<exam.Examination>> snapshot) {
         final tasks = snapshot.data ?? List();
         print(tasks.length);
         return Container(
@@ -122,7 +123,32 @@ class _ExaminationSearchBarState extends State<ExaminationSearchBar> {
             itemBuilder: (_, index) {
               final itemTask = tasks[index];
               return GestureDetector(
-                onTap: () async {},
+                onTap: () async {
+                  List<Parameters> par = [];
+                  for(var i in itemTask.parameters.data ){
+                    par.add(Parameters(
+                      bioReference: i.bioReference,
+                      references: i.references,
+                      result: [],
+                      title: i.title,
+                      type: i.type,
+                      unit: i.unit
+                    ));
+                  }
+                  List<ExaminationData> bhd = [
+                    ExaminationData(
+                        examinationId: itemTask.id,
+                        title: itemTask.title,
+                        parameters: par,
+                        status: 'Advised')
+                  ];
+                  Examinationgenerated bh = Examinationgenerated(data: bhd);
+                  // print(pId);
+                  var p = await pv.checkPatient(pId);
+
+                  pv.updateExamination(p[0], bh);
+                  Navigator.pop(context);
+                },
                 child: ListTile(
                   contentPadding: EdgeInsets.zero,
                   dense: true,

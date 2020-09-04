@@ -226,7 +226,7 @@ class _SymtomsState extends State<Symtoms> {
                                       showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
-                                          return FeedBackScreen(token: widget.token,);
+                                          return FeedBackScreen(token: widget.token,pat:snapshot.data[0]);
                                         },
                                       );
                                     },

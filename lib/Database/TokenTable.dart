@@ -3,7 +3,7 @@ import 'package:moor/moor.dart';
 import 'package:moor_ffi/moor_ffi.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
-
+import 'package:intl/intl.dart';
 part 'TokenTable.g.dart';
 
 class Tokens extends Table {
@@ -28,7 +28,6 @@ class Tokens extends Table {
   TextColumn get gender => text().nullable()();
 
   BoolColumn get shift => boolean().withDefault(Constant(true))();
-
 }
 
 LazyDatabase _openConnection() {
@@ -45,7 +44,7 @@ class TokenDB extends _$TokenDB {
   @override
   int get schemaVersion => 1;
 
-  Future<List<Token>> getAllTasks(DateTime time,int clinicId) {
+  Future<List<Token>> getAllTasks(DateTime time, int clinicId) {
     final query = select(tokens)
       ..where((t) => t.tokentime.day.equals(time.day))
       ..where((tbl) => tbl.clinicid.equals(clinicId))
@@ -71,9 +70,10 @@ class TokenDB extends _$TokenDB {
 
   Stream<List<Token>> watchAllbookedTasks() {
     dynamic query;
+    DateTime d = DateTime.parse(DateFormat('yyyy-MM-dd').format(DateTime.now()).toString() +" 00:00:00");
     query = select(tokens)
-      ..where((t) => t.booked.equals(true));
-      // ..where((t) => t.tokentime.isBiggerOrEqualValue(DateTime.now()));
+      ..where((t) => t.booked.equals(true))
+      ..where((t) => t.tokentime.isBiggerOrEqualValue(d));
 
     return query.watch();
   }
@@ -91,7 +91,7 @@ class TokenDB extends _$TokenDB {
     return query.watch().length;
   }
 
-  Stream<List<Token>> watchondate(DateTime time,int clinicId) {
+  Stream<List<Token>> watchondate(DateTime time, int clinicId) {
     final query = select(tokens)
       ..where((t) => t.tokentime.day.equals(time.day))
       ..where((t) => t.booked.equals(false))
