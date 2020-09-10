@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:getcure_doctor/Database/PatientsVisitTable.dart';
 import 'package:getcure_doctor/Database/TokenTable.dart';
 import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
+import 'package:getcure_doctor/Models/PatientsVisitTableModels.dart';
 import 'package:getcure_doctor/Widgets/MedicineSearch.dart';
 import 'package:provider/provider.dart';
 
@@ -28,13 +29,19 @@ class _MedicationState extends State<Medication> {
             break;
           case ConnectionState.done:
             return ListView.separated(
-                itemCount: list.data[0].diagnosis==null?0:list.data[0].diagnosis.data.length,physics: ScrollPhysics(),
+                itemCount: list.data[0].diagnosis == null
+                    ? 0
+                    : list.data[0].diagnosis.data.length,
+                physics: ScrollPhysics(),
                 separatorBuilder: (BuildContext context, int index) {
                   return SizedBox(
                     height: 5,
                   );
                 },
                 itemBuilder: (BuildContext context, int index) {
+                  var md = list.data[0].medication.data.where((element) =>
+                      element.disease ==
+                      list.data[0].diagnosis.data[index].title);
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
@@ -59,6 +66,15 @@ class _MedicationState extends State<Medication> {
                             list.data[0].diagnosis.data[index].title,
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
+                          ListView.builder(
+                            itemCount: md.length==0?0: md.elementAt(0).medicines.length,
+                            shrinkWrap: true,
+                            physics: ScrollPhysics(),
+                            itemBuilder: (BuildContext context, int index) {
+                              return Text(
+                                  md.elementAt(0).medicines[index].title);
+                            },
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
@@ -66,17 +82,21 @@ class _MedicationState extends State<Medication> {
                               Icon(Icons.timelapse),
                               Icon(Icons.check_circle),
                               Icon(Icons.error_outline),
-                              IconButton(icon: Icon(Icons.local_hospital), onPressed: (){
-                                 showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return MedicineSearch(
-                                pId: widget.token.guid,
-                                docId: widget.token.doctorid,
-                              );
-                            },
-                          );
-                              })
+                              IconButton(
+                                  icon: Icon(Icons.local_hospital),
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return MedicineSearch(
+                                            pId: widget.token.guid,
+                                            docId: widget.token.doctorid,
+                                            disease: list.data[0].diagnosis
+                                                .data[index].title,
+                                            fun: () => setState(() {}));
+                                      },
+                                    );
+                                  })
                             ],
                           )
                         ],

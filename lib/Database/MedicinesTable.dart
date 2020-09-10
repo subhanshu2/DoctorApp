@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:getcure_doctor/Database/FeedBackTable.dart';
 import 'package:moor/moor.dart';
 import 'package:moor_ffi/moor_ffi.dart';
 import 'package:path_provider/path_provider.dart';
@@ -35,4 +36,15 @@ class MedicinesDB extends _$MedicinesDB {
   MedicinesDB() : super(_openConnection());
   @override
   int get schemaVersion => 1;
+    Future insert(Medicine m) => into(medicines).insert(m);
+     Stream<List<Medicine>> watchAllTask(String q) {
+    dynamic query;
+    if (q.length != 0) {
+      query = select(medicines)..where((t) => t.title.like("%$q%"));
+    } else {
+      query = select(medicines);
+    }
+    return query.watch();
+  }
+
 }

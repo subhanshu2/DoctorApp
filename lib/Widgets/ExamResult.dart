@@ -49,7 +49,6 @@ class _ExamResultState extends State<ExamResult> {
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: DataTable(
-              
                 columns: <DataColumn>[
                   DataColumn(
                     label: Text('Test Name'),
@@ -62,19 +61,27 @@ class _ExamResultState extends State<ExamResult> {
                 ],
                 rows: widget.exmdata.parameters
                     .map<DataRow>((p) => DataRow(
-                      
-                      cells: [
-                          DataCell(Text(p.title), onTap: () {}),
-                          DataCell(
-                              Text(p.result.length == 0 ? "NIL" : p.result[0]),
-                              onTap: () {}),
-                          DataCell(
-                              Text(p.type == 'numeric'
-                                  ? '${p.references[0]} - ${p.references.last}'
-                                  : p.bioReference[0]),
-                              onTap: () {}),
-                          DataCell(Text(p.unit), onTap: () {}),
-                        ]))
+                            color: MaterialStateProperty.resolveWith<Color>(
+                                (Set<MaterialState> states) {
+                              if (p.result.length!=0) {
+                                return blue;
+                              }
+                              return red;
+                            }),
+                            cells: [
+                              DataCell(Text(p.title), onTap: () {}),
+                              DataCell(
+                                  Text(p.result.length == 0
+                                      ? "NIL"
+                                      : p.result[0]),
+                                  onTap: () {}),
+                              DataCell(
+                                  Text(p.type == 'numeric'
+                                      ? '${p.references[0]} - ${p.references.last}'
+                                      : p.bioReference[0]),
+                                  onTap: () {}),
+                              DataCell(Text(p.unit), onTap: () {}),
+                            ]))
                     .toList()),
           ),
         )

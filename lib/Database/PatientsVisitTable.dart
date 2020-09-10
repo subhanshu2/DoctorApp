@@ -124,6 +124,31 @@ class PatientsVisitDB extends _$PatientsVisitDB {
     return query.write(PatientsVisitCompanion(examination: Value(ex)));
   }
 
+  Future updateMedication(
+      PatientsVisitData data, String disease, PrescribedMedicines pm) {
+    var query = update(patientsVisit)..where((t) => t.id.equals(data.id));
+    List<MedicationData> list = [];
+    if (data.medication.data.length!=0 ) {
+      list = data.medication.data;
+    }
+    var r = list.where((element) => element.disease == disease);
+    if (r.length == 0) {
+      list.add(new MedicationData(disease: disease, symptomId: 0, medicines: [pm]));
+    } else {
+      var tr = r.elementAt(0);
+      var res = tr.medicines.where((element) => element.title == pm.title);
+      if (res.length == 0) {
+        tr.medicines.add(pm);
+        list.removeWhere((element) => element.disease==disease);
+        list.add(tr);
+      } else {
+        // ex.data = list;
+      }
+    }
+    return query.write(PatientsVisitCompanion(
+        medication: Value(Medicationgenerated(data: list))));
+  }
+
   //Fetch Data
   Stream<List<PatientsVisitData>> getBriefHistory(String id) {
     dynamic query;
@@ -145,6 +170,8 @@ class PatientsVisitDB extends _$PatientsVisitDB {
     return query
         .write(PatientsVisitCompanion(briefHistory: Value(pvd.briefHistory)));
   }
+
+ 
 
   Future deleteExam(PatientsVisitData pvd, String title) {
     var query = update(patientsVisit)..where((t) => t.id.equals(pvd.id));
