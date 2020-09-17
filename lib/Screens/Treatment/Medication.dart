@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:getcure_doctor/Database/PatientsVisitTable.dart';
 import 'package:getcure_doctor/Database/TokenTable.dart';
 import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
-import 'package:getcure_doctor/Models/PatientsVisitTableModels.dart';
 import 'package:getcure_doctor/Widgets/MedicineSearch.dart';
 import 'package:provider/provider.dart';
 
@@ -67,12 +66,20 @@ class _MedicationState extends State<Medication> {
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           ListView.builder(
-                            itemCount: md.length==0?0: md.elementAt(0).medicines.length,
+                            itemCount: md.length == 0
+                                ? 0
+                                : md.elementAt(0).medicines.length,
                             shrinkWrap: true,
                             physics: ScrollPhysics(),
                             itemBuilder: (BuildContext context, int index) {
-                              return Text(
-                                  md.elementAt(0).medicines[index].title);
+                              return ListTile(
+                                dense: true,
+                                onLongPress: () {
+                                  print(md.elementAt(0).medicines[index].title);
+                                },
+                                leading: Text(
+                                    md.elementAt(0).medicines[index].title),
+                              );
                             },
                           ),
                           Row(

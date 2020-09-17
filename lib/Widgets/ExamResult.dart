@@ -63,22 +63,57 @@ class _ExamResultState extends State<ExamResult> {
                     .map<DataRow>((p) => DataRow(
                             color: MaterialStateProperty.resolveWith<Color>(
                                 (Set<MaterialState> states) {
-                              if (p.result.length!=0) {
-                                return blue;
+                              if (p.result.length != 0) {
+                                if ((int.parse(p.result[0]) <
+                                            int.parse(p.references[0]) ||
+                                        int.parse(p.result[0]) >
+                                            int.parse(p.references.last)) &&
+                                    p.type == 'numeric') {
+                                  return Colors.red[100];
+                                } else {
+                                  return blue;
+                                }
                               }
-                              return red;
+                              return grey;
                             }),
                             cells: [
                               DataCell(Text(p.title), onTap: () {}),
                               DataCell(
-                                  Text(p.result.length == 0
-                                      ? "NIL"
-                                      : p.result[0]),
+                                  p.type == 'numeric'
+                                      ? TextFormField(
+                                          initialValue: p.result.length == 0
+                                              ? "NIL"
+                                              : p.result[0],
+                                          keyboardType: TextInputType.number,
+                                          onChanged: (val) {},
+                                        )
+                                      : DropdownButton<String>(
+                                          items:
+                                              p.references.map((String value) {
+                                            return new DropdownMenuItem<String>(
+                                              value: value,
+                                              child: new Text(value),
+                                            );
+                                          }).toList(),
+                                          hint: Text('result'),
+                                          // value: _category,
+                                          elevation: 5,
+                                          isExpanded: true,
+                                          onChanged: (val) {
+                                            setState(() {
+                                              // _category = val;
+                                            });
+                                          },
+                                        ),
+                                  // Text(p.result.length == 0
+                                  //     ? "NIL"
+                                  //     : p.result[0]),
+
                                   onTap: () {}),
                               DataCell(
                                   Text(p.type == 'numeric'
                                       ? '${p.references[0]} - ${p.references.last}'
-                                      : p.bioReference[0]),
+                                      : '${p.bioReference[0]} - ${p.bioReference.last}'),
                                   onTap: () {}),
                               DataCell(Text(p.unit), onTap: () {}),
                             ]))

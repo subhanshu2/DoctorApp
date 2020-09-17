@@ -296,14 +296,14 @@ class _HomeConnectorState extends State<HomeConnector>
                   length: tabs.length,
                   // initialIndex: 0,
                   child: SizedBox(
-                    height: MediaQuery.of(context).size.height,
+                    height: MediaQuery.of(context).size.height*0.7,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Flexible(
                           fit: FlexFit.loose,
                           child: TabBarView(
-                              controller: tabController,
+                              controller: tabController,physics: ScrollPhysics(),
                               children: tabsFun(context)),
                         )
                       ],

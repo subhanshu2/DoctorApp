@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:getcure_doctor/Database/PatientsVisitTable.dart';
 import 'package:getcure_doctor/Database/TokenTable.dart';
 import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
+import 'package:getcure_doctor/Models/PatientsVisitTableModels.dart';
 
 class FeedBackScreen extends StatefulWidget {
   final Token token;
@@ -33,44 +34,117 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
                 return Container();
               },
               itemBuilder: (BuildContext context, int index) {
-                String feed;
-                List<String> li = [
-                  'Cured Complete',
-                  'Partially Cured',
-                  'Not Cured',
-                  'Symptoms Increased'
-                ];
-                return Container(
-                  height: 80,
-                  child: Column(
-                    // crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.pat.medication.data[index].disease,
-                        style: TextStyle(color: blue),
-                      ),
-                      new DropdownButton<String>(
-                        items: li.map((String value) {
-                          return new DropdownMenuItem<String>(
-                            value: value,
-                            child: new Text(value),
-                          );
-                        }).toList(),
-                        value: feed,
-                        isExpanded: true,
-                        onChanged: (val) {
-                          setState(() {
-                            feed = val;
-                            print(feed);
-                          });
-                        },
-                      )
-                    ],
-                  ),
+                return ResponseInput(
+                  data: widget.pat.medication.data[index],
                 );
               },
             )),
       ],
+    );
+  }
+}
+
+class ResponseInput extends StatefulWidget {
+  final MedicationData data;
+
+  const ResponseInput({Key key, this.data}) : super(key: key);
+
+  @override
+  _ResponseInputState createState() => _ResponseInputState();
+}
+
+class _ResponseInputState extends State<ResponseInput> {
+  @override
+  void initState() {
+    setState(() {
+      _radioValue = "Cured Complete";
+    });
+    super.initState();
+  }
+
+  String _radioValue; //Initial definition of radio button value
+  String choice;
+
+  void radioButtonChanges(String value) {
+    setState(() {
+      _radioValue = value;
+      switch (value) {
+        case 'Cured Complete':
+          choice = value;
+          break;
+        case 'Partially Cured':
+          choice = value;
+          break;
+        case 'Not Cured':
+          choice = value;
+          break;
+        default:
+          choice = 'Symptoms Increased';
+      }
+      debugPrint(choice); //Debug the choice in console
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 150,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            child: Text(
+              widget.data.disease,
+              style: TextStyle(color: blue),
+            ),
+          ),
+          Column(
+            children: [
+              Row(
+                children: <Widget>[
+                  Radio(
+                    value: 'Cured Complete',
+                    groupValue: _radioValue,
+                    onChanged: radioButtonChanges,
+                  ),
+                  Text(
+                    "Cured Complete",
+                  ),
+                  Radio(
+                    value: 'Partially Cured',
+                    groupValue: _radioValue,
+                    onChanged: radioButtonChanges,
+                  ),
+                  Text(
+                    "Partially Cured",
+                  ),
+                ],
+              ),
+              Row(
+                children: <Widget>[
+                  Radio(
+                    value: 'Not Cured',
+                    groupValue: _radioValue,
+                    onChanged: radioButtonChanges,
+                  ),
+                  Text(
+                    "Not Cured",
+                  ),
+                  Radio(
+                    value: 'Symptoms Increased',
+                    groupValue: _radioValue,
+                    onChanged: radioButtonChanges,
+                  ),
+                  Text(
+                    "Symptoms Increased",
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
