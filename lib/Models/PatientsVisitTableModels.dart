@@ -29,13 +29,15 @@ class BriefHistoryData {
   String title;
   String date;
   String visibleTill;
+  bool isCured;
 
-  BriefHistoryData({this.title, this.date, this.visibleTill});
+  BriefHistoryData({this.title, this.date, this.visibleTill,this.isCured});
 
   BriefHistoryData.fromJson(Map<String, dynamic> json) {
     title = json['title'];
     date = json['date'];
     visibleTill = json['visible_till'];
+    isCured = json['is_cured'];
   }
 
   Map<String, dynamic> toJson() {
@@ -43,6 +45,7 @@ class BriefHistoryData {
     data['title'] = this.title;
     data['date'] = this.date;
     data['visible_till'] = this.visibleTill;
+    data['is_cured']=this.isCured;
     return data;
   }
 }

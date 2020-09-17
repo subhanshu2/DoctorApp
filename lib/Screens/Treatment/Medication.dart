@@ -77,6 +77,12 @@ class _MedicationState extends State<Medication> {
                                 onLongPress: () {
                                   print(md.elementAt(0).medicines[index].title);
                                 },
+                                trailing: IconButton(icon: Icon(Icons.cancel), onPressed: (){
+                                  patient.deleteMedicine(list.data[0],md.elementAt(0).disease , md.elementAt(0).medicines[index].title);
+                                  setState(() {
+                                    
+                                  });
+                                }),
                                 leading: Text(
                                     md.elementAt(0).medicines[index].title),
                               );

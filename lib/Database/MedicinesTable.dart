@@ -46,5 +46,14 @@ class MedicinesDB extends _$MedicinesDB {
     }
     return query.watch();
   }
+   Stream<List<Medicine>> searchCategory(String q) {
+    dynamic query;
+    if (q.length != 0) {
+      query = select(medicines)..where((t) => t.category.like("%$q%"));
+    } else {
+      query = select(medicines);
+    }
+    return query.watch();
+  }
 
 }
