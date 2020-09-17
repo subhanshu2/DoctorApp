@@ -150,6 +150,10 @@ class _SymtomsState extends State<Symtoms> {
                                               snapshot.data[0],
                                               snapshot.data[0].briefHistory
                                                   .data[index].title);
+                                          patient.deleteDiagnosis(
+                                              snapshot.data[0],
+                                              snapshot.data[0].diagnosis
+                                                  .data[index].title);
                                         }),
                                   );
                                 },
@@ -224,7 +228,9 @@ class _SymtomsState extends State<Symtoms> {
                                       showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
-                                          return FeedBackScreen(token: widget.token,pat:snapshot.data[0]);
+                                          return FeedBackScreen(
+                                              token: widget.token,
+                                              pat: snapshot.data[0]);
                                         },
                                       );
                                     },
