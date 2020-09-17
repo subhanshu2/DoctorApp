@@ -5,6 +5,7 @@ import 'package:getcure_doctor/Database/PatientsVisitTable.dart';
 import 'package:getcure_doctor/Database/SymptomsTable.dart';
 import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
 import 'package:getcure_doctor/Models/PatientsVisitTableModels.dart';
+import 'package:getcure_doctor/Widgets/GetBriefTimings.dart';
 import 'package:provider/provider.dart';
 
 class SearchBarDiagnosis extends StatefulWidget {
@@ -126,17 +127,27 @@ StreamBuilder<List<Symptom>> _buildTaskList(BuildContext context, String query,
             final itemTask = tasks[index];
             return GestureDetector(
               onTap: () async {
-                List<DignosisData> bhd = [
-                  DignosisData(
-                      date: DateTime.now().toString(),
-                      title: itemTask.title,
-                      visibleTill: itemTask.visibilityPeriod.toString())
-                ];
-                Dignosisgenerated bh = Dignosisgenerated(data: bhd);
-                var p = await pv.checkPatient(pId);
+                // List<DignosisData> bhd = [
+                //   DignosisData(
+                //       date: DateTime.now().toString(),
+                //       title: itemTask.title,
+                //       visibleTill: itemTask.visibilityPeriod.toString())
+                // ];
+                // Dignosisgenerated bh = Dignosisgenerated(data: bhd);
+                // var p = await pv.checkPatient(pId);
 
-                pv.updateDiagnosis(p[0], bh);
+                // pv.updateDiagnosis(p[0], bh);
                 Navigator.pop(context);
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return GetTimings(
+                        briefTitle: itemTask.title,
+                        pId: pId,
+                        pv: pv,
+                        visibleTill: itemTask.visibilityPeriod.toString());
+                  },
+                );
               },
               child: ListTile(
                 contentPadding: EdgeInsets.zero,

@@ -98,10 +98,8 @@ class _SymtomsState extends State<Symtoms> {
   Widget build(BuildContext context) {
     final patient = Provider.of<PatientsVisitDB>(context);
     return SingleChildScrollView(
-        child:
-            // Consumer<DoctorProvider>(builder: (context, doctorprovider, child) {
-            Center(
-                child: Column(
+        child: Center(
+            child: Column(
       children: <Widget>[
         Container(
           child: Row(
@@ -151,6 +149,10 @@ class _SymtomsState extends State<Symtoms> {
                                           patient.deleteBrief(
                                               snapshot.data[0],
                                               snapshot.data[0].briefHistory
+                                                  .data[index].title);
+                                          patient.deleteDiagnosis(
+                                              snapshot.data[0],
+                                              snapshot.data[0].diagnosis
                                                   .data[index].title);
                                         }),
                                   );
@@ -226,18 +228,16 @@ class _SymtomsState extends State<Symtoms> {
                                       showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
-                                          return FeedBackScreen(token: widget.token,pat:snapshot.data[0]);
+                                          return FeedBackScreen(
+                                              token: widget.token,
+                                              pat: snapshot.data[0]);
                                         },
                                       );
                                     },
                                   );
                                 },
                               );
-
                               break;
-                            // default:
-                            //   return Text('NO Data');
-                            //   break;
                           }
                         },
                       ),

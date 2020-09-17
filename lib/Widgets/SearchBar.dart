@@ -1,10 +1,10 @@
-import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:getcure_doctor/Database/PatientsVisitTable.dart';
 import 'package:getcure_doctor/Database/SymptomsTable.dart';
 import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
 import 'package:getcure_doctor/Models/PatientsVisitTableModels.dart';
+import 'package:getcure_doctor/Widgets/GetBriefTimings.dart';
 import 'package:provider/provider.dart';
 
 class SearchBar extends StatefulWidget {
@@ -126,17 +126,26 @@ StreamBuilder<List<Symptom>> _buildTaskList(BuildContext context, String query,
             final itemTask = tasks[index];
             return GestureDetector(
               onTap: () async {
-                List<BriefHistoryData> bhd = [
-                  BriefHistoryData(
-                      date: DateTime.now().toString(),
-                      title: itemTask.title,
-                      visibleTill: itemTask.visibilityPeriod.toString())
-                ];
-                BriefHistorygenerated bh = BriefHistorygenerated(data: bhd);
-                var p = await pv.checkPatient(pId);
-
-                pv.updateBriefHistory(p[0], bh);
+                // List<BriefHistoryData> bhd = [
+                //   BriefHistoryData(
+                //       date: DateTime.now().toString(),
+                //       title: itemTask.title,
+                //       visibleTill: itemTask.visibilityPeriod.toString())
+                // ];
+                // BriefHistorygenerated bh = BriefHistorygenerated(data: bhd, );
+                // var p = await pv.checkPatient(pId);
+                // pv.updateBriefHistory(p[0], bh);
                 Navigator.pop(context);
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return GetTimings(
+                        briefTitle: itemTask.title,
+                        pId: pId,
+                        pv: pv,
+                        visibleTill: itemTask.visibilityPeriod.toString());
+                  },
+                );
               },
               child: ListTile(
                 contentPadding: EdgeInsets.zero,

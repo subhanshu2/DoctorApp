@@ -12,6 +12,7 @@ class ExamResult extends StatefulWidget {
 }
 
 class _ExamResultState extends State<ExamResult> {
+  List<String> numericResultList = [];
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
@@ -61,21 +62,21 @@ class _ExamResultState extends State<ExamResult> {
                 ],
                 rows: widget.exmdata.parameters
                     .map<DataRow>((p) => DataRow(
-                            color: MaterialStateProperty.resolveWith<Color>(
-                                (Set<MaterialState> states) {
-                              if (p.result.length != 0) {
-                                if ((int.parse(p.result[0]) <
-                                            int.parse(p.references[0]) ||
-                                        int.parse(p.result[0]) >
-                                            int.parse(p.references.last)) &&
-                                    p.type == 'numeric') {
-                                  return Colors.red[100];
-                                } else {
-                                  return blue;
-                                }
-                              }
-                              return grey;
-                            }),
+                            // color: MaterialStateProperty.resolveWith<Color>(
+                            //     (Set<MaterialState> states) {
+                            //   if (p.result.length != 0) {
+                            //     if ((int.parse(p.result[0]) <
+                            //                 int.parse(p.references[0]) ||
+                            //             int.parse(p.result[0]) >
+                            //                 int.parse(p.references.last)) &&
+                            //         p.type == 'numeric') {
+                            //       return Colors.red[100];
+                            //     } else {
+                            //       return blue;
+                            //     }
+                            //   }
+                            //   return grey;
+                            // }),
                             cells: [
                               DataCell(Text(p.title), onTap: () {}),
                               DataCell(

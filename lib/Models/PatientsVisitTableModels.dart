@@ -21,6 +21,7 @@ class BriefHistorygenerated {
     if (this.data != null) {
       data['data'] = this.data.map((v) => v.toJson()).toList();
     }
+
     return data;
   }
 }
@@ -31,7 +32,8 @@ class BriefHistoryData {
   String visibleTill;
   bool isCured;
 
-  BriefHistoryData({this.title, this.date, this.visibleTill,this.isCured});
+  BriefHistoryData({this.title, this.date, this.visibleTill, this.isCured});
+
 
   BriefHistoryData.fromJson(Map<String, dynamic> json) {
     title = json['title'];
@@ -45,7 +47,8 @@ class BriefHistoryData {
     data['title'] = this.title;
     data['date'] = this.date;
     data['visible_till'] = this.visibleTill;
-    data['is_cured']=this.isCured;
+    data['is_cured'] = this.isCured;
+
     return data;
   }
 }

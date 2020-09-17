@@ -72,6 +72,10 @@ class _DiagnosisState extends State<Diagnosis> {
                                                 snapshot.data[0],
                                                 snapshot.data[0].diagnosis
                                                     .data[index].title);
+                                            patient.deleteBrief(
+                                                snapshot.data[0],
+                                                snapshot.data[0].briefHistory
+                                                    .data[index].title);
                                           }),
                                     );
                                   },
