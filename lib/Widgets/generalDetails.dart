@@ -40,6 +40,7 @@ class _GeneralDetailsState extends State<GeneralDetails> {
 
   @override
   Widget build(BuildContext context) {
+    
     return FittedBox(
       child: Container(
         // height: 90,

@@ -217,8 +217,7 @@ class _AppointmentsState extends State<Appointments> {
               size: 30,
             ),
             onPressed: () async {
-              var res = await widget.patientDatabase.getAll();
-              print(res[0].patientId);
+              var res = await widget.patientDatabase.deleteallTask();
             },
           ),
         ],

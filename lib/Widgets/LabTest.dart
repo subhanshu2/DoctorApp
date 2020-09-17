@@ -299,7 +299,8 @@ class _NumericParameterState extends State<NumericParameter> {
                                   return 'Please enter some text';
                                 }
                                 return null;
-                              },
+                              },                              keyboardType:TextInputType.number,
+
                               decoration: new InputDecoration(
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: blue),
@@ -327,6 +328,7 @@ class _NumericParameterState extends State<NumericParameter> {
                                 }
                                 return null;
                               },
+                              keyboardType:TextInputType.number,
                               decoration: new InputDecoration(
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: blue),
@@ -446,6 +448,7 @@ class _NumericParameterState extends State<NumericParameter> {
                                   sample: _sample.text,
                                   method: _method.text,
                                   references: [_lbr.text, _hbr.text],
+                                  bioReference: [],
                                   unit: _unit.text,
                                   type: widget.paraName))
                               : test.addParameter(new ParameterData(

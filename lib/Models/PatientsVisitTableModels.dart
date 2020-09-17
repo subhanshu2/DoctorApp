@@ -276,7 +276,7 @@ class Medicationgenerated {
 class MedicationData {
   String disease;
   int symptomId;
-  List<Medicines> medicines;
+  List<PrescribedMedicines> medicines;
 
   MedicationData({this.disease, this.symptomId, this.medicines});
 
@@ -284,9 +284,9 @@ class MedicationData {
     disease = json['disease'];
     symptomId = json['symptom_id'];
     if (json['medicines'] != null) {
-      medicines = new List<Medicines>();
+      medicines = new List<PrescribedMedicines>();
       json['medicines'].forEach((v) {
-        medicines.add(new Medicines.fromJson(v));
+        medicines.add(new PrescribedMedicines.fromJson(v));
       });
     }
   }
@@ -302,30 +302,48 @@ class MedicationData {
   }
 }
 
-class Medicines {
+class PrescribedMedicines {
   int medicineId;
   String title;
-  String timing;
-  int days;
-  String type;
+  String dose;
+  String unit;
+  String route;
+  String direction;
+  String frequency;
+  String duration;
 
-  Medicines({this.medicineId, this.title, this.timing, this.days, this.type});
+  PrescribedMedicines(
+      {this.medicineId,
+      this.title,
+      this.direction,
+      this.dose,
+      this.duration,
+      this.frequency,
+      this.route,
+      this.unit});
 
-  Medicines.fromJson(Map<String, dynamic> json) {
+  PrescribedMedicines.fromJson(Map<String, dynamic> json) {
     medicineId = json['medicine_id'];
     title = json['title'];
-    timing = json['timing'];
-    days = json['days'];
-    type = json['type'];
+    dose = json['dose'];
+    direction = json['direction'];
+    duration = json['duration'];
+    frequency = json['frequency'];
+    route = json['route'];
+    unit = json['unit'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['medicine_id'] = this.medicineId;
     data['title'] = this.title;
-    data['timing'] = this.timing;
-    data['days'] = this.days;
-    data['type'] = this.type;
+    data['dose'] = this.dose;
+    data['direction'] = this.direction;
+    data['duration'] = this.duration;
+    data['route'] = this.route;
+    data['unit'] = this.unit;
+    data['frequency'] = this.frequency;
+
     return data;
   }
 }

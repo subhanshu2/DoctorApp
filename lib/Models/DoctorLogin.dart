@@ -1,12 +1,12 @@
 class DoctorLogin {
   String token;
-  DoctorData data;
+  DoctorLoginData data;
 
   DoctorLogin({this.token, this.data});
 
   DoctorLogin.fromJson(Map<String, dynamic> json) {
     token = json['token'];
-    data = json['data'] != null ? new DoctorData.fromJson(json['data']) : null;
+    data = json['data'] != null ? new DoctorLoginData.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -19,7 +19,7 @@ class DoctorLogin {
   }
 }
 
-class DoctorData {
+class DoctorLoginData {
   int id;
   String name;
   int age;
@@ -31,17 +31,18 @@ class DoctorData {
   String language;
   String experience;
   String designation;
-  dynamic imageUrl;
+  String imageUrl;
   List<String> specialities;
   bool isActive;
   String getCureCode;
-  dynamic identityVerificationUrl;
+  Null identityVerificationUrl;
   List<String> holidays;
   String createdAt;
   String updatedAt;
   List<ClinicDoctor> clinicDoctor;
+  Null clinics;
 
-  DoctorData(
+  DoctorLoginData(
       {this.id,
       this.name,
       this.age,
@@ -61,9 +62,10 @@ class DoctorData {
       this.holidays,
       this.createdAt,
       this.updatedAt,
-      this.clinicDoctor});
+      this.clinicDoctor,
+      this.clinics});
 
-  DoctorData.fromJson(Map<String, dynamic> json) {
+  DoctorLoginData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     age = json['age'];
@@ -89,6 +91,7 @@ class DoctorData {
         clinicDoctor.add(new ClinicDoctor.fromJson(v));
       });
     }
+    clinics = json['clinics'];
   }
 
   Map<String, dynamic> toJson() {
@@ -115,6 +118,7 @@ class DoctorData {
     if (this.clinicDoctor != null) {
       data['clinicDoctor'] = this.clinicDoctor.map((v) => v.toJson()).toList();
     }
+    data['clinics'] = this.clinics;
     return data;
   }
 }
@@ -126,17 +130,26 @@ class ClinicDoctor {
   String doctorName;
   int frontDeskId;
   int consultationFee;
+  int emergencyFee;
+  int onlineCharge;
   int paidVisitCharge;
   int freeVisitCharge;
   int onCallPaidVisitCharge;
   int onCallFreeVisitCharge;
-  dynamic followUpAppointments;
-  dynamic followUpDays;
+  int followUpAppointments;
+  int followUpDays;
   int slotTime;
   List<DoctorTimings> doctorTimings;
+  List<String> medicineCategories;
+  List<String> medicineDoses;
+  List<String> medicineUnits;
+  List<String> medicineRoutes;
+  List<String> medicineFrequencies;
+  List<String> medicineDirections;
+  List<String> medicineDurations;
   String createdAt;
   String updatedAt;
-  dynamic doctor;
+  Null doctor;
   Clinic clinic;
 
   ClinicDoctor(
@@ -146,6 +159,8 @@ class ClinicDoctor {
       this.doctorName,
       this.frontDeskId,
       this.consultationFee,
+      this.emergencyFee,
+      this.onlineCharge,
       this.paidVisitCharge,
       this.freeVisitCharge,
       this.onCallPaidVisitCharge,
@@ -154,6 +169,13 @@ class ClinicDoctor {
       this.followUpDays,
       this.slotTime,
       this.doctorTimings,
+      this.medicineCategories,
+      this.medicineDoses,
+      this.medicineUnits,
+      this.medicineRoutes,
+      this.medicineFrequencies,
+      this.medicineDirections,
+      this.medicineDurations,
       this.createdAt,
       this.updatedAt,
       this.doctor,
@@ -166,6 +188,8 @@ class ClinicDoctor {
     doctorName = json['doctor_name'];
     frontDeskId = json['front_desk_id'];
     consultationFee = json['consultation_fee'];
+    emergencyFee = json['emergency_fee'];
+    onlineCharge = json['online_charge'];
     paidVisitCharge = json['paid_visit_charge'];
     freeVisitCharge = json['free_visit_charge'];
     onCallPaidVisitCharge = json['on_call_paid_visit_charge'];
@@ -179,6 +203,13 @@ class ClinicDoctor {
         doctorTimings.add(new DoctorTimings.fromJson(v));
       });
     }
+    medicineCategories = json['medicine_categories'].cast<String>();
+    medicineDoses = json['medicine_doses'].cast<String>();
+    medicineUnits = json['medicine_units'].cast<String>();
+    medicineRoutes = json['medicine_routes'].cast<String>();
+    medicineFrequencies = json['medicine_frequencies'].cast<String>();
+    medicineDirections = json['medicine_directions'].cast<String>();
+    medicineDurations = json['medicine_durations'].cast<String>();
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     doctor = json['doctor'];
@@ -194,6 +225,8 @@ class ClinicDoctor {
     data['doctor_name'] = this.doctorName;
     data['front_desk_id'] = this.frontDeskId;
     data['consultation_fee'] = this.consultationFee;
+    data['emergency_fee'] = this.emergencyFee;
+    data['online_charge'] = this.onlineCharge;
     data['paid_visit_charge'] = this.paidVisitCharge;
     data['free_visit_charge'] = this.freeVisitCharge;
     data['on_call_paid_visit_charge'] = this.onCallPaidVisitCharge;
@@ -205,6 +238,13 @@ class ClinicDoctor {
       data['doctor_timings'] =
           this.doctorTimings.map((v) => v.toJson()).toList();
     }
+    data['medicine_categories'] = this.medicineCategories;
+    data['medicine_doses'] = this.medicineDoses;
+    data['medicine_units'] = this.medicineUnits;
+    data['medicine_routes'] = this.medicineRoutes;
+    data['medicine_frequencies'] = this.medicineFrequencies;
+    data['medicine_directions'] = this.medicineDirections;
+    data['medicine_durations'] = this.medicineDurations;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     data['doctor'] = this.doctor;
@@ -281,6 +321,7 @@ class Clinic {
   Null latitude;
   Null longitude;
   String getCureCode;
+  List<String> imageUrls;
   bool isActive;
   String createdAt;
   String updatedAt;
@@ -304,6 +345,7 @@ class Clinic {
       this.latitude,
       this.longitude,
       this.getCureCode,
+      this.imageUrls,
       this.isActive,
       this.createdAt,
       this.updatedAt,
@@ -327,6 +369,7 @@ class Clinic {
     latitude = json['latitude'];
     longitude = json['longitude'];
     getCureCode = json['get_cure_code'];
+    imageUrls = json['image_urls'].cast<String>();
     isActive = json['is_active'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
@@ -352,6 +395,7 @@ class Clinic {
     data['latitude'] = this.latitude;
     data['longitude'] = this.longitude;
     data['get_cure_code'] = this.getCureCode;
+    data['image_urls'] = this.imageUrls;
     data['is_active'] = this.isActive;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;

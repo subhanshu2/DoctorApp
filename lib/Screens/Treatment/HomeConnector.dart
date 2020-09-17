@@ -4,11 +4,12 @@ import 'package:getcure_doctor/Database/SymptomsTable.dart';
 import 'package:getcure_doctor/Database/TokenTable.dart';
 import 'package:getcure_doctor/Screens/Appointments/PatientInfo.dart';
 import 'package:getcure_doctor/Screens/Treatment/Diagnosis.dart';
-import 'package:getcure_doctor/Screens/Treatment/Examination.dart' as ex;
+import 'package:getcure_doctor/Screens/Treatment/Examination.dart';
 import 'package:getcure_doctor/Screens/Treatment/Symptoms.dart';
 import 'package:getcure_doctor/Widgets/generalDetails.dart';
 import 'package:provider/provider.dart';
 import '../../Helpers/AppConfig/colors.dart';
+import 'Medication.dart';
 
 String temp;
 String bp;
@@ -55,16 +56,11 @@ class _HomeConnectorState extends State<HomeConnector>
       Symtoms(
         token: widget.token,
       ),
-      ex.Examination(),
-      Diagnosis(),
-
-      Center(
-          child: Icon(
-        Icons.gavel,
-        size: 64,
-        color: orange,
-      )),
-      // Medication()
+      Examination(token: widget.token,),
+      Diagnosis(
+        token: widget.token,
+      ),
+      Medication(token: widget.token)
     ];
     return tabpages;
   }
@@ -208,112 +204,112 @@ class _HomeConnectorState extends State<HomeConnector>
       controller: controller,
       scrollDirection: scrollDirection,
       children: <Widget>[
-        Container(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  color: grey300,
-                  height: 50,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Icon(
-                            Icons.person,
-                          ),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Text(widget.token.name),
-                        ],
-                      ),
-                      Text(widget.token.age.toString() + " yr"),
-                      Text(widget.token.gender.toUpperCase()),
-                      IconButton(
-                          icon: Icon(Icons.create),
-                          onPressed: () async {
-                            await pt.deleteallTask();
-                            // for(var i in s){
-                            //   print(i.title);
-                            // }
-                            // List<PatientsVisitData> result =
-                            //     await patient.checkPatient(widget.token.guid);
-                            // if (result.isEmpty) {
-                            //   final p = PatientsVisitData(
-                            //       mobileNo: widget.token.mobileno,
-                            //       patientName: widget.token.name,
-                            //       patientId: widget.token.guid.toString(),
-                            //       age: widget.token.age,
-                            //       clinicDoctorId: widget.token.doctorid);
-                            //   patient.insert(p);
-                            // } else {
-                            //   print('preseent');
-                            //   PatientsVisitData r = result[0];
-                            //   final p = PatientsVisitData(
-                            //       mobileNo: r.mobileNo,
-                            //       patientName: r.patientName,
-                            //       temperature: r.temperature,
-                            //       pulse: r.pulse,
-                            //       patientId: r.patientId,
-                            //       visitReason: r.visitReason,
-                            //       age: r.age,
-                            //       briefHistory: r.briefHistory,
-                            //       allergies: r.allergies,
-                            //       clinicDoctorId: r.clinicDoctorId,
-                            //       diagnosis: r.diagnosis,
-                            //       examination: r.examination,
-                            //       lifestyle: r.lifestyle,
-                            //       medication: r.medication,
-                            //       weight: r.weight);
-                            //   patient.insert(p);
-                            // }
-                          })
-                    ],
-                  ),
+        SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                color: grey300,
+                height: 50,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Icon(
+                          Icons.person,
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text(widget.token.name),
+                      ],
+                    ),
+                    Text(widget.token.age.toString() + " yr"),
+                    Text(widget.token.gender.toUpperCase()),
+                    IconButton(
+                        icon: Icon(Icons.create),
+                        onPressed: () async {
+                          await pt.deleteallTask();
+                          // for(var i in s){
+                          //   print(i.title);
+                          // }
+                          // List<PatientsVisitData> result =
+                          //     await patient.checkPatient(widget.token.guid);
+                          // if (result.isEmpty) {
+                          //   final p = PatientsVisitData(
+                          //       mobileNo: widget.token.mobileno,
+                          //       patientName: widget.token.name,
+                          //       patientId: widget.token.guid.toString(),
+                          //       age: widget.token.age,
+                          //       clinicDoctorId: widget.token.doctorid);
+                          //   patient.insert(p);
+                          // } else {
+                          //   print('preseent');
+                          //   PatientsVisitData r = result[0];
+                          //   final p = PatientsVisitData(
+                          //       mobileNo: r.mobileNo,
+                          //       patientName: r.patientName,
+                          //       temperature: r.temperature,
+                          //       pulse: r.pulse,
+                          //       patientId: r.patientId,
+                          //       visitReason: r.visitReason,
+                          //       age: r.age,
+                          //       briefHistory: r.briefHistory,
+                          //       allergies: r.allergies,
+                          //       clinicDoctorId: r.clinicDoctorId,
+                          //       diagnosis: r.diagnosis,
+                          //       examination: r.examination,
+                          //       lifestyle: r.lifestyle,
+                          //       medication: r.medication,
+                          //       weight: r.weight);
+                          //   patient.insert(p);
+                          // }
+                        })
+                  ],
                 ),
+              ),
 
-                // if (tabController.index == 0)
-                //   upperDesign0
-                // else if (tabController.index == 1)
-                //   upperDesign1
-                // else if (tabController.index == 3)
-                //   upperDesign3
-                // else
-                //   upperDesign1,
-                // getDesigns(),
-                GeneralDetails(
-                    token: widget.token, patientVisit: patient, temp: "109"),
-                DefaultTabController(
-                    length: tabs.length,
-                    // initialIndex: 0,
-                    child: SizedBox(
-                      height: 500,
-                      child: Column(
-                        children: <Widget>[
-                          TabBar(
-                            onTap: (value) {
-                              setState(() {
-                                getDesigns();
-                              });
-                            },
-                            controller: tabController,
-                            tabs: tabs,
-                            labelColor: black,
-                            isScrollable: true,
-                          ),
-                          Expanded(
-                            child: TabBarView(
-                                controller: tabController,
-                                children: tabsFun(context)),
-                          )
-                        ],
-                      ),
-                    ))
-              ],
-            ),
+              // if (tabController.index == 0)
+              //   upperDesign0
+              // else if (tabController.index == 1)
+              //   upperDesign1
+              // else if (tabController.index == 3)
+              //   upperDesign3
+              // else
+              //   upperDesign1,
+              // getDesigns(),
+              GeneralDetails(
+                  token: widget.token, patientVisit: patient, temp: "109"),
+              TabBar(
+                onTap: (value) {
+                  setState(() {
+                    getDesigns();
+                  });
+                },
+                controller: tabController,
+                tabs: tabs,
+                labelColor: black,
+                isScrollable: true,
+              ),
+              DefaultTabController(
+                  length: tabs.length,
+                  // initialIndex: 0,
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height*0.7,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Flexible(
+                          fit: FlexFit.loose,
+                          child: TabBarView(
+                              controller: tabController,physics: ScrollPhysics(),
+                              children: tabsFun(context)),
+                        )
+                      ],
+                    ),
+                  ))
+            ],
           ),
         )
       ],

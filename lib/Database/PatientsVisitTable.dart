@@ -48,14 +48,13 @@ class PatientsVisitDB extends _$PatientsVisitDB {
   @override
   int get schemaVersion => 2;
 
-
   Future insert(PatientsVisitData p) => into(patientsVisit).insert(p);
-
 
   Future<List<PatientsVisitData>> checkPatient(String patientId) {
     try {
       var query = select(patientsVisit)
-        ..where((pat) => pat.patientId.equals(patientId))..limit(1);
+        ..where((pat) => pat.patientId.equals(patientId))
+        ..limit(1);
       return query.get();
     } catch (e) {
       print("Error" + e);
@@ -67,11 +66,21 @@ class PatientsVisitDB extends _$PatientsVisitDB {
   Future updateBriefHistory(PatientsVisitData data, BriefHistorygenerated bh) {
     var query = update(patientsVisit)..where((t) => t.id.equals(data.id));
     List<BriefHistoryData> list = [];
-    // list = data.briefHistory.data;
+    // List<DignosisData> listd = [];
+    // if (data.diagnosis != null) {
+    //   listd = data.diagnosis.data;
+    // }
+    // var resd = listd.where((element) => element.title == bh.data[0].title);
     if (data.briefHistory != null) {
       list = data.briefHistory.data;
     }
     var res = list.where((element) => element.title == bh.data[0].title);
+    // if (res.length == 0) {
+    //   list.add(bh.data[0]);
+    //   bh.data = list;
+    // } else {
+    //   bh.data = list;
+    // }
     if (res.length == 0) {
       list.add(bh.data[0]);
       bh.data = list;
@@ -81,6 +90,65 @@ class PatientsVisitDB extends _$PatientsVisitDB {
     return query.write(PatientsVisitCompanion(briefHistory: Value(bh)));
   }
 
+  Future updateDiagnosis(PatientsVisitData data, Dignosisgenerated bh) {
+    var query = update(patientsVisit)..where((t) => t.id.equals(data.id));
+    List<DignosisData> list = [];
+    // list = data.briefHistory.data;
+    if (data.diagnosis != null) {
+      list = data.diagnosis.data;
+    }
+    var res = list.where((element) => element.title == bh.data[0].title);
+    if (res.length == 0) {
+      list.add(bh.data[0]);
+      bh.data = list;
+    } else {
+      bh.data = list;
+    }
+    return query.write(PatientsVisitCompanion(diagnosis: Value(bh)));
+  }
+
+  Future updateExamination(PatientsVisitData data, Examinationgenerated ex) {
+    var query = update(patientsVisit)..where((t) => t.id.equals(data.id));
+    List<ExaminationData> list = [];
+    // list = data.briefHistory.data;
+    if (data.examination != null) {
+      list = data.examination.data;
+    }
+    var res = list.where((element) => element.title == ex.data[0].title);
+    if (res.length == 0) {
+      list.add(ex.data[0]);
+      ex.data = list;
+    } else {
+      ex.data = list;
+    }
+    return query.write(PatientsVisitCompanion(examination: Value(ex)));
+  }
+
+  Future updateMedication(
+      PatientsVisitData data, String disease, PrescribedMedicines pm) {
+    var query = update(patientsVisit)..where((t) => t.id.equals(data.id));
+    List<MedicationData> list = [];
+    if (data.medication.data.length!=0 ) {
+      list = data.medication.data;
+    }
+    var r = list.where((element) => element.disease == disease);
+    if (r.length == 0) {
+      list.add(new MedicationData(disease: disease, symptomId: 0, medicines: [pm]));
+    } else {
+      var tr = r.elementAt(0);
+      var res = tr.medicines.where((element) => element.title == pm.title);
+      if (res.length == 0) {
+        tr.medicines.add(pm);
+        list.removeWhere((element) => element.disease==disease);
+        list.add(tr);
+      } else {
+        // ex.data = list;
+      }
+    }
+    return query.write(PatientsVisitCompanion(
+        medication: Value(Medicationgenerated(data: list))));
+  }
+
   //Fetch Data
   Stream<List<PatientsVisitData>> getBriefHistory(String id) {
     dynamic query;
@@ -88,27 +156,36 @@ class PatientsVisitDB extends _$PatientsVisitDB {
     return query.watch();
   }
 
+  Future<List<PatientsVisitData>> getDiagnosis(String id) {
+    dynamic query;
+    query = select(patientsVisit)..where((tbl) => tbl.patientId.equals(id));
+    return query.get();
+  }
+
   //delete briefhistory
   Future deleteBrief(PatientsVisitData pvd, String title) {
     var query = update(patientsVisit)..where((t) => t.id.equals(pvd.id));
-    List<BriefHistoryData> list = [];
     pvd.briefHistory.data.removeWhere((element) => element.title == title);
-    // if (pvd.briefHistory != null) {
-    //   list = pvd.briefHistory.data;
-    // }
-    // var res = list.where((element) => element.title == title);
-    // if (res.length == 0) {
-    //   list.add(bh.data[0]);
-    //   bh.data = list;
-    // } else {
-    //   bh.data = list;
-    // }
 
     return query
         .write(PatientsVisitCompanion(briefHistory: Value(pvd.briefHistory)));
   }
 
+ 
 
+  Future deleteExam(PatientsVisitData pvd, String title) {
+    var query = update(patientsVisit)..where((t) => t.id.equals(pvd.id));
+    pvd.examination.data.removeWhere((element) => element.title == title);
+    return query
+        .write(PatientsVisitCompanion(examination: Value(pvd.examination)));
+  }
+
+  Future deleteDiagnosis(PatientsVisitData pvd, String title) {
+    var query = update(patientsVisit)..where((t) => t.id.equals(pvd.id));
+    pvd.diagnosis.data.removeWhere((element) => element.title == title);
+
+    return query.write(PatientsVisitCompanion(diagnosis: Value(pvd.diagnosis)));
+  }
 
   Future updateVisitReason(PatientsVisitData data, VisitReasongenerated vh) {
     var query = update(patientsVisit)..where((t) => t.id.equals(data.id));
@@ -128,15 +205,11 @@ class PatientsVisitDB extends _$PatientsVisitDB {
     return query.write(PatientsVisitCompanion(visitReason: Value(vh)));
   }
 
-
-
   Stream<List<PatientsVisitData>> getVisitReason(String id) {
     dynamic query;
     query = select(patientsVisit)..where((tbl) => tbl.patientId.equals(id));
     return query.watch();
   }
-
-
 
   Future deleteVisit(PatientsVisitData pvd, String title) {
     var query = update(patientsVisit)..where((t) => t.id.equals(pvd.id));

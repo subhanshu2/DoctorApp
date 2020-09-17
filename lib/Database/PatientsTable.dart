@@ -1,6 +1,4 @@
-import 'dart:convert';
 import 'dart:io';
-import 'package:getcure_doctor/Models/TokenMode.dart';
 import 'package:moor/moor.dart';
 import 'package:moor_ffi/moor_ffi.dart';
 import 'package:path_provider/path_provider.dart';
@@ -44,9 +42,15 @@ class PatientsDB extends _$PatientsDB {
     return names;
   }
 
-  Future<List<Patient>> showFamilyPatient(int mobileNo) async {
+  Future<List<Patient>> showFamilyPatient(int mobileNo, String name) async {
     String mob = mobileNo.toString();
     dynamic ans = select(patients)..where((u) => u.patientId.like("%$mob"));
+    return ans.get();
+  }
+
+  Future<List<Patient>> isPatient(int mobileNo, String name) async {
+    dynamic ans = select(patients)
+      ..where((u) => u.mobileNo.equals(mobileNo) & u.name.equals(name));
     return ans.get();
   }
 
@@ -56,22 +60,7 @@ class PatientsDB extends _$PatientsDB {
     return query.get();
   }
 
-  // Future<Patient> createPatient(int mobileNo, String name) async {
-  //   String unique_id = "A" + mobileNo.toString();
-  //   var family = await this.showFamilyPatient(mobileNo);
-  //   var unique_ids = await this.showFamily(family);
-  //   List<String> names = await family.map((e) => e.name);
-  //   if (names.indexOf(name) != -1) {
-  //     return family[names.indexOf(name)];
-  //   }
 
-  //   int len = unique_ids.length;
-  //   int char = int.parse(unique_id[0]);
-  //   unique_id = unique_id.replaceAll(
-  //       String.fromCharCode(char), String.fromCharCode(char + len));
-
-  //   //return create
-  // }
 
   Future<List<Patient>> checkPatient(String patientId) {
     try {
@@ -86,28 +75,35 @@ class PatientsDB extends _$PatientsDB {
 
   Future createPatient2(Patient patient) async {
     String uniqueId = "A" + patient.mobileNo.toString();
-    List<Patient> family = await this.showFamilyPatient(patient.mobileNo);
-    // var unique_ids = await this.showFamily(family);
-    // List<String> names = await family.map((e) => e.name);
-    // if (names.indexOf(patient.name) != -1) {
-    //   print("If inside");
-    //   return family[names.indexOf(patient.name)];
-    // }
-    // int len = unique_ids.length;
-    String ch = uniqueId[0];
-    uniqueId = uniqueId.replaceAll(
-        ch, String.fromCharCode(ch.codeUnitAt(0) + family.length));
-    Patient pat = Patient(
+ Patient pat;
+    List<Patient> family =
+        await this.showFamilyPatient(patient.mobileNo, patient.name);
+    List<Patient> ispat = await this.isPatient(patient.mobileNo, patient.name);
+    if (ispat.length != 0) {
+      uniqueId = ispat[0].patientId;
+      pat = ispat[0];
+    } else {
+      String ch = uniqueId[0];
+      uniqueId = uniqueId.replaceAll(
+          ch, String.fromCharCode(ch.codeUnitAt(0) + family.length));
+            pat = Patient(
         mobileNo: patient.mobileNo,
         name: patient.name,
         gender: patient.gender,
         patientId: uniqueId,
         address: patient.address,
         age: patient.age);
+            into(patients).insert(pat);
+
+    }
+
+   
     List<Patient> part = await checkPatient(pat.patientId);
+    print(part);
     //  if (pat.patientId.toString() != part.patientId) {
-    into(patients).insert(pat);
     // }
     return uniqueId;
   }
+    Future deleteallTask() => delete(patients).go();
+
 }
