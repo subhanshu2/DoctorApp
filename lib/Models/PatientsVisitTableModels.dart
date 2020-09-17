@@ -34,6 +34,7 @@ class BriefHistoryData {
 
   BriefHistoryData({this.title, this.date, this.visibleTill, this.isCured});
 
+
   BriefHistoryData.fromJson(Map<String, dynamic> json) {
     title = json['title'];
     date = json['date'];
@@ -47,6 +48,7 @@ class BriefHistoryData {
     data['date'] = this.date;
     data['visible_till'] = this.visibleTill;
     data['is_cured'] = this.isCured;
+
     return data;
   }
 }

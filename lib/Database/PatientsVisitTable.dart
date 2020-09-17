@@ -170,7 +170,17 @@ class PatientsVisitDB extends _$PatientsVisitDB {
     return query
         .write(PatientsVisitCompanion(briefHistory: Value(pvd.briefHistory)));
   }
-
+//delete medication
+  Future deleteMedicine(PatientsVisitData pvd, String d , String m) {
+    var query = update(patientsVisit)..where((t) => t.id.equals(pvd.id));
+    var medicineList =  pvd.medication.data.where((element) => element.disease==d).first;
+     medicineList.medicines.removeWhere((element) => element.title == m);
+    pvd.medication.data.removeWhere((element) => element.disease==d);
+    pvd.medication.data.add(medicineList);
+    return query
+        .write(PatientsVisitCompanion(medication: Value(pvd.medication)));
+  }
+  
  
 
   Future deleteExam(PatientsVisitData pvd, String title) {

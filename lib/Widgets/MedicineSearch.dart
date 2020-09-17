@@ -1,10 +1,18 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:getcure_doctor/Database/MedicinesTable.dart';
 import 'package:getcure_doctor/Database/PatientsVisitTable.dart';
 import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
+import 'package:getcure_doctor/Helpers/Navigation.dart';
+import 'package:getcure_doctor/Models/DoctorLogin.dart';
 import 'package:getcure_doctor/Models/PatientsVisitTableModels.dart';
 import 'package:getcure_doctor/Widgets/AddMedicine.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'SelectMedicine.dart';
 
 class MedicineSearch extends StatefulWidget {
   final String pId;
@@ -23,13 +31,40 @@ class _MedicineSearchState extends State<MedicineSearch>
   String query = '';
   TabController tabController;
 
+  ClinicDoctor doc;
+
+  String cate = '';
+
+  TextEditingController _category=new TextEditingController();
+  getParameters() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    String doctors = pref.getString('dresponse');
+    DoctorLogin docUser = DoctorLogin.fromJson(json.decode(doctors));
+    for (var i in docUser.data.clinicDoctor) {
+      if (i.doctorId == widget.docId) {
+        setState(() {
+          doc = i;
+        });
+      }
+    }
+    setState(() {
+      category = doc.medicineCategories;
+    });
+  }
+
+  List<String> category = [];
+
   @override
   void initState() {
     super.initState();
+    getParameters();
     setState(() {
       tabController = TabController(length: 2, vsync: this);
     });
   }
+
+  bool con = false;
+  bool newcat = false;
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +108,11 @@ class _MedicineSearchState extends State<MedicineSearch>
                     ),
                     TabBar(
                       controller: tabController,
+                      onTap: (ind) {
+                        setState(() {
+                          con = false;
+                        });
+                      },
                       tabs: <Tab>[
                         Tab(
                           text: 'Most Prescribed',
@@ -93,7 +133,70 @@ class _MedicineSearchState extends State<MedicineSearch>
                               TabBarView(controller: tabController, children: [
                             _buildTaskList(
                                 context, query, med, patientsVisit, widget.pId),
-                            Container()
+                            con
+                                ? CMedicine(
+                                    cat: cate,
+                                    db: med,
+                                    pv: patientsVisit,
+                                    pId: widget.pId)
+                                : Container(
+                                    child: ListView.builder(
+                                      itemCount: category.length + 1,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        if (index == category.length) {
+                                          return ListTile(
+                                            title: newcat
+                                                ? TextFormField(
+                                                  controller: _category,
+                                                    decoration: InputDecoration(
+                                                        labelText:
+                                                            'New Category',
+                                                        border:
+                                                            OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(5),
+                                                        )),
+                                                  )
+                                                : Text(
+                                                    " Category not in list?",
+                                                    style:
+                                                        TextStyle(color: blue),
+                                                  ),
+                                            trailing: FlatButton(
+                                                onPressed: () {
+                                                  if(newcat && _category.text.isNotEmpty ){
+                                                    
+                                                    print(_category.text);
+                                                    _category.clear();
+                                                  }
+                                                  setState(() {
+                                                    newcat = !newcat;
+                                                  });
+                                                },
+                                                color: blue,
+                                                textColor: white,
+                                                child: newcat
+                                                    ? Text('Save')
+                                                    : Text('Add New')),
+                                          );
+                                        } else {
+                                          return ListTile(
+                                            title: Text(category[index]),
+                                            trailing:
+                                                Icon(Icons.arrow_forward_ios),
+                                            onTap: () {
+                                              setState(() {
+                                                con = true;
+                                                cate = category[index];
+                                              });
+                                            },
+                                          );
+                                        }
+                                      },
+                                    ),
+                                  )
                           ]),
                         )),
                   ],
@@ -150,27 +253,109 @@ class _MedicineSearchState extends State<MedicineSearch>
               final itemTask = tasks[index];
               return GestureDetector(
                 onTap: () async {
-                  // List<BriefHistoryData> bhd = [
-                  //   BriefHistoryData(
-                  //       date: DateTime.now().toString(),
-                  //       title: itemTask.title,
-                  //       visibleTill: itemTask.visibilityPeriod.toString())
-                  // ];
-                  // BriefHistorygenerated bh = BriefHistorygenerated(data: bhd);
-                  PrescribedMedicines pm = PrescribedMedicines(
-                      title: itemTask.title,
-                      direction: itemTask.defaultDirection,
-                      dose: itemTask.defaultDose,
-                      duration: itemTask.defaultDuration,
-                      frequency: itemTask.defaultFrequency,
-                      medicineId: itemTask.id,
-                      route: itemTask.defaultRoute,
-                      unit: itemTask.defaultUnit);
-                  var p = await pv.checkPatient(pId);
-                  pv.updateMedication(p[0], widget.disease, pm);
-                  Navigator.pop(context);
-                    widget.fun();
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return SelectMedicine(
+                        medicine: itemTask,
+                        docId: widget.docId,
+                        pv: pv,
+                        disease: widget.disease,
+                        fun: widget.fun,
+                        pId: widget.pId,
+                      );
+                    },
+                  );
+
+                  // PrescribedMedicines pm = PrescribedMedicines(
+                  //     title: itemTask.title,
+                  //     direction: itemTask.defaultDirection,
+                  //     dose: itemTask.defaultDose,
+                  //     duration: itemTask.defaultDuration,
+                  //     frequency: itemTask.defaultFrequency,
+                  //     medicineId: itemTask.id,
+                  //     route: itemTask.defaultRoute,
+                  //     unit: itemTask.defaultUnit);
+                  // var p = await pv.checkPatient(pId);
+                  // pv.updateMedication(p[0], widget.disease, pm);
+                  // Navigator.pop(context);
+                  //   widget.fun();
                 },
+                child: ListTile(
+                  // contentPadding: EdgeInsets.zero,
+                  dense: true,
+                  title: Text(itemTask.title),
+                  trailing: Text(itemTask.salt),
+                  subtitle: Text(itemTask.interactionDrugs +
+                      " " +
+                      itemTask.defaultFrequency),
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+}
+
+class CMedicine extends StatelessWidget {
+  final String cat;
+  final MedicinesDB db;
+  final PatientsVisitDB pv;
+  final String pId;
+
+  const CMedicine({Key key, this.cat, this.db, this.pv, this.pId})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+      stream: db.searchCategory(cat),
+      builder: (context, AsyncSnapshot<List<Medicine>> snapshot) {
+        final tasks = snapshot.data ?? List();
+        return Container(
+          height: MediaQuery.of(context).size.height * 0.6,
+          width: MediaQuery.of(context).size.width * 0.6,
+          child: ListView.separated(
+            separatorBuilder: (_, index) {
+              return Divider();
+            },
+            scrollDirection: Axis.vertical,
+            itemCount: tasks.length,
+            shrinkWrap: true,
+            itemBuilder: (_, index) {
+              final itemTask = tasks[index];
+              return GestureDetector(
+                // onTap: () async {
+                //   showDialog(
+                //     context: context,
+                //     builder: (BuildContext context) {
+                //       return SelectMedicine(
+                //         medicine: itemTask,
+                //         docId: widget.docId,
+                //         pv: pv,
+                //         disease: widget.disease,
+                //         fun: widget.fun,
+                //         pId: widget.pId,
+                //       );
+                //     },
+                //   );
+
+                //   // PrescribedMedicines pm = PrescribedMedicines(
+                //   //     title: itemTask.title,
+                //   //     direction: itemTask.defaultDirection,
+                //   //     dose: itemTask.defaultDose,
+                //   //     duration: itemTask.defaultDuration,
+                //   //     frequency: itemTask.defaultFrequency,
+                //   //     medicineId: itemTask.id,
+                //   //     route: itemTask.defaultRoute,
+                //   //     unit: itemTask.defaultUnit);
+                //   // var p = await pv.checkPatient(pId);
+                //   // pv.updateMedication(p[0], widget.disease, pm);
+                //   // Navigator.pop(context);
+                //   //   widget.fun();
+                // },
                 child: ListTile(
                   // contentPadding: EdgeInsets.zero,
                   dense: true,
