@@ -6,6 +6,7 @@ import 'package:getcure_doctor/Database/PatientsVisitTable.dart';
 import 'package:getcure_doctor/Database/SymptomsTable.dart';
 import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
 import 'package:getcure_doctor/Models/PatientsVisitTableModels.dart';
+import 'package:getcure_doctor/Widgets/GetBriefTimings.dart';
 import 'package:provider/provider.dart';
 
 class SearchBarVisit extends StatefulWidget {
@@ -127,18 +128,17 @@ StreamBuilder<List<Symptom>> _buildTaskList(BuildContext context, String query,
             final itemTask = tasks[index];
             return GestureDetector(
               onTap: () async {
-                List<VisitReasonData> vhd = [
-                  VisitReasonData(
-                      date: DateTime.now().toString(),
-                      title: itemTask.title,
-                      visibleTill: itemTask.visibilityPeriod.toString())
-                ];
-                VisitReasongenerated vh = VisitReasongenerated(data: vhd);
-
-                var p = await pv.checkPatient(pId);
-
-                pv.updateVisitReason(p[0], vh);
                 Navigator.pop(context);
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return GetTimings(
+                          briefTitle: itemTask.title,
+                          pId: pId,
+                          pv: pv,
+                          visibleTill: itemTask.visibilityPeriod.toString(),
+                          type: "todayVisit");
+                    });
               },
               child: ListTile(
                 contentPadding: EdgeInsets.zero,

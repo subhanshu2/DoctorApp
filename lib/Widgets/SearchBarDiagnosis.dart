@@ -142,10 +142,12 @@ StreamBuilder<List<Symptom>> _buildTaskList(BuildContext context, String query,
                   context: context,
                   builder: (BuildContext context) {
                     return GetTimings(
-                        briefTitle: itemTask.title,
-                        pId: pId,
-                        pv: pv,
-                        visibleTill: itemTask.visibilityPeriod.toString());
+                      briefTitle: itemTask.title,
+                      pId: pId,
+                      pv: pv,
+                      visibleTill: itemTask.visibilityPeriod.toString(),
+                      type: "diagnois",
+                    );
                   },
                 );
               },
