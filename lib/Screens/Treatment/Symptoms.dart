@@ -141,8 +141,11 @@ class _SymtomsState extends State<Symtoms> {
                                 physics: ScrollPhysics(),
                                 itemBuilder: (BuildContext context, int index) {
                                   return ListTile(
+                                    dense: true,
                                     title: Text(snapshot.data[0].briefHistory
                                         .data[index].title),
+                                    subtitle: Text(
+                                        "${snapshot.data[0].briefHistory.data[index].isCured == true ? "Cured" : "Since"} (${snapshot.data[0].briefHistory.data[index].date})"),
                                     trailing: IconButton(
                                         icon: Icon(Icons.cancel),
                                         onPressed: () {

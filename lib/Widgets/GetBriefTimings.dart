@@ -23,13 +23,12 @@ class _GetTimingsState extends State<GetTimings> {
   String year = '0';
   String _radioValue;
   String choice;
-  int days;
-  int months;
-  int years;
+  int days=0;
+  int months=0;
+  int years=0;
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     widget.pId;
   }
@@ -109,6 +108,7 @@ class _GetTimingsState extends State<GetTimings> {
                           width: 15.0,
                         ),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text('Cured'),
                             Radio(
@@ -260,11 +260,10 @@ class _GetTimingsState extends State<GetTimings> {
                       color: pcolor,
                       child: Text('Save'),
                       onPressed: () async {
-                        print(widget.visibleTill);
-
+                       
                         List<BriefHistoryData> bhd = [
                           BriefHistoryData(
-                            date: DateTime.now().toString(),
+                            date: '$days days $months months $years years',
                             title: widget.briefTitle,
                             visibleTill: widget.visibleTill,
                             isCured: _radioValue == "Since" ? false : true,
