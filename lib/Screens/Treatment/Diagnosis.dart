@@ -63,6 +63,9 @@ class _DiagnosisState extends State<Diagnosis> {
                                   itemBuilder:
                                       (BuildContext context, int index) {
                                     return ListTile(
+                                      subtitle: Text(
+                                          "${snapshot.data[0].diagnosis.data[index].isCured == true ? "Cured" : "Since"}" +
+                                              "(${snapshot.data[0].diagnosis.data[index].date})"),
                                       title: Text(snapshot
                                           .data[0].diagnosis.data[index].title),
                                       trailing: IconButton(
@@ -71,10 +74,6 @@ class _DiagnosisState extends State<Diagnosis> {
                                             patient.deleteDiagnosis(
                                                 snapshot.data[0],
                                                 snapshot.data[0].diagnosis
-                                                    .data[index].title);
-                                            patient.deleteBrief(
-                                                snapshot.data[0],
-                                                snapshot.data[0].briefHistory
                                                     .data[index].title);
                                           }),
                                     );

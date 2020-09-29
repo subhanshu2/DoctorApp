@@ -145,17 +145,14 @@ class _SymtomsState extends State<Symtoms> {
                                     title: Text(snapshot.data[0].briefHistory
                                         .data[index].title),
                                     subtitle: Text(
-                                        "${snapshot.data[0].briefHistory.data[index].isCured == true ? "Cured" : "Since"} (${snapshot.data[0].briefHistory.data[index].date})"),
+                                        "${snapshot.data[0].briefHistory.data[index].isCured == true ? "Cured" : "Since"}" +
+                                            "(${snapshot.data[0].briefHistory.data[index].date})"),
                                     trailing: IconButton(
                                         icon: Icon(Icons.cancel),
                                         onPressed: () {
                                           patient.deleteBrief(
                                               snapshot.data[0],
                                               snapshot.data[0].briefHistory
-                                                  .data[index].title);
-                                          patient.deleteDiagnosis(
-                                              snapshot.data[0],
-                                              snapshot.data[0].diagnosis
                                                   .data[index].title);
                                         }),
                                   );
@@ -215,6 +212,9 @@ class _SymtomsState extends State<Symtoms> {
                                 physics: ScrollPhysics(),
                                 itemBuilder: (BuildContext context, int index) {
                                   return ListTile(
+                                    subtitle: Text(
+                                        "${snapshot.data[0].visitReason.data[index].isCured == true ? "Cured" : "Since"}" +
+                                            "(${snapshot.data[0].visitReason.data[index].date})"),
                                     contentPadding:
                                         EdgeInsets.symmetric(horizontal: 20),
                                     title: Text(snapshot
