@@ -587,6 +587,18 @@ class _SlotBookingState extends State<SlotBooking> {
                               //   );
                               // }
                               print("GUID" + response);
+                              var pat = Patient(
+                                  mobileNo: int.parse(_mobileno),
+                                  name: _name,
+                                  gender: _radiovalue4 == 'male'
+                                      ? Gender.Male
+                                      : Gender.Female,
+                                  age: int.parse(_age),
+                                  address: _address);
+                              responsePatient = await widget.patientDatabase
+                                  .createPatient2(pat);
+                              print("Patient reponse" +
+                                  responsePatient.toString());
                               widget.database.updateData(
                                   widget.token.copyWith(
                                       name: _name,
@@ -598,12 +610,8 @@ class _SlotBookingState extends State<SlotBooking> {
                                       bookedtype: _radioValue3,
                                       booked: true,
                                       gender: _radiovalue4,
-                                      guid: response),
+                                      guid: responsePatient),
                                   response.toString());
-
-                              setState(() {
-                                // widget.count(database);
-                              });
                               _btnController.success();
                               Timer(Duration(seconds: 1),
                                   () => Navigator.pop(context));
