@@ -76,6 +76,7 @@ class _ExaminationState extends State<Examination> {
                                               child: ExamResult(
                                                 exmdata: snapshot.data[0]
                                                     .examination.data[index],
+                                                pid: widget.token.guid,
                                               ),
                                             );
                                           },

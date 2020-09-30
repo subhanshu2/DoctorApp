@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:getcure_doctor/Database/ExaminationTable.dart';
+import 'package:getcure_doctor/Database/PatientsVisitTable.dart';
 import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
 import 'package:getcure_doctor/Models/PatientsVisitTableModels.dart';
+import 'package:provider/provider.dart';
 
 class ExamResult extends StatefulWidget {
   final ExaminationData exmdata;
-
-  ExamResult({Key key, this.exmdata}) : super(key: key);
+  final String pid;
+  ExamResult({Key key, this.exmdata, this.pid}) : super(key: key);
 
   @override
   _ExamResultState createState() => _ExamResultState();
@@ -13,8 +16,12 @@ class ExamResult extends StatefulWidget {
 
 class _ExamResultState extends State<ExamResult> {
   List<String> numericResultList = [];
+  String _category;
+
   @override
   Widget build(BuildContext context) {
+    final exam = Provider.of<ExaminationsDB>(context);
+    final patientsVisit = Provider.of<PatientsVisitDB>(context);
     return SimpleDialog(
       title: Container(
         alignment: Alignment.center,
@@ -83,10 +90,33 @@ class _ExamResultState extends State<ExamResult> {
                                   p.type == 'numeric'
                                       ? TextFormField(
                                           initialValue: p.result.length == 0
-                                              ? "NIL"
+                                              ? ""
                                               : p.result[0],
                                           keyboardType: TextInputType.number,
-                                          onChanged: (val) {},
+                                          onChanged: (val) async {
+                                            String tex = "";
+                                            setState(() {
+                                              tex = val;
+                                            });
+                                            ParameterData pd = ParameterData(
+                                                title: p.title,
+                                                type: "numeric",
+                                                unit: p.unit,
+                                                bioReference: p.bioReference,
+                                                references: p.references,
+                                                method: p.method,
+                                                sample: p.sample);
+
+                                            var x = await patientsVisit
+                                                .checkPatient(widget.pid);
+                                            patientsVisit
+                                                .updateExaminationParams(
+                                                    x[0],
+                                                    widget
+                                                        .exmdata.examinationId,
+                                                    pd,
+                                                    tex);
+                                          },
                                         )
                                       : DropdownButton<String>(
                                           items:
@@ -97,19 +127,38 @@ class _ExamResultState extends State<ExamResult> {
                                             );
                                           }).toList(),
                                           hint: Text('result'),
-                                          // value: _category,
+                                          value: p.result.length == 0
+                                              ? _category
+                                              : p.result[0],
                                           elevation: 5,
                                           isExpanded: true,
-                                          onChanged: (val) {
+                                          onChanged: (val) async {
                                             setState(() {
-                                              // _category = val;
+                                              _category = val;
+                                              if (p.result.isNotEmpty) {
+                                                p.result[0] = val;
+                                              }
                                             });
+                                            ParameterData pd = ParameterData(
+                                                title: p.title,
+                                                type: "radio",
+                                                unit: p.unit,
+                                                bioReference: p.bioReference,
+                                                references: p.references,
+                                                method: p.method,
+                                                sample: p.sample);
+
+                                            var x = await patientsVisit
+                                                .checkPatient(widget.pid);
+                                            patientsVisit
+                                                .updateExaminationParams(
+                                                    x[0],
+                                                    widget
+                                                        .exmdata.examinationId,
+                                                    pd,
+                                                    _category);
                                           },
                                         ),
-                                  // Text(p.result.length == 0
-                                  //     ? "NIL"
-                                  //     : p.result[0]),
-
                                   onTap: () {}),
                               DataCell(
                                   Text(p.type == 'numeric'

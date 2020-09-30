@@ -445,6 +445,8 @@ class Parameters {
   String type;
   List<String> references;
   String unit;
+  String method;
+  String sample;
   List<String> bioReference;
   List<String> result;
 
@@ -452,6 +454,8 @@ class Parameters {
       {this.title,
       this.type,
       this.references,
+      this.method,
+      this.sample,
       this.unit,
       this.bioReference,
       this.result});
@@ -459,6 +463,8 @@ class Parameters {
   Parameters.fromJson(Map<String, dynamic> json) {
     title = json['title'];
     type = json['type'];
+    method = json['method'];
+    sample = json['sample'];
     references = json['references'].cast<String>();
     unit = json['unit'];
     bioReference = json['bio_reference'].cast<String>();
@@ -471,6 +477,8 @@ class Parameters {
     data['type'] = this.type;
     data['references'] = this.references;
     data['unit'] = this.unit;
+    data['method'] = this.method;
+    data['sample'] = this.sample;
     data['bio_reference'] = this.bioReference;
     data['result'] = this.result;
     return data;

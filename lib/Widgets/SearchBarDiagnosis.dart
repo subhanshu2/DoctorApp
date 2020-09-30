@@ -127,29 +127,17 @@ StreamBuilder<List<Symptom>> _buildTaskList(BuildContext context, String query,
             final itemTask = tasks[index];
             return GestureDetector(
               onTap: () async {
-                // List<DignosisData> bhd = [
-                //   DignosisData(
-                //       date: DateTime.now().toString(),
-                //       title: itemTask.title,
-                //       visibleTill: itemTask.visibilityPeriod.toString())
-                // ];
-                // Dignosisgenerated bh = Dignosisgenerated(data: bhd);
-                // var p = await pv.checkPatient(pId);
+                List<DignosisData> bhd = [
+                  DignosisData(
+                      date: DateTime.now().toString(),
+                      title: itemTask.title,
+                      visibleTill: itemTask.visibilityPeriod.toString())
+                ];
+                Dignosisgenerated bh = Dignosisgenerated(data: bhd);
+                var p = await pv.checkPatient(pId);
 
-                // pv.updateDiagnosis(p[0], bh);
+                pv.updateDiagnosis(p[0], bh);
                 Navigator.pop(context);
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return GetTimings(
-                      briefTitle: itemTask.title,
-                      pId: pId,
-                      pv: pv,
-                      visibleTill: itemTask.visibilityPeriod.toString(),
-                      type: "diagnois",
-                    );
-                  },
-                );
               },
               child: ListTile(
                 contentPadding: EdgeInsets.zero,

@@ -5,6 +5,7 @@ import 'package:getcure_doctor/Database/TokenTable.dart';
 import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
 import 'package:getcure_doctor/Helpers/Network/Requesthttp.dart';
 import 'package:getcure_doctor/Screens/Treatment/HomeConnector.dart';
+import 'package:getcure_doctor/Widgets/DisplayListPatients.dart';
 import 'package:provider/provider.dart';
 
 class ListDocPatients extends StatefulWidget {
@@ -61,7 +62,13 @@ class _ListDocPatientsState extends State<ListDocPatients> {
                   width: 10,
                 ),
                 InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return DisplayLists(token: database);
+                          });
+                    },
                     child: Container(
                       height: 34,
                       width: 34,

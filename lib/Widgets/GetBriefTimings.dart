@@ -86,32 +86,6 @@ class _GetTimingsState extends State<GetTimings> {
 
         widget.pv.updateVisitReason(p[0], vh);
         break;
-      case 'allergy':
-        List<AllergyData> bhd = [
-          AllergyData(
-            title: widget.briefTitle,
-            doctorId: widget.docId,
-            type: widget.allergyOrLifeType,
-            isCured: _radioValue == "Since" ? false : true,
-          )
-        ];
-        Allergy al = Allergy(data: bhd);
-        var p = await widget.pv.checkPatient(widget.pId);
-        widget.pv.updateAllergy(p[0], al);
-        break;
-      case 'lifestyle':
-        List<LifeStyleData> bhd = [
-          LifeStyleData(
-              title: widget.briefTitle,
-              doctorId: widget.docId,
-              type: widget.allergyOrLifeType,
-              isCured: _radioValue == "Since" ? false : true),
-        ];
-        LifeStyle ls = LifeStyle(data: bhd);
-        var p = await widget.pv.checkPatient(widget.pId);
-
-        widget.pv.updateLifeStyle(p[0], ls);
-        break;
       case 'diagnois':
         List<DignosisData> bhdd = [
           DignosisData(

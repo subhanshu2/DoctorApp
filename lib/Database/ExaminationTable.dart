@@ -7,10 +7,10 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 part 'ExaminationTable.g.dart';
 
-class Parameters {
+class Parameters2 {
   List<ParameterData> data;
-  Parameters({this.data});
-  Parameters.fromJson(Map<String, dynamic> json) {
+  Parameters2({this.data});
+  Parameters2.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
       data = new List<ParameterData>();
       json['data'].forEach((v) {
@@ -48,6 +48,8 @@ class ParameterData {
   ParameterData.fromJson(Map<String, dynamic> json) {
     title = json['title'];
     type = json['type'];
+    method = json['method'];
+    sample = json['sample'];
     references = json['references'].cast<String>();
     unit = json['unit'];
     bioReference = json['bio_reference'].cast<String>();
@@ -59,23 +61,25 @@ class ParameterData {
     data['type'] = this.type;
     data['references'] = this.references;
     data['unit'] = this.unit;
+    data['method'] = this.method;
+    data['sample'] = this.sample;
     data['bio_reference'] = this.bioReference;
     return data;
   }
 }
 
-class ParametersConverter extends TypeConverter<Parameters, String> {
+class ParametersConverter extends TypeConverter<Parameters2, String> {
   const ParametersConverter();
   @override
-  Parameters mapToDart(String fromDb) {
+  Parameters2 mapToDart(String fromDb) {
     if (fromDb == null) {
       return null;
     }
-    return Parameters.fromJson(json.decode(fromDb) as Map<String, dynamic>);
+    return Parameters2.fromJson(json.decode(fromDb) as Map<String, dynamic>);
   }
 
   @override
-  String mapToSql(Parameters value) {
+  String mapToSql(Parameters2 value) {
     if (value == null) {
       return null;
     }
@@ -109,16 +113,23 @@ class ExaminationsDB extends _$ExaminationsDB {
   @override
   int get schemaVersion => 1;
 
-  Future insertTask(Examination examination) => into(examinations).insert(examination);
-  Stream<List<Examination>> watchAllTasks(String q)
-  {
+  Future insertTask(Examination examination) =>
+      into(examinations).insert(examination);
+  Stream<List<Examination>> watchAllTasks(String q) {
     dynamic query;
     if (q.length != 0) {
       query = select(examinations)..where((t) => t.title.contains(q));
     } else {
       query = select(examinations);
     }
-    
+
     return query.watch();
   }
+
+  // Future updateParams(Examination examination) {
+  //   var query = update(examinations)..where((t) => t.id.equals(examination.id));
+  //   Parameters params = examination.parameters;
+
+  //   query.write(ExaminationsCompanion(parameters: ));
+  // }
 }

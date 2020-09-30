@@ -12,7 +12,7 @@ class Examination extends DataClass implements Insertable<Examination> {
   final int clinicDoctorId;
   final int doctorId;
   final String title;
-  final Parameters parameters;
+  final Parameters2 parameters;
   final int price;
   final bool isOnline;
   Examination(
@@ -102,7 +102,7 @@ class Examination extends DataClass implements Insertable<Examination> {
       clinicDoctorId: serializer.fromJson<int>(json['clinicDoctorId']),
       doctorId: serializer.fromJson<int>(json['doctorId']),
       title: serializer.fromJson<String>(json['title']),
-      parameters: serializer.fromJson<Parameters>(json['parameters']),
+      parameters: serializer.fromJson<Parameters2>(json['parameters']),
       price: serializer.fromJson<int>(json['price']),
       isOnline: serializer.fromJson<bool>(json['isOnline']),
     );
@@ -115,7 +115,7 @@ class Examination extends DataClass implements Insertable<Examination> {
       'clinicDoctorId': serializer.toJson<int>(clinicDoctorId),
       'doctorId': serializer.toJson<int>(doctorId),
       'title': serializer.toJson<String>(title),
-      'parameters': serializer.toJson<Parameters>(parameters),
+      'parameters': serializer.toJson<Parameters2>(parameters),
       'price': serializer.toJson<int>(price),
       'isOnline': serializer.toJson<bool>(isOnline),
     };
@@ -126,7 +126,7 @@ class Examination extends DataClass implements Insertable<Examination> {
           int clinicDoctorId,
           int doctorId,
           String title,
-          Parameters parameters,
+          Parameters2 parameters,
           int price,
           bool isOnline}) =>
       Examination(
@@ -181,7 +181,7 @@ class ExaminationsCompanion extends UpdateCompanion<Examination> {
   final Value<int> clinicDoctorId;
   final Value<int> doctorId;
   final Value<String> title;
-  final Value<Parameters> parameters;
+  final Value<Parameters2> parameters;
   final Value<int> price;
   final Value<bool> isOnline;
   const ExaminationsCompanion({
@@ -230,7 +230,7 @@ class ExaminationsCompanion extends UpdateCompanion<Examination> {
       Value<int> clinicDoctorId,
       Value<int> doctorId,
       Value<String> title,
-      Value<Parameters> parameters,
+      Value<Parameters2> parameters,
       Value<int> price,
       Value<bool> isOnline}) {
     return ExaminationsCompanion(
@@ -437,7 +437,7 @@ class $ExaminationsTable extends Examinations
     return $ExaminationsTable(_db, alias);
   }
 
-  static TypeConverter<Parameters, String> $converter0 =
+  static TypeConverter<Parameters2, String> $converter0 =
       const ParametersConverter();
 }
 

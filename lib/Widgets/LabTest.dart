@@ -146,7 +146,8 @@ class _LabTestState extends State<LabTest> with SingleTickerProviderStateMixin {
                             isOnline: false,
                             price: 200,
                             title: _title.text,
-                            parameters: Parameters(data: test.parametersList)));
+                            parameters:
+                                Parameters2(data: test.parametersList)));
                         test.parametersList = [];
                         _title.clear();
                         _btnController.reset();
@@ -299,8 +300,8 @@ class _NumericParameterState extends State<NumericParameter> {
                                   return 'Please enter some text';
                                 }
                                 return null;
-                              },                              keyboardType:TextInputType.number,
-
+                              },
+                              keyboardType: TextInputType.number,
                               decoration: new InputDecoration(
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: blue),
@@ -328,7 +329,7 @@ class _NumericParameterState extends State<NumericParameter> {
                                 }
                                 return null;
                               },
-                              keyboardType:TextInputType.number,
+                              keyboardType: TextInputType.number,
                               decoration: new InputDecoration(
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: blue),
