@@ -127,20 +127,17 @@ StreamBuilder<List<Habit>> _buildTaskList(BuildContext context, String query,
             final itemTask = tasks[index];
             return GestureDetector(
               onTap: () async {
+                List<AllergyData> bhd = [
+                  AllergyData(
+                    title: itemTask.title,
+                    doctorId: docId,
+                    type: itemTask.type.toString(),
+                  )
+                ];
+                Allergy al = Allergy(data: bhd);
+                var p = await pv.checkPatient(pId);
+                pv.updateAllergy(p[0], al);
                 Navigator.pop(context);
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return GetTimings(
-                      briefTitle: itemTask.title,
-                      pId: pId,
-                      pv: pv,
-                      type: "allergy",
-                      docId: docId,
-                      allergyOrLifeType: itemTask.type.toString(),
-                    );
-                  },
-                );
               },
               child: ListTile(
                 contentPadding: EdgeInsets.zero,

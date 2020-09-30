@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:getcure_doctor/Database/ExaminationTable.dart';
 import 'package:getcure_doctor/Models/PatientsVisitTableModels.dart';
 import 'package:moor/moor.dart';
 import 'package:moor_ffi/moor_ffi.dart';
@@ -115,6 +116,7 @@ class PatientsVisitDB extends _$PatientsVisitDB {
       list = data.examination.data;
     }
     var res = list.where((element) => element.title == ex.data[0].title);
+
     if (res.length == 0) {
       list.add(ex.data[0]);
       ex.data = list;
@@ -128,18 +130,19 @@ class PatientsVisitDB extends _$PatientsVisitDB {
       PatientsVisitData data, String disease, PrescribedMedicines pm) {
     var query = update(patientsVisit)..where((t) => t.id.equals(data.id));
     List<MedicationData> list = [];
-    if (data.medication.data.length!=0 ) {
+    if (data.medication.data.length != 0) {
       list = data.medication.data;
     }
     var r = list.where((element) => element.disease == disease);
     if (r.length == 0) {
-      list.add(new MedicationData(disease: disease, symptomId: 0, medicines: [pm]));
+      list.add(
+          new MedicationData(disease: disease, symptomId: 0, medicines: [pm]));
     } else {
       var tr = r.elementAt(0);
       var res = tr.medicines.where((element) => element.title == pm.title);
       if (res.length == 0) {
         tr.medicines.add(pm);
-        list.removeWhere((element) => element.disease==disease);
+        list.removeWhere((element) => element.disease == disease);
         list.add(tr);
       } else {
         // ex.data = list;
@@ -170,18 +173,18 @@ class PatientsVisitDB extends _$PatientsVisitDB {
     return query
         .write(PatientsVisitCompanion(briefHistory: Value(pvd.briefHistory)));
   }
+
 //delete medication
-  Future deleteMedicine(PatientsVisitData pvd, String d , String m) {
+  Future deleteMedicine(PatientsVisitData pvd, String d, String m) {
     var query = update(patientsVisit)..where((t) => t.id.equals(pvd.id));
-    var medicineList =  pvd.medication.data.where((element) => element.disease==d).first;
-     medicineList.medicines.removeWhere((element) => element.title == m);
-    pvd.medication.data.removeWhere((element) => element.disease==d);
+    var medicineList =
+        pvd.medication.data.where((element) => element.disease == d).first;
+    medicineList.medicines.removeWhere((element) => element.title == m);
+    pvd.medication.data.removeWhere((element) => element.disease == d);
     pvd.medication.data.add(medicineList);
     return query
         .write(PatientsVisitCompanion(medication: Value(pvd.medication)));
   }
-  
- 
 
   Future deleteExam(PatientsVisitData pvd, String title) {
     var query = update(patientsVisit)..where((t) => t.id.equals(pvd.id));
@@ -312,5 +315,56 @@ class PatientsVisitDB extends _$PatientsVisitDB {
   void updateWeight(PatientsVisitData pvd, String weight) {
     var query = update(patientsVisit)..where((t) => t.id.equals(pvd.id));
     query.write(PatientsVisitCompanion(weight: Value(int.parse(weight))));
+  }
+
+  Future updateExaminationParams(
+      PatientsVisitData data, int eid, ParameterData pd, String text) {
+    print(pd.title);
+    print(text);
+    var query = update(patientsVisit)..where((t) => t.id.equals(data.id));
+    List<ExaminationData> list = [];
+    // list = data.briefHistory.data;
+    if (data.examination != null) {
+      list = data.examination.data;
+    }
+    var res = list.where((element) => element.examinationId == eid);
+    print(res.last.title);
+
+    var par = res.last.parameters;
+
+    for (var x in par) {
+      if (x.title == pd.title) {
+        print(x.result);
+        if (x.result.isEmpty) {
+          x.result.add(text);
+        } else {
+          x.result.first = text;
+        }
+        print(x.result);
+      }
+    }
+
+    bool flag = false;
+    for (var x in par) {
+      if (x.title == pd.title) {
+        if (x.result.isEmpty) {
+          flag = true;
+          break;
+        }
+      }
+    }
+    if (flag == false) {
+      res.last.status = "Completed";
+    }
+
+    // if (res.length == 0) {
+    //   list.add(ex.data[0]);
+    //   ex.data = list;
+    // } else {
+    //   ex.data = list;
+    // }
+
+    return query.write(PatientsVisitCompanion(
+        examination: Value(Examinationgenerated(data: list))));
   }
 }

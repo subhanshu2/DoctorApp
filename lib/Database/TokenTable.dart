@@ -26,7 +26,6 @@ class Tokens extends Table {
   BoolColumn get isOnline => boolean().withDefault(Constant(false))();
   TextColumn get guid => text().nullable()();
   TextColumn get gender => text().nullable()();
-
   BoolColumn get shift => boolean().withDefault(Constant(true))();
 }
 
@@ -78,6 +77,18 @@ class TokenDB extends _$TokenDB {
       ..where((t) => t.tokentime.isBiggerOrEqualValue(d));
 
     return query.watch();
+  }
+
+  Future<List<Token>> getAllBookedTokens() async {
+    var query;
+    DateTime d = DateTime.parse(
+        DateFormat('yyyy-MM-dd').format(DateTime.now()).toString() +
+            " 00:00:00");
+    query = select(tokens)
+      ..where((t) => t.booked.equals(true))
+      ..where((t) => t.tokentime.isBiggerOrEqualValue(d));
+    // print(await query.get());
+    return query.get();
   }
 
   Future<int> allBooked() async {
