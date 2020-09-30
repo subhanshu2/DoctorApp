@@ -63,6 +63,9 @@ class _DiagnosisState extends State<Diagnosis> {
                                   itemBuilder:
                                       (BuildContext context, int index) {
                                     return ListTile(
+                                      subtitle: Text(
+                                          "${snapshot.data[0].diagnosis.data[index].isCured == true ? "Cured" : "Since"}" +
+                                              "(${snapshot.data[0].diagnosis.data[index].date})"),
                                       title: Text(snapshot
                                           .data.last.diagnosis.data[index].title),
                                       dense: true,
@@ -77,6 +80,7 @@ class _DiagnosisState extends State<Diagnosis> {
                                                 snapshot.data.last,
                                                 snapshot.data.last.briefHistory
                                                     .data[index].title);
+
                                           }),
                                       subtitle: Text(
                                           "${snapshot.data.last.briefHistory.data[index].isCured == true ? "Cured" : "Since"} (${snapshot.data.last.briefHistory.data[index].date})"),

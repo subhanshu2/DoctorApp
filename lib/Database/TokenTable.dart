@@ -102,6 +102,18 @@ class TokenDB extends _$TokenDB {
     return query.watch();
   }
 
+  Future<List<Token>> getAllBookedTokens() async {
+    var query;
+    DateTime d = DateTime.parse(
+        DateFormat('yyyy-MM-dd').format(DateTime.now()).toString() +
+            " 00:00:00");
+    query = select(tokens)
+      ..where((t) => t.booked.equals(true))
+      ..where((t) => t.tokentime.isBiggerOrEqualValue(d));
+    // print(await query.get());
+    return query.get();
+  }
+
   Future<int> allBooked() async {
     final query = select(tokens)..where((t) => t.booked.equals(true));
     print(await query.watch().length);

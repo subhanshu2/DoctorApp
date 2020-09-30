@@ -56,7 +56,9 @@ class _HomeConnectorState extends State<HomeConnector>
       Symtoms(
         token: widget.token,
       ),
-      Examination(token: widget.token,),
+      Examination(
+        token: widget.token,
+      ),
       Diagnosis(
         token: widget.token,
       ),
@@ -208,21 +210,66 @@ class _HomeConnectorState extends State<HomeConnector>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Container(
-                color: grey300,
-                height: 50,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Row(
+              Stack(
+                children: <Widget>[
+                  Container(
+                    color: grey300,
+                    height: 50,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
-                        Icon(
-                          Icons.person,
+                        Row(
+                          children: <Widget>[
+                            Icon(
+                              Icons.person,
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Text(widget.token.name),
+                          ],
                         ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text(widget.token.name),
+                        Text(widget.token.age.toString() + " yr"),
+                        Text(widget.token.gender.toUpperCase()),
+                        IconButton(
+                            icon: Icon(Icons.create),
+                            onPressed: () async {
+                              await pt.deleteallTask();
+                              // for(var i in s){
+                              //   print(i.title);
+                              // }
+                              // List<PatientsVisitData> result =
+                              //     await patient.checkPatient(widget.token.guid);
+                              // if (result.isEmpty) {
+                              //   final p = PatientsVisitData(
+                              //       mobileNo: widget.token.mobileno,
+                              //       patientName: widget.token.name,
+                              //       patientId: widget.token.guid.toString(),
+                              //       age: widget.token.age,
+                              //       clinicDoctorId: widget.token.doctorid);
+                              //   patient.insert(p);
+                              // } else {
+                              //   print('preseent');
+                              //   PatientsVisitData r = result[0];
+                              //   final p = PatientsVisitData(
+                              //       mobileNo: r.mobileNo,
+                              //       patientName: r.patientName,
+                              //       temperature: r.temperature,
+                              //       pulse: r.pulse,
+                              //       patientId: r.patientId,
+                              //       visitReason: r.visitReason,
+                              //       age: r.age,
+                              //       briefHistory: r.briefHistory,
+                              //       allergies: r.allergies,
+                              //       clinicDoctorId: r.clinicDoctorId,
+                              //       diagnosis: r.diagnosis,
+                              //       examination: r.examination,
+                              //       lifestyle: r.lifestyle,
+                              //       medication: r.medication,
+                              //       weight: r.weight);
+                              //   patient.insert(p);
+                              // }
+                            })
                       ],
                     ),
                     Text(widget.token.age.toString() + " yr"),
@@ -269,6 +316,7 @@ class _HomeConnectorState extends State<HomeConnector>
                         })
                   ],
                 ),
+
               ),
 
               // if (tabController.index == 0)
@@ -297,14 +345,15 @@ class _HomeConnectorState extends State<HomeConnector>
                   length: tabs.length,
                   // initialIndex: 0,
                   child: SizedBox(
-                    height: MediaQuery.of(context).size.height*0.7,
+                    height: MediaQuery.of(context).size.height * 0.7,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Flexible(
                           fit: FlexFit.loose,
                           child: TabBarView(
-                              controller: tabController,physics: ScrollPhysics(),
+                              controller: tabController,
+                              physics: ScrollPhysics(),
                               children: tabsFun(context)),
                         )
                       ],

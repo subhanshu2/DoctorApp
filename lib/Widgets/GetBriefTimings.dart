@@ -8,9 +8,18 @@ class GetTimings extends StatefulWidget {
   final String visibleTill;
   final PatientsVisitDB pv;
   final String pId;
-
+  final String type;
+  final int docId;
+  final String allergyOrLifeType;
   const GetTimings(
-      {Key key, this.briefTitle, this.visibleTill, this.pv, this.pId})
+      {Key key,
+      this.briefTitle,
+      this.visibleTill,
+      this.pv,
+      this.pId,
+      this.type,
+      this.docId,
+      this.allergyOrLifeType})
       : super(key: key);
 
   @override
@@ -23,29 +32,76 @@ class _GetTimingsState extends State<GetTimings> {
   String year = '0';
   String _radioValue;
   String choice;
-  int days=0;
-  int months=0;
-  int years=0;
+  int days = 0;
+  int months = 0;
+  int years = 0;
 
   @override
   void dispose() {
     super.dispose();
-    widget.pId;
   }
 
-  // void addNumbers() {
-  //   for (int i = 0; i <= 31; i++) {
-  //     days.add(i.toString());
-  //   }
-  //   for (int i = 0; i <= 11; i++) {
-  //     months.add(i.toString());
-  //   }
+  void getTimeFun(String type, int days, int months, int years) async {
+    switch (type) {
+      case 'brief':
+        List<BriefHistoryData> bhd = [
+          BriefHistoryData(
+            date: '$days days $months months $years years',
+            title: widget.briefTitle,
+            visibleTill: widget.visibleTill,
+            isCured: _radioValue == "Since" ? false : true,
+          )
+        ];
+        BriefHistorygenerated bh = BriefHistorygenerated(
+          data: bhd,
+        );
+        var p = await widget.pv.checkPatient(widget.pId);
+        widget.pv.updateBriefHistory(p[0], bh);
 
-  //   for (int i = 0; i <= 22; i++) {
-  //     years.add(i.toString());
-  //   }
-  //   years.add('22+');
-  // }
+        List<DignosisData> bhdd = [
+          DignosisData(
+            date: '$days days $months months $years years',
+            title: widget.briefTitle,
+            visibleTill: widget.visibleTill,
+            isCured: _radioValue == "Since" ? false : true,
+          )
+        ];
+        Dignosisgenerated bht = Dignosisgenerated(data: bhdd);
+        var pp = await widget.pv.checkPatient(widget.pId);
+
+        widget.pv.updateDiagnosis(pp[0], bht);
+        break;
+      case 'todayVisit':
+        List<VisitReasonData> vhd = [
+          VisitReasonData(
+            date: '$days days $months months $years years',
+            title: widget.briefTitle,
+            visibleTill: widget.visibleTill,
+            isCured: _radioValue == "Since" ? false : true,
+          )
+        ];
+        VisitReasongenerated vh = VisitReasongenerated(data: vhd);
+
+        var p = await widget.pv.checkPatient(widget.pId);
+
+        widget.pv.updateVisitReason(p[0], vh);
+        break;
+      case 'diagnois':
+        List<DignosisData> bhdd = [
+          DignosisData(
+            date: '$days days $months months $years years',
+            title: widget.briefTitle,
+            visibleTill: widget.visibleTill,
+            isCured: _radioValue == "Since" ? false : true,
+          )
+        ];
+        Dignosisgenerated bht = Dignosisgenerated(data: bhdd);
+        var pp = await widget.pv.checkPatient(widget.pId);
+
+        widget.pv.updateDiagnosis(pp[0], bht);
+        break;
+    }
+  }
 
   void radioButtonChanges(String value) {
     setState(() {
@@ -260,31 +316,7 @@ class _GetTimingsState extends State<GetTimings> {
                       color: pcolor,
                       child: Text('Save'),
                       onPressed: () async {
-                       
-                        List<BriefHistoryData> bhd = [
-                          BriefHistoryData(
-                            date: '$days days $months months $years years',
-                            title: widget.briefTitle,
-                            visibleTill: widget.visibleTill,
-                            isCured: _radioValue == "Since" ? false : true,
-                          )
-                        ];
-                        BriefHistorygenerated bh = BriefHistorygenerated(
-                          data: bhd,
-                        );
-                        var p = await widget.pv.checkPatient(widget.pId);
-                        widget.pv.updateBriefHistory(p[0], bh);
-
-                        List<DignosisData> bhdd = [
-                          DignosisData(
-                              date: DateTime.now().toString(),
-                              title: widget.briefTitle,
-                              visibleTill: widget.visibleTill)
-                        ];
-                        Dignosisgenerated bht = Dignosisgenerated(data: bhdd);
-                        var pp = await widget.pv.checkPatient(widget.pId);
-
-                        widget.pv.updateDiagnosis(pp[0], bht);
+                        getTimeFun(widget.type, days, months, years);
                         Navigator.pop(context);
                       },
                     )

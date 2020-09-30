@@ -78,7 +78,7 @@ class _SControllerState extends State<SController> {
   String p;
   isLoggedin() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    var token = pref.getString('docToken');
+    String token = pref.getString('docToken');
     print(token);
     if (token == null) {
       setState(() {

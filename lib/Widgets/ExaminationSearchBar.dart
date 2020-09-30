@@ -103,8 +103,12 @@ class _ExaminationSearchBarState extends State<ExaminationSearchBar> {
     );
   }
 
-  StreamBuilder<List<exam.Examination>> _buildTaskList(BuildContext context,
-      String query,exam.ExaminationsDB database, PatientsVisitDB pv, String pId) {
+  StreamBuilder<List<exam.Examination>> _buildTaskList(
+      BuildContext context,
+      String query,
+      exam.ExaminationsDB database,
+      PatientsVisitDB pv,
+      String pId) {
     return StreamBuilder(
       stream: database.watchAllTasks(query),
       builder: (context, AsyncSnapshot<List<exam.Examination>> snapshot) {
@@ -125,15 +129,16 @@ class _ExaminationSearchBarState extends State<ExaminationSearchBar> {
               return GestureDetector(
                 onTap: () async {
                   List<Parameters> par = [];
-                  for(var i in itemTask.parameters.data ){
+                  for (var i in itemTask.parameters.data) {
                     par.add(Parameters(
-                      bioReference: i.bioReference,
-                      references: i.references,
-                      result: [],
-                      title: i.title,
-                      type: i.type,
-                      unit: i.unit
-                    ));
+                        bioReference: i.bioReference,
+                        references: i.references,
+                        result: [],
+                        title: i.title,
+                        method: i.method,
+                        sample: i.sample,
+                        type: i.type,
+                        unit: i.unit));
                   }
                   List<ExaminationData> bhd = [
                     ExaminationData(

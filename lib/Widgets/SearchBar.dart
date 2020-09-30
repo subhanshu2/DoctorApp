@@ -143,7 +143,8 @@ StreamBuilder<List<Symptom>> _buildTaskList(BuildContext context, String query,
                         briefTitle: itemTask.title,
                         pId: pId,
                         pv: pv,
-                        visibleTill: itemTask.visibilityPeriod.toString());
+                        visibleTill: itemTask.visibilityPeriod.toString(),
+                        type: "brief");
                   },
                 );
               },

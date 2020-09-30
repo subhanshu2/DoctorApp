@@ -34,7 +34,6 @@ class BriefHistoryData {
 
   BriefHistoryData({this.title, this.date, this.visibleTill, this.isCured});
 
-
   BriefHistoryData.fromJson(Map<String, dynamic> json) {
     title = json['title'];
     date = json['date'];
@@ -108,6 +107,7 @@ class AllergyData {
   String createdAt;
   String updatedAt;
   String deletedAt;
+  bool isCured;
 
   AllergyData(
       {this.id,
@@ -117,7 +117,8 @@ class AllergyData {
       this.type,
       this.createdAt,
       this.updatedAt,
-      this.deletedAt});
+      this.deletedAt,
+      this.isCured});
 
   AllergyData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -128,6 +129,7 @@ class AllergyData {
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     deletedAt = json['deletedAt'];
+    isCured = json['is_cured'];
   }
 
   Map<String, dynamic> toJson() {
@@ -140,6 +142,7 @@ class AllergyData {
     data['createdAt'] = this.createdAt;
     data['updatedAt'] = this.updatedAt;
     data['deletedAt'] = this.deletedAt;
+    data['is_cured'] = this.isCured;
     return data;
   }
 }
@@ -198,6 +201,7 @@ class LifeStyleData {
   String createdAt;
   String updatedAt;
   String deletedAt;
+  bool isCured;
 
   LifeStyleData(
       {this.id,
@@ -207,7 +211,8 @@ class LifeStyleData {
       this.type,
       this.createdAt,
       this.updatedAt,
-      this.deletedAt});
+      this.deletedAt,
+      this.isCured});
 
   LifeStyleData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -218,6 +223,7 @@ class LifeStyleData {
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     deletedAt = json['deletedAt'];
+    isCured = json['is_cured'];
   }
 
   Map<String, dynamic> toJson() {
@@ -230,6 +236,7 @@ class LifeStyleData {
     data['createdAt'] = this.createdAt;
     data['updatedAt'] = this.updatedAt;
     data['deletedAt'] = this.deletedAt;
+    data['is_cured'] = this.isCured;
     return data;
   }
 }
@@ -438,6 +445,8 @@ class Parameters {
   String type;
   List<String> references;
   String unit;
+  String method;
+  String sample;
   List<String> bioReference;
   List<String> result;
 
@@ -445,6 +454,8 @@ class Parameters {
       {this.title,
       this.type,
       this.references,
+      this.method,
+      this.sample,
       this.unit,
       this.bioReference,
       this.result});
@@ -452,6 +463,8 @@ class Parameters {
   Parameters.fromJson(Map<String, dynamic> json) {
     title = json['title'];
     type = json['type'];
+    method = json['method'];
+    sample = json['sample'];
     references = json['references'].cast<String>();
     unit = json['unit'];
     bioReference = json['bio_reference'].cast<String>();
@@ -464,6 +477,8 @@ class Parameters {
     data['type'] = this.type;
     data['references'] = this.references;
     data['unit'] = this.unit;
+    data['method'] = this.method;
+    data['sample'] = this.sample;
     data['bio_reference'] = this.bioReference;
     data['result'] = this.result;
     return data;
@@ -518,13 +533,14 @@ class VisitReasonData {
   String title;
   String date;
   String visibleTill;
-
-  VisitReasonData({this.title, this.date, this.visibleTill});
+  bool isCured;
+  VisitReasonData({this.title, this.date, this.visibleTill, this.isCured});
 
   VisitReasonData.fromJson(Map<String, dynamic> json) {
     title = json['title'];
     date = json['date'];
     visibleTill = json['visible_till'];
+    isCured = json['is_cured'];
   }
 
   Map<String, dynamic> toJson() {
@@ -532,6 +548,7 @@ class VisitReasonData {
     data['title'] = this.title;
     data['date'] = this.date;
     data['visible_till'] = this.visibleTill;
+    data['is_cured'] = this.isCured;
     return data;
   }
 }
@@ -585,13 +602,15 @@ class DignosisData {
   String title;
   String date;
   String visibleTill;
+  bool isCured;
 
-  DignosisData({this.title, this.date, this.visibleTill});
+  DignosisData({this.title, this.date, this.visibleTill, this.isCured});
 
   DignosisData.fromJson(Map<String, dynamic> json) {
     title = json['title'];
     date = json['date'];
     visibleTill = json['visible_till'];
+    isCured = json['is_cured'];
   }
 
   Map<String, dynamic> toJson() {
@@ -599,6 +618,7 @@ class DignosisData {
     data['title'] = this.title;
     data['date'] = this.date;
     data['visible_till'] = this.visibleTill;
+    data['is_cured'] = this.isCured;
     return data;
   }
 }

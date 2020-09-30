@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:getcure_doctor/Database/ExaminationTable.dart';
 import 'package:getcure_doctor/Models/PatientsVisitTableModels.dart';
 import 'package:moor/moor.dart';
 import 'package:moor_ffi/moor_ffi.dart';
@@ -116,6 +117,7 @@ class PatientsVisitDB extends _$PatientsVisitDB {
       list = data.examination.data;
     }
     var res = list.where((element) => element.title == ex.data[0].title);
+
     if (res.length == 0) {
       list.add(ex.data[0]);
       ex.data = list;
@@ -130,6 +132,7 @@ class PatientsVisitDB extends _$PatientsVisitDB {
     var query = update(patientsVisit)..where((t) => t.id.equals(data.id));
     List<MedicationData> list = [];
     if (data.medication != null) {
+
       list = data.medication.data;
     }
     var r = list.where((element) => element.disease == disease);
@@ -316,5 +319,56 @@ class PatientsVisitDB extends _$PatientsVisitDB {
   void updateWeight(PatientsVisitData pvd, String weight) {
     var query = update(patientsVisit)..where((t) => t.id.equals(pvd.id));
     query.write(PatientsVisitCompanion(weight: Value(int.parse(weight))));
+  }
+
+  Future updateExaminationParams(
+      PatientsVisitData data, int eid, ParameterData pd, String text) {
+    print(pd.title);
+    print(text);
+    var query = update(patientsVisit)..where((t) => t.id.equals(data.id));
+    List<ExaminationData> list = [];
+    // list = data.briefHistory.data;
+    if (data.examination != null) {
+      list = data.examination.data;
+    }
+    var res = list.where((element) => element.examinationId == eid);
+    print(res.last.title);
+
+    var par = res.last.parameters;
+
+    for (var x in par) {
+      if (x.title == pd.title) {
+        print(x.result);
+        if (x.result.isEmpty) {
+          x.result.add(text);
+        } else {
+          x.result.first = text;
+        }
+        print(x.result);
+      }
+    }
+
+    bool flag = false;
+    for (var x in par) {
+      if (x.title == pd.title) {
+        if (x.result.isEmpty) {
+          flag = true;
+          break;
+        }
+      }
+    }
+    if (flag == false) {
+      res.last.status = "Completed";
+    }
+
+    // if (res.length == 0) {
+    //   list.add(ex.data[0]);
+    //   ex.data = list;
+    // } else {
+    //   ex.data = list;
+    // }
+
+    return query.write(PatientsVisitCompanion(
+        examination: Value(Examinationgenerated(data: list))));
   }
 }
