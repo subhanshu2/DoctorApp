@@ -21,15 +21,15 @@ class _ListDocPatientsState extends State<ListDocPatients> {
   @override
   void initState() {
     super.initState();
-    getData();
+    // getData();
   }
 
-  void getData() async {
-    data = await getBriefHistories();
-    for (String x in data) {
-      widget.databse.addBriefHTTP(x, widget.docId);
-    }
-  }
+  // void getData() async {
+  //   data = await getBriefHistories();
+  //   for (String x in data) {
+  //     widget.databse.addBriefHTTP(x, widget.docId);
+  //   }
+  // }
 
   List<String> data = [];
 
@@ -90,6 +90,7 @@ class _ListDocPatientsState extends State<ListDocPatients> {
                   List<PatientsVisitData> result =
                       await patient.checkPatient(tasks[index].guid);
                   if (result.isEmpty) {
+                    print('absent');
                     final p = PatientsVisitData(
                         mobileNo: tasks[index].mobileno,
                         patientName: tasks[index].name,
@@ -99,7 +100,7 @@ class _ListDocPatientsState extends State<ListDocPatients> {
                     patient.insert(p);
                   } else {
                     print('preseent');
-                    PatientsVisitData r = result[0];
+                    PatientsVisitData r = result.last;
                     final p = PatientsVisitData(
                         mobileNo: r.mobileNo,
                         patientName: r.patientName,
@@ -115,6 +116,7 @@ class _ListDocPatientsState extends State<ListDocPatients> {
                         examination: r.examination,
                         lifestyle: r.lifestyle,
                         medication: r.medication,
+                        feedBack: r.medication,
                         weight: r.weight);
                     patient.insert(p);
                     // print(tokenno);

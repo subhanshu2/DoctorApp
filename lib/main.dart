@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:getcure_doctor/Database/ExaminationTable.dart';
+import 'package:getcure_doctor/Database/FeedBackTable.dart';
 import 'package:getcure_doctor/Database/HabitsTable.dart';
 import 'package:getcure_doctor/Database/MedicinesTable.dart';
 import 'package:getcure_doctor/Database/PatientsTable.dart';
 import 'package:getcure_doctor/Database/PatientsVisitTable.dart';
+import 'package:getcure_doctor/Database/Recommendation.dart';
 import 'package:getcure_doctor/Database/SymptomsTable.dart';
 import 'package:getcure_doctor/Database/TokenTable.dart';
 import 'package:getcure_doctor/Screens/Appointments/Appointment.dart';
@@ -39,6 +41,14 @@ void main() {
     ),
     Provider<ExaminationsDB>(
       create: (context) => ExaminationsDB(),
+      dispose: (context, db) => db.close(),
+    ),
+    Provider<FeedBackDB>(
+      create: (context) => FeedBackDB(),
+      dispose: (context, db) => db.close(),
+    ),
+     Provider<RecommendationDB>(
+      create: (context) => RecommendationDB(),
       dispose: (context, db) => db.close(),
     ),
     Provider<HabitDB>(

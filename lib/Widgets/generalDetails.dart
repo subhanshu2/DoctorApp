@@ -26,10 +26,10 @@ class _GeneralDetailsState extends State<GeneralDetails> {
         await widget.patientVisit.checkPatient(widget.token.guid);
     print(pd);
     setState(() {
-      temp = tempController.text = pd[0].temperature.toString();
-      bp = bpController.text = pd[0].bp.toString();
-      pulse = pulseController.text = pd[0].pulse.toString();
-      weight = weightController.text = pd[0].weight.toString();
+      temp = tempController.text = pd.last.temperature.toString();
+      bp = bpController.text = pd.last.bp.toString();
+      pulse = pulseController.text = pd.last.pulse.toString();
+      weight = weightController.text = pd.last.weight.toString();
     });
   }
 
@@ -111,7 +111,7 @@ class _GeneralDetailsState extends State<GeneralDetails> {
                                 var pv = await widget.patientVisit
                                     .checkPatient(widget.token.guid);
 
-                                widget.patientVisit.updateTemp(pv[0], temp);
+                                widget.patientVisit.updateTemp(pv.last, temp);
                               },
                             ),
                           ),
@@ -184,7 +184,7 @@ class _GeneralDetailsState extends State<GeneralDetails> {
                                 });
                                 var pv = await widget.patientVisit
                                     .checkPatient(widget.token.guid);
-                                widget.patientVisit.updateBP(pv[0], bp);
+                                widget.patientVisit.updateBP(pv.last, bp);
                               },
                             ),
                           ),
@@ -255,7 +255,7 @@ class _GeneralDetailsState extends State<GeneralDetails> {
                                 });
                                 var pv = await widget.patientVisit
                                     .checkPatient(widget.token.guid);
-                                widget.patientVisit.updatePulse(pv[0], pulse);
+                                widget.patientVisit.updatePulse(pv.last, pulse);
                               },
                             ),
                           ),
@@ -326,7 +326,7 @@ class _GeneralDetailsState extends State<GeneralDetails> {
                                 });
                                 var pv = await widget.patientVisit
                                     .checkPatient(widget.token.guid);
-                                widget.patientVisit.updateWeight(pv[0], weight);
+                                widget.patientVisit.updateWeight(pv.last, weight);
                               },
                             ),
                           ),

@@ -56,27 +56,30 @@ class _DiagnosisState extends State<Diagnosis> {
                                 break;
                               default:
                                 return ListView.builder(
-                                  itemCount: snapshot.data[0].diagnosis == null
+                                  itemCount: snapshot.data.last.diagnosis == null
                                       ? 0
-                                      : snapshot.data[0].diagnosis.data.length,
+                                      : snapshot.data.last.diagnosis.data.length,
                                   shrinkWrap: true,
                                   itemBuilder:
                                       (BuildContext context, int index) {
                                     return ListTile(
                                       title: Text(snapshot
-                                          .data[0].diagnosis.data[index].title),
+                                          .data.last.diagnosis.data[index].title),
+                                      dense: true,
                                       trailing: IconButton(
                                           icon: Icon(Icons.cancel),
                                           onPressed: () {
                                             patient.deleteDiagnosis(
-                                                snapshot.data[0],
-                                                snapshot.data[0].diagnosis
+                                                snapshot.data.last,
+                                                snapshot.data.last.diagnosis
                                                     .data[index].title);
                                             patient.deleteBrief(
-                                                snapshot.data[0],
-                                                snapshot.data[0].briefHistory
+                                                snapshot.data.last,
+                                                snapshot.data.last.briefHistory
                                                     .data[index].title);
                                           }),
+                                      subtitle: Text(
+                                          "${snapshot.data.last.briefHistory.data[index].isCured == true ? "Cured" : "Since"} (${snapshot.data.last.briefHistory.data[index].date})"),
                                     );
                                   },
                                 );

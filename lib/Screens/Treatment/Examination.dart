@@ -58,10 +58,10 @@ class _ExaminationState extends State<Examination> {
                               default:
                                 return ListView.builder(
                                   itemCount:
-                                      snapshot.data[0].examination == null
+                                      snapshot.data.last.examination == null
                                           ? 0
                                           : snapshot
-                                              .data[0].examination.data.length,
+                                              .data.last.examination.data.length,
                                   shrinkWrap: true,
                                   physics: ScrollPhysics(),
                                   itemBuilder:
@@ -74,23 +74,23 @@ class _ExaminationState extends State<Examination> {
                                           builder: (BuildContext context) {
                                             return SingleChildScrollView(
                                               child: ExamResult(
-                                                exmdata: snapshot.data[0]
+                                                exmdata: snapshot.data.last
                                                     .examination.data[index],
                                               ),
                                             );
                                           },
                                         );
                                       },
-                                      title: Text(snapshot.data[0].examination
-                                          .data[index].title),
+                                      title: Text(snapshot.data.last.examination
+                                          .data[index].title),dense: true,
                                       subtitle: Text(
-                                          '(${snapshot.data[0].examination.data[index].status})'),
+                                          '(${snapshot.data.last.examination.data[index].status})'),
                                       trailing: IconButton(
                                           icon: Icon(Icons.cancel),
                                           onPressed: () {
                                             patient.deleteExam(
-                                                snapshot.data[0],
-                                                snapshot.data[0].examination
+                                                snapshot.data.last,
+                                                snapshot.data.last.examination
                                                     .data[index].title);
                                           }),
                                     );

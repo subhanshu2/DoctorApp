@@ -230,12 +230,13 @@ class _HomeConnectorState extends State<HomeConnector>
                     IconButton(
                         icon: Icon(Icons.create),
                         onPressed: () async {
-                          await pt.deleteallTask();
+                          // await pt.deleteallTask();
                           // for(var i in s){
                           //   print(i.title);
                           // }
-                          // List<PatientsVisitData> result =
-                          //     await patient.checkPatient(widget.token.guid);
+                          List<PatientsVisitData> result =
+                              await patient.checkPatient(widget.token.guid);
+                              print(result.last);
                           // if (result.isEmpty) {
                           //   final p = PatientsVisitData(
                           //       mobileNo: widget.token.mobileno,
