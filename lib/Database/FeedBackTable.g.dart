@@ -14,7 +14,7 @@ class FeedBackData extends DataClass implements Insertable<FeedBackData> {
   final int patientVisitIid;
   final String option;
   final String question;
-  final Medicationgenerated medication;
+  final MedicationData medication;
   final DateTime createdAt;
   final DateTime updatedAt;
   FeedBackData(
@@ -126,7 +126,7 @@ class FeedBackData extends DataClass implements Insertable<FeedBackData> {
       patientVisitIid: serializer.fromJson<int>(json['patientVisitIid']),
       option: serializer.fromJson<String>(json['option']),
       question: serializer.fromJson<String>(json['question']),
-      medication: serializer.fromJson<Medicationgenerated>(json['medication']),
+      medication: serializer.fromJson<MedicationData>(json['medication']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
     );
@@ -141,7 +141,7 @@ class FeedBackData extends DataClass implements Insertable<FeedBackData> {
       'patientVisitIid': serializer.toJson<int>(patientVisitIid),
       'option': serializer.toJson<String>(option),
       'question': serializer.toJson<String>(question),
-      'medication': serializer.toJson<Medicationgenerated>(medication),
+      'medication': serializer.toJson<MedicationData>(medication),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
     };
@@ -154,7 +154,7 @@ class FeedBackData extends DataClass implements Insertable<FeedBackData> {
           int patientVisitIid,
           String option,
           String question,
-          Medicationgenerated medication,
+          MedicationData medication,
           DateTime createdAt,
           DateTime updatedAt}) =>
       FeedBackData(
@@ -223,7 +223,7 @@ class FeedBackCompanion extends UpdateCompanion<FeedBackData> {
   final Value<int> patientVisitIid;
   final Value<String> option;
   final Value<String> question;
-  final Value<Medicationgenerated> medication;
+  final Value<MedicationData> medication;
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
   const FeedBackCompanion({
@@ -283,7 +283,7 @@ class FeedBackCompanion extends UpdateCompanion<FeedBackData> {
       Value<int> patientVisitIid,
       Value<String> option,
       Value<String> question,
-      Value<Medicationgenerated> medication,
+      Value<MedicationData> medication,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt}) {
     return FeedBackCompanion(
@@ -550,8 +550,8 @@ class $FeedBackTable extends FeedBack
     return $FeedBackTable(_db, alias);
   }
 
-  static TypeConverter<Medicationgenerated, String> $converter0 =
-      const MedicationConverter();
+  static TypeConverter<MedicationData, String> $converter0 =
+      const FeedBackMedicationConverter();
 }
 
 abstract class _$FeedBackDB extends GeneratedDatabase {

@@ -20,6 +20,7 @@ Future<bool> loginDoctor(mobNo, pass) async {
     // print(doctor.token.toString());
     pref.setString('docToken', doctor.token);
     pref.setString('dresponse', json.encode(doctor));
+    pref.setString('category', json.encode(doctor.data.clinicDoctor));    
     pref.setString('docId', doctor.data.id.toString());
     return true;
   }

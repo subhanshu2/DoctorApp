@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:getcure_doctor/Database/PatientsVisitTable.dart';
 import 'package:getcure_doctor/Database/TokenTable.dart';
 import 'package:getcure_doctor/Helpers/AppConfig/colors.dart';
+import 'package:getcure_doctor/Models/PatientsVisitTableModels.dart';
 import 'package:getcure_doctor/Widgets/MedicineSearch.dart';
 import 'package:provider/provider.dart';
 
@@ -28,9 +29,9 @@ class _MedicationState extends State<Medication> {
             break;
           case ConnectionState.done:
             return ListView.separated(
-                itemCount: list.data[0].diagnosis == null
+                itemCount: list.data.last.diagnosis == null
                     ? 0
-                    : list.data[0].diagnosis.data.length,
+                    : list.data.last.diagnosis.data.length,
                 physics: ScrollPhysics(),
                 separatorBuilder: (BuildContext context, int index) {
                   return SizedBox(
@@ -38,9 +39,12 @@ class _MedicationState extends State<Medication> {
                   );
                 },
                 itemBuilder: (BuildContext context, int index) {
-                  var md = list.data[0].medication.data.where((element) =>
-                      element.disease ==
-                      list.data[0].diagnosis.data[index].title);
+                  var md;
+                  if (list.data.last.medication != null) {
+                    md = list.data.last.medication.data.where((element) =>
+                        element.disease ==
+                        list.data.last.diagnosis.data[index].title);
+                  }
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
@@ -62,29 +66,36 @@ class _MedicationState extends State<Medication> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            list.data[0].diagnosis.data[index].title,
+                            list.data.last.diagnosis.data[index].title,
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           ListView.builder(
-                            itemCount: md.length == 0
+                            itemCount: md==null|| md.length == 0
                                 ? 0
-                                : md.elementAt(0).medicines.length,
+                                : md.last.medicines.length,
                             shrinkWrap: true,
                             physics: ScrollPhysics(),
+                            padding: EdgeInsets.zero,
                             itemBuilder: (BuildContext context, int index) {
                               return ListTile(
                                 dense: true,
                                 onLongPress: () {
-                                  print(md.elementAt(0).medicines[index].title);
+                                  print(md.last.medicines[index].title);
                                 },
-                                trailing: IconButton(icon: Icon(Icons.cancel), onPressed: (){
-                                  patient.deleteMedicine(list.data[0],md.elementAt(0).disease , md.elementAt(0).medicines[index].title);
-                                  setState(() {
-                                    
-                                  });
-                                }),
+                                trailing: IconButton(
+                                    icon: Icon(Icons.cancel),
+                                    onPressed: () {
+                                      patient.deleteMedicine(
+                                          list.data.last,
+                                          md.elementAt(0).disease,
+                                          md
+                                              .elementAt(0)
+                                              .medicines[index]
+                                              .title);
+                                      setState(() {});
+                                    }),
                                 leading: Text(
-                                    md.elementAt(0).medicines[index].title),
+                                    md.last.medicines[index].title),
                               );
                             },
                           ),
@@ -104,7 +115,7 @@ class _MedicationState extends State<Medication> {
                                         return MedicineSearch(
                                             pId: widget.token.guid,
                                             docId: widget.token.doctorid,
-                                            disease: list.data[0].diagnosis
+                                            disease: list.data.last.diagnosis
                                                 .data[index].title,
                                             fun: () => setState(() {}));
                                       },

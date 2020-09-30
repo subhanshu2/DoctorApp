@@ -6,6 +6,29 @@ import 'package:path/path.dart' as p;
 import 'package:intl/intl.dart';
 part 'TokenTable.g.dart';
 
+/*id              : {
+      
+    
+      is_present      : {
+        type     : Sequelize.BOOLEAN,
+        allowNull: false
+      },
+     
+      booked_by       : {
+        allowNull: false,
+        type     : Sequelize.ENUM,
+        values   : Helpers.iterateEnum(Bookie)
+      },
+      booked_via      : {
+        allowNull: false,
+        type     : Sequelize.STRING,
+        defaultValue: ""
+      },
+      transaction_id  : {
+        type     : Sequelize.STRING,
+        allowNull: true
+      } */
+
 class Tokens extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get tokenno => integer()();

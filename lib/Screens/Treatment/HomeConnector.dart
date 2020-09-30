@@ -272,21 +272,51 @@ class _HomeConnectorState extends State<HomeConnector>
                             })
                       ],
                     ),
-                  ),
-                  Center(
-                    child: Container(
-                      height: 20.0,
-                      width: 20.0,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          color: green,
-                          borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(10.0),
-                              bottomRight: Radius.circular(10.0))),
-                      child: Text(widget.token.tokenno.toString()),
-                    ),
-                  ),
-                ],
+                    Text(widget.token.age.toString() + " yr"),
+                    Text(widget.token.gender.toUpperCase()),
+                    IconButton(
+                        icon: Icon(Icons.create),
+                        onPressed: () async {
+                          // await pt.deleteallTask();
+                          // for(var i in s){
+                          //   print(i.title);
+                          // }
+                          List<PatientsVisitData> result =
+                              await patient.checkPatient(widget.token.guid);
+                              print(result.last);
+                          // if (result.isEmpty) {
+                          //   final p = PatientsVisitData(
+                          //       mobileNo: widget.token.mobileno,
+                          //       patientName: widget.token.name,
+                          //       patientId: widget.token.guid.toString(),
+                          //       age: widget.token.age,
+                          //       clinicDoctorId: widget.token.doctorid);
+                          //   patient.insert(p);
+                          // } else {
+                          //   print('preseent');
+                          //   PatientsVisitData r = result[0];
+                          //   final p = PatientsVisitData(
+                          //       mobileNo: r.mobileNo,
+                          //       patientName: r.patientName,
+                          //       temperature: r.temperature,
+                          //       pulse: r.pulse,
+                          //       patientId: r.patientId,
+                          //       visitReason: r.visitReason,
+                          //       age: r.age,
+                          //       briefHistory: r.briefHistory,
+                          //       allergies: r.allergies,
+                          //       clinicDoctorId: r.clinicDoctorId,
+                          //       diagnosis: r.diagnosis,
+                          //       examination: r.examination,
+                          //       lifestyle: r.lifestyle,
+                          //       medication: r.medication,
+                          //       weight: r.weight);
+                          //   patient.insert(p);
+                          // }
+                        })
+                  ],
+                ),
+
               ),
 
               // if (tabController.index == 0)

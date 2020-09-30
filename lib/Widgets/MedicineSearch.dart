@@ -35,21 +35,32 @@ class _MedicineSearchState extends State<MedicineSearch>
 
   String cate = '';
 
-  TextEditingController _category=new TextEditingController();
+  TextEditingController _category = new TextEditingController();
   getParameters() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     String doctors = pref.getString('dresponse');
     DoctorLogin docUser = DoctorLogin.fromJson(json.decode(doctors));
-    for (var i in docUser.data.clinicDoctor) {
-      if (i.doctorId == widget.docId) {
-        setState(() {
-          doc = i;
-        });
-      }
-    }
+
     setState(() {
-      category = doc.medicineCategories;
+      category = docUser.data.clinicDoctor
+          .where((element) => element.doctorId == widget.docId)
+          .first
+          .medicineCategories;
     });
+  }
+
+  addNewCategory(String category) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    String doctors = pref.getString('dresponse');
+    DoctorLogin docUser = DoctorLogin.fromJson(json.decode(doctors));
+    docUser.data.clinicDoctor
+        .where((element) => element.doctorId == widget.docId)
+        .first
+        .medicineCategories
+        .add(category);
+    pref.remove('dresponse');
+    pref.setString('dresponse', json.encode(docUser));
+    // getParameters();
   }
 
   List<String> category = [];
@@ -145,41 +156,50 @@ class _MedicineSearchState extends State<MedicineSearch>
                                       itemBuilder:
                                           (BuildContext context, int index) {
                                         if (index == category.length) {
-                                          return ListTile(
-                                            title: newcat
-                                                ? TextFormField(
-                                                  controller: _category,
-                                                    decoration: InputDecoration(
-                                                        labelText:
-                                                            'New Category',
-                                                        border:
-                                                            OutlineInputBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(5),
-                                                        )),
-                                                  )
-                                                : Text(
-                                                    " Category not in list?",
-                                                    style:
-                                                        TextStyle(color: blue),
-                                                  ),
-                                            trailing: FlatButton(
-                                                onPressed: () {
-                                                  if(newcat && _category.text.isNotEmpty ){
-                                                    
-                                                    print(_category.text);
-                                                    _category.clear();
-                                                  }
-                                                  setState(() {
-                                                    newcat = !newcat;
-                                                  });
-                                                },
-                                                color: blue,
-                                                textColor: white,
-                                                child: newcat
-                                                    ? Text('Save')
-                                                    : Text('Add New')),
+                                          return Container(
+                                            padding: EdgeInsets.only(bottom: 50),
+                                            child: ListTile(
+                                              
+                                              title: newcat
+                                                  ? TextFormField(
+                                                      controller: _category,
+                                                      decoration: InputDecoration(
+                                                          labelText:
+                                                              'New Category',
+                                                          border:
+                                                              OutlineInputBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(5),
+                                                          )),
+                                                    )
+                                                  : Text(
+                                                      " Category not in list?",
+                                                      style:
+                                                          TextStyle(color: blue),
+                                                    ),
+                                              trailing: FlatButton(
+                                                  onPressed: () {
+                                                    if (newcat &&
+                                                        _category
+                                                            .text.isNotEmpty) {
+                                                      print(_category.text);
+                                                      category
+                                                          .add(_category.text);
+                                                      addNewCategory(
+                                                          _category.text);
+                                                      _category.clear();
+                                                    }
+                                                    setState(() {
+                                                      newcat = !newcat;
+                                                    });
+                                                  },
+                                                  color: blue,
+                                                  textColor: white,
+                                                  child: newcat
+                                                      ? Text('Save')
+                                                      : Text('Add New')),
+                                            ),
                                           );
                                         } else {
                                           return ListTile(
@@ -328,19 +348,19 @@ class CMedicine extends StatelessWidget {
               final itemTask = tasks[index];
               return GestureDetector(
                 // onTap: () async {
-                //   showDialog(
-                //     context: context,
-                //     builder: (BuildContext context) {
-                //       return SelectMedicine(
-                //         medicine: itemTask,
-                //         docId: widget.docId,
-                //         pv: pv,
-                //         disease: widget.disease,
-                //         fun: widget.fun,
-                //         pId: widget.pId,
-                //       );
-                //     },
-                //   );
+                  // showDialog(
+                  //   context: context,
+                  //   builder: (BuildContext context) {
+                  //     return SelectMedicine(
+                  //       medicine: itemTask,
+                  //       docId: widget.docId,
+                  //       pv: pv,
+                  //       disease: widget.disease,
+                  //       fun: widget.fun,
+                  //       pId: widget.pId,
+                  //     );
+                  //   },
+                  // );
 
                 //   // PrescribedMedicines pm = PrescribedMedicines(
                 //   //     title: itemTask.title,

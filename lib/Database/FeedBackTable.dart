@@ -1,4 +1,5 @@
 
+import 'dart:convert';
 import 'dart:io';
 import 'package:getcure_doctor/Models/PatientsVisitTableModels.dart';
 import 'package:moor/moor.dart';
@@ -15,7 +16,7 @@ class FeedBack extends Table {
   TextColumn get option => text()();
   TextColumn get question => text()();
   TextColumn get medication =>
-      text().map(const MedicationConverter()).nullable()();
+      text().map(const FeedBackMedicationConverter()).nullable()();
   DateTimeColumn get createdAt => dateTime().nullable()();
   DateTimeColumn get updatedAt => dateTime().nullable()();
 }
@@ -33,7 +34,30 @@ class FeedBackDB extends _$FeedBackDB {
   FeedBackDB() : super(_openConnection());
   @override
   int get schemaVersion => 1;
+  Future insert(FeedBackData p) => into(feedBack).insert(p);
 }
+
+class FeedBackMedicationConverter extends TypeConverter<MedicationData, String> {
+  const FeedBackMedicationConverter();
+  @override
+  MedicationData mapToDart(String fromDb) {
+    if (fromDb == null) {
+      return null;
+    }
+    return MedicationData.fromJson(
+        json.decode(fromDb) as Map<String, dynamic>);
+  }
+
+  @override
+  String mapToSql(MedicationData value) {
+    if (value == null) {
+      return null;
+    }
+
+    return json.encode(value.toJson());
+  }
+}
+
 
 class Medication {
   int id;

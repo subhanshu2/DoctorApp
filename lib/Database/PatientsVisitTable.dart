@@ -29,6 +29,8 @@ class PatientsVisit extends Table {
       text().map(const DignosisConverter()).nullable()();
   TextColumn get medication =>
       text().map(const MedicationConverter()).nullable()();
+  TextColumn get feedBack =>
+      text().map(const MedicationConverter()).nullable()();
   TextColumn get allergies => text().map(const AllergyConverter()).nullable()();
   TextColumn get lifestyle =>
       text().map(const LifeStyleConverter()).nullable()();
@@ -54,8 +56,8 @@ class PatientsVisitDB extends _$PatientsVisitDB {
   Future<List<PatientsVisitData>> checkPatient(String patientId) {
     try {
       var query = select(patientsVisit)
-        ..where((pat) => pat.patientId.equals(patientId))
-        ..limit(1);
+        ..where((pat) => pat.patientId.equals(patientId));
+      // ..limit(1);
       return query.get();
     } catch (e) {
       print("Error" + e);
@@ -111,7 +113,6 @@ class PatientsVisitDB extends _$PatientsVisitDB {
   Future updateExamination(PatientsVisitData data, Examinationgenerated ex) {
     var query = update(patientsVisit)..where((t) => t.id.equals(data.id));
     List<ExaminationData> list = [];
-    // list = data.briefHistory.data;
     if (data.examination != null) {
       list = data.examination.data;
     }
@@ -130,7 +131,8 @@ class PatientsVisitDB extends _$PatientsVisitDB {
       PatientsVisitData data, String disease, PrescribedMedicines pm) {
     var query = update(patientsVisit)..where((t) => t.id.equals(data.id));
     List<MedicationData> list = [];
-    if (data.medication.data.length != 0) {
+    if (data.medication != null) {
+
       list = data.medication.data;
     }
     var r = list.where((element) => element.disease == disease);
@@ -203,7 +205,6 @@ class PatientsVisitDB extends _$PatientsVisitDB {
   Future updateVisitReason(PatientsVisitData data, VisitReasongenerated vh) {
     var query = update(patientsVisit)..where((t) => t.id.equals(data.id));
     List<VisitReasonData> list = [];
-    // list = data.briefHistory.data;
     if (data.visitReason != null) {
       list = data.visitReason.data;
     }
@@ -214,7 +215,6 @@ class PatientsVisitDB extends _$PatientsVisitDB {
     } else {
       vh.data = list;
     }
-
     return query.write(PatientsVisitCompanion(visitReason: Value(vh)));
   }
 
@@ -226,11 +226,15 @@ class PatientsVisitDB extends _$PatientsVisitDB {
 
   Future deleteVisit(PatientsVisitData pvd, String title) {
     var query = update(patientsVisit)..where((t) => t.id.equals(pvd.id));
-    List<VisitReasonData> list = [];
     pvd.visitReason.data.removeWhere((element) => element.title == title);
-
     return query
         .write(PatientsVisitCompanion(visitReason: Value(pvd.visitReason)));
+  }
+
+  Future deleteFeedBack(PatientsVisitData pvd) {
+    var query = update(patientsVisit)..where((t) => t.id.equals(pvd.id));
+    pvd.feedBack.data.clear();
+    return query.write(PatientsVisitCompanion(feedBack: Value(pvd.feedBack)));
   }
 
   Stream<List<PatientsVisitData>> getAllergies(String id) {

@@ -35,14 +35,11 @@ class _SelectMedicineState extends State<SelectMedicine> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     String doctors = pref.getString('dresponse');
     DoctorLogin docUser = DoctorLogin.fromJson(json.decode(doctors));
-    for (var i in docUser.data.clinicDoctor) {
-      if (i.doctorId == widget.docId) {
-        setState(() {
-          doc = i;
-        });
-      }
-    }
+
     setState(() {
+      doc = docUser.data.clinicDoctor
+          .where((element) => element.doctorId == widget.docId)
+          .first;
       dose = doc.medicineDoses;
       unit = doc.medicineUnits;
       route = doc.medicineRoutes;
@@ -212,7 +209,7 @@ class _SelectMedicineState extends State<SelectMedicine> {
                 route: _route ?? widget.medicine.defaultRoute,
                 unit: _unit ?? widget.medicine.defaultUnit);
             var p = await widget.pv.checkPatient(widget.pId);
-            widget.pv.updateMedication(p[0], widget.disease, pm);
+            widget.pv.updateMedication(p.last, widget.disease, pm);
             Navigator.pop(context);
             widget.fun();
           },

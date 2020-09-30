@@ -22,14 +22,18 @@ class _AddMedicineState extends State<AddMedicine> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     String doctors = pref.getString('dresponse');
     DoctorLogin docUser = DoctorLogin.fromJson(json.decode(doctors));
-    for (var i in docUser.data.clinicDoctor) {
-      if (i.doctorId == widget.docId) {
-        setState(() {
-          doc = i;
-        });
-      }
-    }
+    // for (var i in docUser.data.clinicDoctor) {
+    //   if (i.doctorId == widget.docId) {
+    //     setState(() {
+    //       doc = i;
+    //     });
+    //   }
+    // }
+
     setState(() {
+      doc = docUser.data.clinicDoctor
+          .where((element) => element.doctorId == widget.docId)
+          .first;
       dose = doc.medicineDoses;
       unit = doc.medicineUnits;
       route = doc.medicineRoutes;
@@ -38,6 +42,61 @@ class _AddMedicineState extends State<AddMedicine> {
       duration = doc.medicineDurations;
       category = doc.medicineCategories;
     });
+  }
+
+  addParameter(String parameter, String type) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    String doctors = pref.getString('dresponse');
+    DoctorLogin docUser = DoctorLogin.fromJson(json.decode(doctors));
+    switch (type) {
+      case 'dose':
+        docUser.data.clinicDoctor
+            .where((element) => element.doctorId == widget.docId)
+            .first
+            .medicineDoses
+            .add(parameter);
+        break;
+      case 'unit':
+        docUser.data.clinicDoctor
+            .where((element) => element.doctorId == widget.docId)
+            .first
+            .medicineUnits
+            .add(parameter);
+        break;
+      case 'route':
+        docUser.data.clinicDoctor
+            .where((element) => element.doctorId == widget.docId)
+            .first
+            .medicineRoutes
+            .add(parameter);
+        break;
+      case 'frequency':
+        docUser.data.clinicDoctor
+            .where((element) => element.doctorId == widget.docId)
+            .first
+            .medicineFrequencies
+            .add(parameter);
+        break;
+      case 'directions':
+        docUser.data.clinicDoctor
+            .where((element) => element.doctorId == widget.docId)
+            .first
+            .medicineDirections
+            .add(parameter);
+        break;
+      case 'duration':
+        docUser.data.clinicDoctor
+            .where((element) => element.doctorId == widget.docId)
+            .first
+            .medicineDurations
+            .add(parameter);
+        break;
+      default:
+    }
+    print('done');
+    pref.remove('dresponse');
+    pref.setString('dresponse', json.encode(docUser));
+    getParameters();
   }
 
   @override
@@ -214,7 +273,10 @@ class _AddMedicineState extends State<AddMedicine> {
                           },
                         ),
                         IconButton(
-                            icon: Icon(Icons.add_circle), onPressed: () {})
+                            icon: Icon(Icons.add_circle),
+                            onPressed: () {
+                              _addParameter('dose', context);
+                            })
                       ],
                     ),
                   ),
@@ -239,7 +301,10 @@ class _AddMedicineState extends State<AddMedicine> {
                           },
                         ),
                         IconButton(
-                            icon: Icon(Icons.add_circle), onPressed: () {})
+                            icon: Icon(Icons.add_circle),
+                            onPressed: () {
+                              _addParameter('unit', context);
+                            })
                       ],
                     ),
                   ),
@@ -264,7 +329,10 @@ class _AddMedicineState extends State<AddMedicine> {
                           },
                         ),
                         IconButton(
-                            icon: Icon(Icons.add_circle), onPressed: () {})
+                            icon: Icon(Icons.add_circle),
+                            onPressed: () {
+                              _addParameter('route', context);
+                            })
                       ],
                     ),
                   ),
@@ -289,7 +357,10 @@ class _AddMedicineState extends State<AddMedicine> {
                           },
                         ),
                         IconButton(
-                            icon: Icon(Icons.add_circle), onPressed: () {})
+                            icon: Icon(Icons.add_circle),
+                            onPressed: () {
+                              _addParameter('frequency', context);
+                            })
                       ],
                     ),
                   ),
@@ -314,7 +385,10 @@ class _AddMedicineState extends State<AddMedicine> {
                           },
                         ),
                         IconButton(
-                            icon: Icon(Icons.add_circle), onPressed: () {})
+                            icon: Icon(Icons.add_circle),
+                            onPressed: () {
+                              _addParameter('direction', context);
+                            })
                       ],
                     ),
                   ),
@@ -339,7 +413,10 @@ class _AddMedicineState extends State<AddMedicine> {
                           },
                         ),
                         IconButton(
-                            icon: Icon(Icons.add_circle), onPressed: () {})
+                            icon: Icon(Icons.add_circle),
+                            onPressed: () {
+                              _addParameter('duration', context);
+                            })
                       ],
                     ),
                   ),
@@ -371,6 +448,39 @@ class _AddMedicineState extends State<AddMedicine> {
           )
         ],
       ),
+    );
+  }
+
+  _addParameter(String type, BuildContext context) {
+    TextEditingController _parameter = new TextEditingController();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: Text('Add $type'),
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                decoration: InputDecoration(labelText: 'Enter New $type'),
+                controller: _parameter,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: FlatButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  addParameter(_parameter.text, type);
+                },
+                child: Text('Save'),
+                color: green,
+                textColor: white,
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
