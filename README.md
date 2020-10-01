@@ -1,6 +1,6 @@
 # getcure_doctor
 
-A new Flutter project.
+A new Flutter project exclusively for doctors.
 
 ## Getting Started
 
